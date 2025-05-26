@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"></div>
+    <div class="header"><h1>로그인</h1></div>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -16,7 +16,7 @@
                   </div>
                 </div>
                 <div class="login_btn_wrap">
-                  <button type="submit" class="login_btn"></button>
+                  <button type="submit" class="login_btn">로그인</button>
                 </div>
               </li>
             </ul>
