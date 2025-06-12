@@ -87,7 +87,9 @@ input {
   border-bottom: 0.3125rem solid #b71a86;
   outline: none;
 }
-
+button {
+  cursor: pointer;
+}
 .wrap {
   width: 360px;
   height: 740px;
