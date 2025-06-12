@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><h1>로그인</h1></div>
+    <div class="header"><h1>SENIORWAY</h1></div>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -9,9 +9,15 @@
               <li class="panel_item">
                 <div class="login_panel">
                   <div class="input_id">
+                    <p class="input_id_text" style="font-size: 1.375rem">
+                      아이디를 입력해주세요.
+                    </p>
                     <input type="text" class="id" id="id" v-model="id" />
                   </div>
                   <div class="input_pw">
+                    <p class="input_pw_text" style="font-size: 1.375rem">
+                      비밀번호를 입력해주세요.
+                    </p>
                     <input type="password" class="pw" id="pw" v-model="pw" />
                   </div>
                 </div>
@@ -23,18 +29,17 @@
           </form>
         </div>
       </div>
-      <ul class="option_wrap">
-        <li class="register">
-          <router-link to="/register">회원가입</router-link>
-        </li>
-      </ul>
+      <div class="find_idpw_btn_wrap">
+        <button class="find_btn">아이디/비밀번호가<br />기억나지 않아요</button>
+      </div>
     </div>
-    <div class="footer"></div>
+    <div class="footer">
+      <p>현재 <span class="highlight">로그인</span> 진행중입니다.</p>
+    </div>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue';
-import Register from './Register.vue';
 import axios from 'axios';
 
 const id = ref('');
@@ -65,8 +70,94 @@ const tryLogin = async () => {
 };
 </script>
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
 ol,
 ul {
   list-style: none;
+}
+input {
+  width: 250px;
+  height: 45px;
+  background-color: #ffffff;
+  border: none;
+  border-bottom: 0.3125rem solid #b71a86;
+  outline: none;
+}
+
+.wrap {
+  width: 360px;
+  height: 740px;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  background-color: #f6f6f6;
+}
+.header {
+  font-family: 'Impact', 'Anton', sans-serif;
+  text-align: center;
+  font-size: 2rem;
+  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
+    1px 1px 0 #b71a86;
+  letter-spacing: 2px;
+  margin-top: 1.5625rem;
+}
+.container {
+  margin-top: 7.90625rem;
+}
+.panel_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login_btn_wrap {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+.login_btn {
+  width: 250px;
+  height: 50px;
+  border: 0.0625rem solid #b71a86;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  font-size: 1.25rem;
+}
+.input_pw {
+  margin-top: 3.125rem;
+  margin-bottom: 2.5rem;
+}
+.find_idpw_btn_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5625rem;
+}
+.find_btn {
+  width: 250px;
+  height: 70px;
+  border: 0.0625rem solid #7d828d;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  color: #7d828d;
+  background-color: #ffffff;
+}
+.footer {
+  text-align: center;
+  margin-top: 5.8125rem;
+}
+
+.footer p {
+  text-decoration: underline;
+  color: #7d828d;
+  font-size: 1rem;
+}
+
+.highlight {
+  color: #b71a86;
 }
 </style>
