@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><h1>SENIORWAY</h1></div>
+    <div class="header"><p>SENIORWAY</p></div>
     <div class="container">
       <div class="content">
         <div class="register_btn_wrap">
@@ -48,6 +48,7 @@ const goToRegister = () => {
   padding: 0;
   font-weight: bold;
 }
+/* class */
 .wrap {
   width: 360px;
   height: 740px;
@@ -56,6 +57,9 @@ const goToRegister = () => {
   align-items: center;
   display: flex;
   background-color: #f6f6f6;
+}
+.container {
+  flex-grow: 1;
 }
 .header {
   font-family: 'Impact', 'Anton', sans-serif;
@@ -119,6 +123,6 @@ const goToRegister = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5.25rem;
+  margin-bottom: 2.5625rem;
 }
 </style>
