@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "userId": "admin",
+      "password": "1234",
+      "userName": "관리자",
+      "userGender": "기타",
+      "userBirth": ""
+    }
+  ]
+}

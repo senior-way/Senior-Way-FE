@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><h1>SENIORWAY</h1></div>
+    <div class="header"><p>SENIORWAY</p></div>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -74,6 +74,7 @@ const tryLogin = async () => {
   margin: 0;
   padding: 0;
   font-weight: bold;
+  line-height: 1;
 }
 ol,
 ul {
@@ -86,10 +87,12 @@ input {
   border: none;
   border-bottom: 0.3125rem solid #b71a86;
   outline: none;
+  margin-top: 0.4375rem;
 }
 button {
   cursor: pointer;
 }
+/* class */
 .wrap {
   width: 360px;
   height: 740px;
@@ -99,6 +102,11 @@ button {
   display: flex;
   background-color: #f6f6f6;
 }
+.container {
+  margin-top: 7.90625rem;
+  flex-grow: 1;
+}
+/* 헤더 */
 .header {
   font-family: 'Impact', 'Anton', sans-serif;
   text-align: center;
@@ -107,9 +115,6 @@ button {
     1px 1px 0 #b71a86;
   letter-spacing: 2px;
   margin-top: 1.5625rem;
-}
-.container {
-  margin-top: 7.90625rem;
 }
 .panel_item {
   display: flex;
@@ -150,7 +155,7 @@ button {
 }
 .footer {
   text-align: center;
-  margin-top: 5.8125rem;
+  margin-bottom: 2.5625rem;
 }
 
 .footer p {
