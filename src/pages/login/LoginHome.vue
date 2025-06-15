@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><p>SENIORWAY</p></div>
+    <header><p>SENIORWAY</p></header>
     <div class="container">
       <div class="content">
         <div class="register_btn_wrap">
@@ -23,9 +23,9 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+    <footer>
       <p>로그인/회원가입 방법 안내</p>
-    </div>
+    </footer>
   </div>
 </template>
 <script setup>
@@ -47,6 +47,29 @@ const goToRegister = () => {
   margin: 0;
   padding: 0;
   font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0;
+}
+/* header */
+header {
+  font-family: 'Impact', 'Anton', sans-serif;
+  text-align: center;
+  font-size: 2rem;
+  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
+    1px 1px 0 #b71a86;
+  letter-spacing: 2px;
+  margin-top: 2.59375rem;
+  margin-bottom: 4.28125rem;
+}
+/* footer */
+footer {
+  font-size: 1rem;
+  color: #7d828d;
+  text-decoration: underline;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5625rem;
 }
 /* class */
 .wrap {
@@ -60,16 +83,6 @@ const goToRegister = () => {
 }
 .container {
   flex-grow: 1;
-}
-.header {
-  font-family: 'Impact', 'Anton', sans-serif;
-  text-align: center;
-  font-size: 2rem;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 1.5625rem;
-  margin-bottom: 4.28125rem;
 }
 .content {
   display: flex;
@@ -115,14 +128,5 @@ const goToRegister = () => {
   margin-top: 1.0625rem;
   font-size: 1rem;
   color: #7d828d;
-}
-.footer {
-  font-size: 1rem;
-  color: #7d828d;
-  text-decoration: underline;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2.5625rem;
 }
 </style>
