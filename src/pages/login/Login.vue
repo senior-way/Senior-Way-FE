@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><p>SENIORWAY</p></div>
+    <header><p>SENIORWAY</p></header>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -33,9 +33,9 @@
         <button class="find_btn">아이디/비밀번호가<br />기억나지 않아요</button>
       </div>
     </div>
-    <div class="footer">
+    <footer>
       <p>현재 <span class="highlight">로그인</span> 진행중입니다.</p>
-    </div>
+    </footer>
   </div>
 </template>
 <script setup>
@@ -75,6 +75,7 @@ const tryLogin = async () => {
   padding: 0;
   font-weight: bold;
   line-height: 1;
+  letter-spacing: 0;
 }
 ol,
 ul {
@@ -92,6 +93,31 @@ input {
 button {
   cursor: pointer;
 }
+/* header */
+header {
+  font-family: 'Impact', 'Anton', sans-serif;
+  text-align: center;
+  font-size: 2rem;
+  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
+    1px 1px 0 #b71a86;
+  letter-spacing: 2px;
+  margin-top: 2.59375rem;
+}
+/* footer */
+footer {
+  text-align: center;
+  margin-bottom: 2.5625rem;
+}
+
+footer p {
+  text-decoration: underline;
+  color: #7d828d;
+  font-size: 1rem;
+}
+
+.highlight {
+  color: #b71a86;
+}
 /* class */
 .wrap {
   width: 360px;
@@ -105,16 +131,6 @@ button {
 .container {
   margin-top: 7.90625rem;
   flex-grow: 1;
-}
-/* 헤더 */
-.header {
-  font-family: 'Impact', 'Anton', sans-serif;
-  text-align: center;
-  font-size: 2rem;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 1.5625rem;
 }
 .panel_item {
   display: flex;
@@ -152,19 +168,5 @@ button {
   font-size: 1.125rem;
   color: #7d828d;
   background-color: #ffffff;
-}
-.footer {
-  text-align: center;
-  margin-bottom: 2.5625rem;
-}
-
-.footer p {
-  text-decoration: underline;
-  color: #7d828d;
-  font-size: 1rem;
-}
-
-.highlight {
-  color: #b71a86;
 }
 </style>

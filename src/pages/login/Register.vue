@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="header"><p>SENIORWAY</p></div>
+    <header><p>SENIORWAY</p></header>
     <div class="container">
       <div class="content">
         <div class="breadcrumb" v-if="currentStep < 4">
@@ -135,7 +135,7 @@
         </div>
       </div>
     </div>
-    <footer class="footer">
+    <footer>
       <p>현재 <span class="highlight">회원가입</span> 진행중입니다.</p>
     </footer>
   </div>
@@ -219,6 +219,7 @@ const submitRegistration = async () => {
   padding: 0;
   font-weight: bold;
   line-height: 1;
+  letter-spacing: 0;
 }
 input {
   width: 250px;
@@ -227,6 +228,32 @@ input {
   border: none;
   border-bottom: 0.3125rem solid #b71a86;
   outline: none;
+}
+/* header */
+header {
+  font-family: 'Impact', 'Anton', sans-serif;
+  text-align: center;
+  font-size: 2rem;
+  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
+    1px 1px 0 #b71a86;
+  letter-spacing: 2px;
+  margin-top: 2.59375rem;
+}
+/* footer */
+footer {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 2.5625rem;
+}
+
+footer p {
+  text-decoration: underline;
+  color: #7d828d;
+  font-size: 1rem;
+}
+
+.highlight {
+  color: #b71a86;
 }
 /* class */
 .wrap {
@@ -238,15 +265,6 @@ input {
   display: flex;
   justify-content: space-between;
   background-color: #f6f6f6;
-}
-.header {
-  font-family: 'Impact', 'Anton', sans-serif;
-  text-align: center;
-  font-size: 2rem;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 1.5625rem;
 }
 .container {
   flex-grow: 1;
@@ -332,11 +350,9 @@ input {
     0% 100%
   );
 }
-
 .step:last-child {
   margin-right: 0;
 }
-
 .step.active {
   background-color: #b71a86;
   z-index: 2;
@@ -417,21 +433,5 @@ input {
   background-color: #ffffff;
   font-size: 1.25rem;
   cursor: pointer;
-}
-/* footer */
-.footer {
-  text-align: center;
-  font-size: 1rem;
-  margin-bottom: 2.5625rem;
-}
-
-.footer p {
-  text-decoration: underline;
-  color: #7d828d;
-  font-size: 1rem;
-}
-
-.highlight {
-  color: #b71a86;
 }
 </style>
