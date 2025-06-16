@@ -1,3 +1,7 @@
-<template></template>
+<template>
+  <router-link :to="`/place/${place.id}`">
+    <button>자세히 보기</button>
+  </router-link>
+</template>
 <script setup></script>
-<script scoped></script>
+<style scoped></style>

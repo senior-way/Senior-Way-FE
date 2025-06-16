@@ -4,6 +4,7 @@ import Login from '@/pages/login/Login.vue';
 import Register from '@/pages/login/Register.vue';
 import LoginHome from '@/pages/login/LoginHome.vue';
 import UserProfileSurvey from '@/pages/profile/UserProfileSurvey.vue';
+import PlaceList from '@/pages/place/PlaceList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,16 @@ const router = createRouter({
       path: '/profilesurvey',
       name: 'profilesurvey',
       component: UserProfileSurvey,
+    },
+    {
+      path: '/place',
+      name: 'place',
+      component: PlaceList,
+    },
+    {
+      path: '/place/:id',
+      name: 'placedetail',
+      component: () => import('@/pages/place/PlaceDetail.vue'),
     },
   ],
 });
