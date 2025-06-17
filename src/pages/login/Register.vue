@@ -257,8 +257,10 @@ footer p {
 }
 /* class */
 .wrap {
-  width: 360px;
-  height: 740px;
+  width: 100%;
+  max-width: 360px;
+  height: 100dvh;
+  max-height: 740px;
   margin: 0 auto;
   flex-direction: column;
   align-items: center;

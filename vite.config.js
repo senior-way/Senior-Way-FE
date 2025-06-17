@@ -12,4 +12,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    host: true, // ← 이게 핵심!
+    port: 5173, // 기본값 (원하면 바꿔도 됨)
+  },
 });
