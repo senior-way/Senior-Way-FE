@@ -4,13 +4,13 @@
     <div class="container">
       <div class="content">
         <div class="register_btn_wrap">
-          <button class="register_btn" @click="goToRegister">
+          <button class="large_btn" @click="goToRegister">
             <p class="main">회원가입 하기</p>
             <p class="sub">처음 방문했어요!</p>
           </button>
         </div>
         <div class="login_btn_wrap">
-          <button class="login_btn" @click="goToLogin">
+          <button class="large_btn" @click="goToLogin">
             <p class="main">로그인 하기</p>
             <p class="sub">일반 계정이 있어요!</p>
           </button>
@@ -19,7 +19,7 @@
           <button class="kakao_login_btn">
             <img :src="kakaoLoginBtn" alt="카카오 로그인" />
           </button>
-          <p class="kako_login_text">카카오 계정으로 가입했어요!</p>
+          <p class="kakao_login_text">카카오 계정으로 가입했어요!</p>
         </div>
       </div>
     </div>
@@ -46,15 +46,15 @@ const goToRegister = () => {
 * {
   margin: 0;
   padding: 0;
-  font-weight: bold;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.03rem;
+  font-weight: 500;
 }
 /* header */
 header {
-  font-family: 'Impact', 'Anton', sans-serif;
   text-align: center;
   font-size: 2rem;
+  font-weight: 700;
   text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
     1px 1px 0 #b71a86;
   letter-spacing: 2px;
@@ -91,8 +91,7 @@ footer {
   flex-direction: column;
   align-items: center;
 }
-.register_btn,
-.login_btn {
+.large_btn {
   width: 250px;
   height: 150px;
   border: 0 solid #ffffff;
@@ -102,6 +101,7 @@ footer {
 }
 .main {
   font-size: 1.75rem;
+  font-weight: 700;
   height: 1.75rem;
 }
 .sub {
@@ -118,7 +118,6 @@ footer {
   width: 244px;
   height: 60px;
   border: none;
-  background-color: none;
   cursor: pointer;
 }
 .kakao_login_btn img {
@@ -126,7 +125,7 @@ footer {
   height: 100%;
   display: block;
 }
-.kako_login_text {
+.kakao_login_text {
   margin-top: 1.0625rem;
   font-size: 1rem;
   color: #7d828d;

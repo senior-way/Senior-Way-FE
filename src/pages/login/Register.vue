@@ -217,9 +217,11 @@ const submitRegistration = async () => {
 * {
   margin: 0;
   padding: 0;
-  font-weight: bold;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.03rem;
+}
+p {
+  font-weight: 500;
 }
 input {
   width: 250px;
@@ -229,11 +231,28 @@ input {
   border-bottom: 0.3125rem solid #b71a86;
   outline: none;
 }
+button {
+  width: 250px;
+  height: 50px;
+  margin-bottom: 1.25rem;
+  margin-top: 3.125rem;
+  border: 0.0625rem solid #b71a86;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+button:hover,
+button:focus,
+button:active {
+  background-color: #ffffff;
+  border-color: #b71a86;
+}
 /* header */
 header {
-  font-family: 'Impact', 'Anton', sans-serif;
   text-align: center;
   font-size: 2rem;
+  font-weight: normal;
   text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
     1px 1px 0 #b71a86;
   letter-spacing: 2px;
@@ -243,6 +262,7 @@ header {
 footer {
   text-align: center;
   font-size: 1rem;
+  font-weight: 500;
   margin-bottom: 2.5625rem;
 }
 
@@ -250,10 +270,6 @@ footer p {
   text-decoration: underline;
   color: #7d828d;
   font-size: 1rem;
-}
-
-.highlight {
-  color: #b71a86;
 }
 /* class */
 .wrap {
@@ -275,13 +291,7 @@ footer p {
   margin-top: 2.4375rem;
 }
 .form_content input {
-  width: 300px;
-  height: 45px;
   margin-top: 0.25rem;
-  background-color: #ffffff;
-  border: none;
-  border-bottom: 0.3125rem solid #b71a86;
-  outline: none;
 }
 .input_wrap {
   padding: 0 30px;
@@ -290,15 +300,7 @@ footer p {
   align-items: center;
 }
 .btn {
-  width: 250px;
-  height: 50px;
   margin-top: 2.3125rem;
-  margin-bottom: 1.25rem;
-  border: 0.0625rem solid #b71a86;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  font-size: 1.25rem;
-  cursor: pointer;
 }
 .main_text {
   width: 300px;
@@ -307,14 +309,14 @@ footer p {
   text-align: left;
   justify-items: center;
   font-size: 1.375rem;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 0.4375rem;
 }
 /* 브레드크럼 */
 .breadcrumb {
   display: flex;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 1.21875rem;
   justify-content: center;
 }
@@ -377,17 +379,6 @@ footer p {
   outline: none;
   appearance: none;
 }
-.user_data_btn {
-  width: 250px;
-  height: 50px;
-  margin-top: 3.125rem;
-  margin-bottom: 1.25rem;
-  border: 0.0625rem solid #b71a86;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
 /* 정보 확인 페이지 */
 .check_wrap {
   display: flex;
@@ -408,7 +399,7 @@ footer p {
   display: flex;
   align-items: center;
   font-size: 1.375rem;
-  font-weight: bold;
+  font-weight: 700;
   /* 높낮이 */
   margin-top: 1rem;
   margin-bottom: 1.5rem;
@@ -425,15 +416,7 @@ footer p {
   align-items: center;
   flex-direction: column;
 }
-.register_btn {
-  width: 250px;
-  height: 50px;
-  margin-top: 3.125rem;
-  margin-bottom: 1.25rem;
-  border: 0.0625rem solid #b71a86;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  font-size: 1.25rem;
-  cursor: pointer;
+.highlight {
+  color: #b71a86;
 }
 </style>
