@@ -9,15 +9,11 @@
               <li class="panel_item">
                 <div class="login_panel">
                   <div class="input_id">
-                    <p class="input_id_text" style="font-size: 1.375rem">
-                      아이디를 입력해주세요.
-                    </p>
+                    <p class="main_text">아이디를 입력해주세요.</p>
                     <input type="text" class="id" id="id" v-model="id" />
                   </div>
                   <div class="input_pw">
-                    <p class="input_pw_text" style="font-size: 1.375rem">
-                      비밀번호를 입력해주세요.
-                    </p>
+                    <p class="main_text">비밀번호를 입력해주세요.</p>
                     <input type="password" class="pw" id="pw" v-model="pw" />
                   </div>
                 </div>
@@ -73,9 +69,9 @@ const tryLogin = async () => {
 * {
   margin: 0;
   padding: 0;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.03rem;
 }
 ol,
 ul {
@@ -91,11 +87,15 @@ input {
   margin-top: 0.4375rem;
 }
 button {
+  width: 250px;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
   cursor: pointer;
+  border: none;
 }
 /* header */
 header {
-  font-family: 'Impact', 'Anton', sans-serif;
+  font-weight: 400;
   text-align: center;
   font-size: 2rem;
   text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
@@ -110,9 +110,9 @@ footer {
 }
 
 footer p {
+  font-size: 1rem;
   text-decoration: underline;
   color: #7d828d;
-  font-size: 1rem;
 }
 
 .highlight {
@@ -145,12 +145,13 @@ footer p {
   align-items: center;
 }
 .login_btn {
-  width: 250px;
   height: 50px;
   border: 0.0625rem solid #b71a86;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
   font-size: 1.25rem;
+}
+.main_text {
+  font-size: 1.375rem;
+  font-weight: 700;
 }
 .input_pw {
   margin-top: 3.125rem;
@@ -163,12 +164,9 @@ footer p {
   margin-top: 1.5625rem;
 }
 .find_btn {
-  width: 250px;
   height: 70px;
   border: 0.0625rem solid #7d828d;
-  border-radius: 0.75rem;
   font-size: 1.125rem;
   color: #7d828d;
-  background-color: #ffffff;
 }
 </style>
