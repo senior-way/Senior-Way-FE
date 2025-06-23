@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <header><p>SENIORWAY</p></header>
+    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
     <div class="container">
       <div class="content">
         <div class="breadcrumb">
@@ -20,7 +20,7 @@
                 하고 싶은 체험을<br /><span class="highlight">모두</span>
                 선택해주세요.
               </div>
-              <div class="image">난미<br />이지</div>
+              <img src="@/assets/img/evaluation.png" alt="체험선택" class="sub_img">
             </div>
             <div class="select_gird">
               <div
@@ -46,7 +46,7 @@
                 이용할 이동 수단을<br /><span class="highlight">모두</span>
                 선택해주세요.
               </div>
-              <div class="image">난미<br />이지</div>
+              <img src="@/assets/img/public-transport.png" alt="교통수단" class="sub_img">
             </div>
             <div class="select_gird">
               <div
@@ -72,7 +72,7 @@
                 휠체어 사용 여부를<br />
                 선택해주세요.
               </div>
-              <div class="image">난미<br />이지</div>
+              <img src="@/assets/img/wheelchair.png" alt="휠체어" class="sub_img">
             </div>
             <div class="select_gird">
               <div class="select_btn_wrap">
@@ -100,6 +100,7 @@
               </button>
             </div>
           </div>
+
           <!-- 반려동물 동반 여부 창 -->
           <div v-if="step === 3" class="form_list">
             <div class="main_text_wrap">
@@ -107,7 +108,7 @@
                 반려동물 동반 여부를<br />
                 선택해주세요.
               </div>
-              <div class="image">난미<br />이지</div>
+              <img src="@/assets/img/pets.png" alt="반려동물" class="sub_img">
             </div>
             <div class="select_gird">
               <div class="select_btn_wrap">
@@ -136,8 +137,44 @@
               </button>
             </div>
           </div>
-          <!-- 전자기기 활용 능력 창-->
-          <div v-if="step === 4" class="form_list"></div>
+
+          <!-- 전자기기 활용 능력 창 -->
+          <div v-if="step === 4" class="form_list">
+            <div class="main_text_wrap">
+              <div class="main_text">
+                전자기기 활용 능력을<br />
+                선택해주세요.
+              </div>
+              <img src="@/assets/img/smartphone.png" alt="스마트폰" class="sub_img" />
+            </div>
+
+            <div class="digital_skill_btns">
+              <img
+                :src="digitalSkillLevel === 'high' ? smartphoneHighSelect : smartphoneHighNone"
+                alt="상"
+                class="digital_img_btn"
+                @click="selectDigitalSkill('high')"
+              />
+              <img
+                :src="digitalSkillLevel === 'medium' ? smartphoneMediumSelect : smartphoneMediumNone"
+                alt="중"
+                class="digital_img_btn"
+                @click="selectDigitalSkill('medium')"
+              />
+              <img
+                :src="digitalSkillLevel === 'low' ? smartphoneLowSelect : smartphoneLowNone"
+                alt="하"
+                class="digital_img_btn"
+                @click="selectDigitalSkill('low')"
+              />
+            </div>
+
+            <div class="btn_wrap">
+              <button class="btn_final" @click="goToNextPage">
+                설문 끝내기
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -146,15 +183,25 @@
     </footer>
   </div>
 </template>
+
+
 <script setup>
 import { ref } from 'vue';
+import smartphoneHighNone from '@/assets/img/smartphone_high_none.png';
+import smartphoneHighSelect from '@/assets/img/smartphone_high_select.png';
+import smartphoneMediumNone from '@/assets/img/smartphone_medium_none.png';
+import smartphoneMediumSelect from '@/assets/img/smartphone_medium_select.png';
+import smartphoneLowNone from '@/assets/img/smartphone_low_none.png';
+import smartphoneLowSelect from '@/assets/img/smartphone_low_select.png';
 
 const steps = [
-  '체험 선택',
-  '이동수단 선택',
-  '휠체어 사용 여부',
-  '반려동물 여부',
+  '체험\n선택',
+  '이동\n수단',
+  '휠체어\n사용',
+  '반려\n동물',
+  '스마\n트폰'
 ];
+
 const experienceOptions = [
   '자연',
   '역사·문화·예술',
@@ -163,13 +210,23 @@ const experienceOptions = [
   '체험 액티비티',
   '상관 없음',
 ];
+
 const selectedExperiences = ref([]);
+
 const selectedVehicle = ref([]);
 const vehicle = ['기차', '버스', '비행기', '자차', '자전거', '도보'];
+
 const usesWheelchair = ref(null);
+
 const withPet = ref(null);
+
 // 전자기기 활용 능력 기준 low, medium, high
-const digitalSkillLevel = ref('low');
+const digitalSkillLevel = ref('')  // 기본값 비워둘 수도 있음
+const selectDigitalSkill = (level) => {
+  digitalSkillLevel.value = level
+  console.log('디지털 스킬 레벨:', level);
+}
+
 const step = ref(0);
 
 // 체험 선택했을 시
@@ -191,37 +248,41 @@ const toggleVehicle = (item) => {
     selectedVehicle.value.push(item);
   }
 };
+
 // 휠체어 여부 선택
 const selectWheelchair = (value) => {
   usesWheelchair.value = value;
 };
+
 // 반려견 동반 여부 선택
 const selectWithPet = (value) => {
   withPet.value = value;
 };
+
 // 다음페이지 이동
 const goToNextPage = () => {
   step.value++;
 };
+
 </script>
+
+
 <style scoped>
 * {
   margin: 0;
   padding: 0;
-  font-weight: bold;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.03rem;
 }
+
 /* header */
-header {
-  font-family: 'Impact', 'Anton', sans-serif;
-  text-align: center;
-  font-size: 2rem;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 2.59375rem;
+.header_logo {
+  padding-top: 2rem;
+  width: 15rem; 
+  display: block; 
+  margin: 0 auto;
 }
+
 /* footer */
 footer {
   text-align: center;
@@ -231,12 +292,14 @@ footer {
 footer p {
   text-decoration: underline;
   color: #7d828d;
+  font-family: 'Font-Medium';
   font-size: 1rem;
 }
 
 .highlight {
   color: #b71a86;
 }
+
 /* class */
 .wrap {
   width: 360px;
@@ -247,20 +310,28 @@ footer p {
   display: flex;
   background-color: #f6f6f6;
 }
+
 .container {
   flex-grow: 1;
 }
+
+.sub_img {
+  width: 40px;
+  display: flex;
+}
+
 /* 브레드크럼 */
 .breadcrumb {
   display: flex;
-  font-size: 1rem;
+  font-family: 'Font-Bold';
+  font-size: 14pt;
   font-weight: bold;
   margin-top: 1.21875rem;
   justify-content: center;
 }
 .step {
   position: relative;
-  width: 5.625rem;
+  width: 4.5rem;
   height: 3.125rem;
   background-color: #ccc;
   color: white;
@@ -299,16 +370,20 @@ footer p {
   background-color: #b71a86;
   z-index: 2;
 }
+
+
 /* 본문 */
 .survey_content {
-  margin-top: 1.875rem;
+  margin-top: 1.5rem;
 }
 .main_text_wrap {
   padding: 0 1.875rem;
+  font-family: 'Font-Bold';
   font-size: 1.375rem;
   display: flex;
   justify-content: space-between;
 }
+
 /* 선택창 */
 .select_gird {
   display: grid;
@@ -318,6 +393,7 @@ footer p {
   justify-content: center;
   margin-top: 2.0625rem;
 }
+
 /*체험, 이동수단 선택 버튼 */
 .select_btn {
   width: 150px;
@@ -329,15 +405,16 @@ footer p {
   text-align: center;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-family: 'Font-Bold';
   font-size: 1.25rem;
   cursor: pointer;
   margin-bottom: 0.5625rem;
 }
 .selected {
   border-color: #b71a86;
-  background-color: rgba(183, 26, 134, 0.1);
+  background-color: #b71a8630;
 }
+
 /* 휠체어, 반려견 선택 버튼 */
 .select_two_option_btn {
   width: 300px;
@@ -349,7 +426,7 @@ footer p {
   text-align: center;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-family: 'Font-Bold';
   font-size: 1.25rem;
   cursor: pointer;
   margin-bottom: 1.125rem;
@@ -362,8 +439,24 @@ footer p {
 }
 .select_two_option_btn.selected {
   border-color: #b71a86;
-  background-color: rgba(183, 26, 134, 0.1);
+  background-color: #b71a8630
 }
+
+.digital_skill_btns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 0.3rem;
+}
+
+.digital_img_btn {
+  width: 300px;
+  height: auto;
+  /* display: block; */
+  cursor: pointer;
+}
+
 /* 다음 버튼 */
 .btn_wrap {
   display: flex;
@@ -371,13 +464,27 @@ footer p {
   flex-direction: column;
 }
 .btn {
-  width: 250px;
+  width: 300px;
   height: 50px;
   margin-top: 2.6875rem;
   margin-bottom: 1.25rem;
   border: 0.0625rem solid #b71a86;
   border-radius: 0.75rem;
   background-color: #ffffff;
+  font-family: 'Font-Medium';
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.btn_final{
+  width: 300px;
+  height: 50px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0.0625rem solid #b71a86;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  font-family: 'Font-Medium';
   font-size: 1.25rem;
   cursor: pointer;
 }
