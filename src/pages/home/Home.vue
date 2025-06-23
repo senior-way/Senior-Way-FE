@@ -83,7 +83,7 @@ const goTo = (name) => {
   border-radius: 0.75rem;
   background-color: #ffffff;
   border: 0.0625rem solid #b71a86;
-  font-family: 'Font-Medium';
+  font-family: 'Font-BOld';
   font-size: 1.25rem;
   cursor: pointer;
 }
@@ -94,7 +94,7 @@ const goTo = (name) => {
   border-radius: 0.75rem;
   background-color: #ffffff;
   border: 0.0625rem solid #b71a86;
-  font-family: 'Font-Medium';
+  font-family: 'Font-Bold';
   font-size: 1.25rem;
   cursor: pointer;
 }
@@ -105,8 +105,8 @@ const goTo = (name) => {
   border-radius: 0.75rem;
   background-color: #ffffff;
   border: 0.0625rem solid #b71a86;
-  font-family: 'Font-Medium';
-  font-size: 1.25rem;
+  font-family: 'Font-Bold';
+  font-size: 1rem;
   cursor: pointer;
 }
 
