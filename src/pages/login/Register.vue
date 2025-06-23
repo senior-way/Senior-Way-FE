@@ -14,6 +14,40 @@
         </div>
 
         <div class="form_content">
+          <!-- 개인정보 동의창 -->
+          <div v-if="currentStep === -1" class="form_list">
+            <div class="input_wrap agree_wrap">
+              <p class="main_text">개인정보 이용 동의 여부를 <br />체크해주세요.</p>
+
+              <label class="checkbox_label">
+                <input type="checkbox" v-model="isAgreed" class="custom_checkbox" />
+                <span class="check_text">
+                  [필수] 개인정보 수집 및 이용 동의<br/> <span class="sub_text2">(수집 항목: 이메일, 이름, 성별, 생년월일)</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="input_wrap">
+              <p class="agree_detail_box">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint aliquid ab, hic voluptate animi tenetur explicabo illo iste eius! Perferendis velit magni, odio sed enim corrupti esse doloribus ut ad? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias hic aut sed accusamus qui laborum, dolore velit dolorum non quasi quas? Voluptatibus non iusto deleniti suscipit nihil ad quia totam.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint aliquid ab, hic voluptate animi tenetur explicabo illo iste eius! Perferendis velit magni, odio sed enim corrupti esse doloribus ut ad? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias hic aut sed accusamus qui laborum, dolore velit dolorum non quasi quas? Voluptatibus non iusto deleniti suscipit nihil ad quia totam.
+              </p>
+            </div>
+
+
+            <div class="input_wrap">
+              <button
+                type="submit"
+                class="btn"
+                :disabled="!isAgreed"
+                :class="{ disabled: !isAgreed }"
+                @click="goToNextPage"
+              >
+                회원가입 계속 진행하기
+              </button>
+            </div>
+          </div>
+
           <!-- 아이디 입력 창 -->
           <div v-if="currentStep === 0" class="form_list">
             <div class="input_wrap">
@@ -159,10 +193,11 @@ import { useRouter } from 'vue-router';
 import Axios from 'axios';
 
 const steps = ['아이디\n입력', '비밀번호\n입력', '비밀번호\n확인', '정보\n입력'];
-const currentStep = ref(0);
+const currentStep = ref(-1);
 const router = useRouter();
 
 // 입력받은 정보
+const isAgreed = ref(false);
 const userId = ref('');
 const password = ref('');
 const checkPassword = ref('');
@@ -277,16 +312,6 @@ button:active {
   margin: 0 auto;
 }
 
-/* header {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: normal;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 2.59375rem;
-} */
-
 /* footer */
 footer {
   text-align: center;
@@ -383,7 +408,6 @@ footer p {
     0% 100%,
     10px 50%
   );
-
   margin-right: -10px;
   z-index: 1;
   display: flex;
@@ -419,6 +443,88 @@ footer p {
 .input_name_wrap {
   width: 300px;
   margin-bottom: 3.15625rem;
+}
+
+/* 체크박스 영역 여백 및 정렬 */
+.agree_wrap {
+  align-items: flex-start;
+  padding: 0 30px;
+  gap: 1rem;
+}
+
+/* 체크박스 커스텀 */
+.custom_checkbox {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  accent-color: #b71a86; /* 체크 색상 */
+}
+
+/* 텍스트 스타일 */
+.checkbox_label {
+  display: flex;
+  align-items: center;
+  font-family: 'Font-Medium';
+  font-size: 1.05rem;
+  color: #444;
+}
+
+.sub_text2 {
+  font-family: 'Font-Light';
+  font-size: 0.9rem;
+  color: #7d828d;
+}
+
+.check_text {
+  font-weight: bold;
+}
+
+.agree_detail_box {
+  width: 300px;
+  height: 250px;
+  padding: 0.625rem;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  border: 0.0625rem solid #b71a86;
+  margin-top: 0.5rem;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Chrome, Safari 스크롤 기본 숨김 */
+.agree_detail_box::-webkit-scrollbar {
+  width: 6px;
+  opacity: 0;
+}
+
+/* 마우스 호버 시 스크롤바 표시 */
+.agree_detail_box:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* 스크롤바 손잡이 (thumb) */
+.agree_detail_box::-webkit-scrollbar-thumb {
+  background-color: rgba(183, 26, 134, 0.6); /* 투명도 조절 */
+  border-radius: 6px;
+  border: 2px solid white; /* 배경과 어우러지게 */
+}
+
+/* 스크롤바 트랙 */
+.agree_detail_box::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+/* 비활성 버튼 스타일 */
+.btn.disabled {
+  border-color: #7D828D;
+  color: #7D828D;
+  cursor: not-allowed;
+  background-color: #ffffff;
 }
 
 
