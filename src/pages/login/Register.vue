@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <header><p>SENIORWAY</p></header>
+    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
     <div class="container">
       <div class="content">
         <div class="breadcrumb" v-if="currentStep < 4">
@@ -12,26 +12,29 @@
             {{ step }}
           </div>
         </div>
+
         <div class="form_content">
           <!-- 아이디 입력 창 -->
           <div v-if="currentStep === 0" class="form_list">
             <div class="input_wrap">
-              <p class="main_text">사용하실 아이디를<br />입력해주세요.</p>
+              <p class="main_text">사용하실 <span class="highlight">아이디</span>를<br />
+                입력해주세요.</p>
               <input type="text" class="input_id" v-model="userId" />
             </div>
             <div class="input_wrap">
               <button type="submit" class="btn" @click="checkId">
                 아이디 중복 확인
               </button>
-              <p style="color: #7d828d">
+              <p class="sub_text">
                 아이디 중복 확인이 완료되면<br />다음 페이지로 넘어갑니다.
               </p>
             </div>
           </div>
+
           <!-- 비밀번호 입력 창 -->
           <div v-if="currentStep === 1" class="form_list">
             <div class="input_wrap">
-              <p class="main_text">사용하실 비밀번호를<br />입력해주세요.</p>
+              <p class="main_text">사용하실 <span class="highlight">비밀번호</span>를<br />입력해주세요.</p>
               <input type="password" class="input_id" v-model="password" />
             </div>
             <div class="input_wrap">
@@ -41,11 +44,12 @@
               <p style="color: #7d828d">비밀번호 구성 요건 적기...</p>
             </div>
           </div>
+
           <!-- 비밀번호 확인 창 -->
           <div v-if="currentStep === 2" class="form_list">
             <div class="input_wrap">
               <p class="main_text">
-                앞에서 입력한 비밀번호를<br />한 번 더 입력해주세요.
+                앞에서 입력한 <span class="highlight">비밀번호</span>를<br /><span class="highlight">한 번 더</span> 입력해주세요.
               </p>
               <input type="password" class="input_id" v-model="checkPassword" />
             </div>
@@ -60,11 +64,11 @@
           <div v-if="currentStep === 3" class="form_list">
             <div class="input_wrap">
               <div class="input_name_wrap">
-                <p class="main_text">이름을 입력해주세요.</p>
+                <p class="main_text"><span class="highlight">이름</span>을 입력해주세요.</p>
                 <input type="text" class="input_name" v-model="userName" />
               </div>
               <div class="drop_wrap">
-                <p class="main_text">성별을 선택해주세요.</p>
+                <p class="main_text"><span class="highlight">성별</span>을 선택해주세요.</p>
                 <select v-model="userGender" class="drop_gender">
                   <option disabled value="">성별 선택하기</option>
                   <option>남성</option>
@@ -73,7 +77,7 @@
                 </select>
               </div>
               <div class="select_brith_wrap">
-                <p class="main_text">생년월일을 선택해주세요.</p>
+                <p class="main_text"><span class="highlight">생년월일</span>을 선택해주세요.</p>
                 <input type="date" v-model="userBirth" class="select_brith" />
               </div>
               <div class="input_wrap">
@@ -91,7 +95,7 @@
           <div v-if="currentStep === 4" class="form_list">
             <div class="check_wrap">
               <p class="main_text">
-                내가 입력한 정보가 맞는지<br />다시 한번 확인해주세요.
+                내가 입력한 정보가 맞는지<br />다시 한 번 확인해주세요.
               </p>
               <div class="check_info_wrap">
                 <div class="check_info_border">
@@ -117,16 +121,23 @@
                   </div>
                 </div>
                 <p class="sub_text" style="color: #7d828d">
-                  잘못된 부분이 있다면<br />
-                  뒤로가기를 눌러 이전 페이지로<br />돌아가서 다시 선택해주세요.
+                  잘못된 부분이 있다면 뒤로가기를 눌러<br/>
+                  이전 페이지로 돌아가서 다시 선택해주세요.
                 </p>
                 <div class="register_btn_wrap">
                   <button
                     type="submit"
-                    class="register_btn"
+                    class="correct_btn"
                     @click="submitRegistration"
                   >
-                    회원가입 완료하기
+                    전부 올바르게 작성했습니다.
+                  </button>
+                  <button
+                    type="submit"
+                    class="back_btn"
+                    @click="submitRegistration"
+                  >
+                    뒤로가서 다시 선택하겠습니다.
                   </button>
                 </div>
               </div>
@@ -140,12 +151,14 @@
     </footer>
   </div>
 </template>
+
+
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from 'axios';
 
-const steps = ['아이디\n입력', '비밀번호\n입력', '비밀번호\n확인', '정보 입력'];
+const steps = ['아이디\n입력', '비밀번호\n입력', '비밀번호\n확인', '정보\n입력'];
 const currentStep = ref(0);
 const router = useRouter();
 
@@ -213,6 +226,8 @@ const submitRegistration = async () => {
   }
 };
 </script>
+
+
 <style scoped>
 * {
   margin: 0;
@@ -220,25 +235,29 @@ const submitRegistration = async () => {
   line-height: 1;
   letter-spacing: -0.03rem;
 }
+
 p {
-  font-weight: 500;
+  font-family: 'Font-Medium';
 }
+
 input {
-  width: 250px;
+  width: 300px;
   height: 45px;
   background-color: #ffffff;
   border: none;
   border-bottom: 0.3125rem solid #b71a86;
   outline: none;
 }
+
 button {
-  width: 250px;
+  width: 300px;
   height: 50px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   margin-top: 3.125rem;
   border: 0.0625rem solid #b71a86;
   border-radius: 0.75rem;
   background-color: #ffffff;
+  font-family: 'Font-Medium';
   font-size: 1.25rem;
   cursor: pointer;
 }
@@ -248,8 +267,17 @@ button:active {
   background-color: #ffffff;
   border-color: #b71a86;
 }
+
 /* header */
-header {
+.header_logo {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  width: 15rem; 
+  display: block; 
+  margin: 0 auto;
+}
+
+/* header {
   text-align: center;
   font-size: 2rem;
   font-weight: normal;
@@ -257,12 +285,13 @@ header {
     1px 1px 0 #b71a86;
   letter-spacing: 2px;
   margin-top: 2.59375rem;
-}
+} */
+
 /* footer */
 footer {
   text-align: center;
+  font-family: 'Font-Medium';
   font-size: 1rem;
-  font-weight: 500;
   margin-bottom: 2.5625rem;
 }
 
@@ -271,6 +300,12 @@ footer p {
   color: #7d828d;
   font-size: 1rem;
 }
+
+.highlight {
+  color: #b71a86;
+}
+
+
 /* class */
 .wrap {
   width: 100%;
@@ -284,42 +319,56 @@ footer p {
   justify-content: space-between;
   background-color: #f6f6f6;
 }
+
 .container {
   flex-grow: 1;
 }
+
 .form_content {
   margin-top: 2.4375rem;
 }
+
 .form_content input {
   margin-top: 0.25rem;
 }
+
 .input_wrap {
   padding: 0 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .btn {
   margin-top: 2.3125rem;
 }
+
 .main_text {
   width: 300px;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   text-align: left;
   justify-items: center;
+  font-family: 'Font-Bold';
   font-size: 1.375rem;
-  font-weight: 700;
+  line-height: 1.2;
   margin-bottom: 0.4375rem;
+  white-space: pre-line;
 }
+
+.sub_text {
+  text-align: center;
+  color: #7d828d;
+}
+
 /* 브레드크럼 */
 .breadcrumb {
   display: flex;
+  font-family: 'Font-Medium';
   font-size: 1rem;
-  font-weight: 700;
-  margin-top: 1.21875rem;
   justify-content: center;
 }
+
 .step {
   position: relative;
   width: 5.625rem;
@@ -334,6 +383,7 @@ footer p {
     0% 100%,
     10px 50%
   );
+
   margin-right: -10px;
   z-index: 1;
   display: flex;
@@ -342,9 +392,11 @@ footer p {
   justify-content: center;
   text-align: center;
 }
+
 .step-label {
   white-space: pre-line;
 }
+
 .step:first-child {
   clip-path: polygon(
     0% 0%,
@@ -354,17 +406,22 @@ footer p {
     0% 100%
   );
 }
+
 .step:last-child {
   margin-right: 0;
 }
+
 .step.active {
   background-color: #b71a86;
   z-index: 2;
 }
+
 .input_name_wrap {
   width: 300px;
   margin-bottom: 3.15625rem;
 }
+
+
 /* 성별 드랍 */
 .drop_gender {
   width: 300px;
@@ -379,44 +436,61 @@ footer p {
   outline: none;
   appearance: none;
 }
+
+
 /* 정보 확인 페이지 */
 .check_wrap {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 4.21875rem;
 }
+
 .check_info_border {
   width: 300px;
   height: 250px;
-  border: 0.0625rem solid #b71a86;
+  /* border: 0.0625rem solid #b71a86; */
   border-radius: 0.75rem;
   background-color: #ffffff;
-  margin-top: 1.6875rem;
-  margin-bottom: 1.375rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
 }
+
 .info-row {
   display: flex;
   align-items: center;
+  font-family: 'Font-Medium';
   font-size: 1.375rem;
-  font-weight: 700;
   /* 높낮이 */
   margin-top: 1rem;
   margin-bottom: 1.5rem;
   padding: 0 0.9375rem;
 }
+
 .value {
   padding-left: 0.5rem;
 }
-.sub_text {
-  text-align: center;
-}
+
+
 .register_btn_wrap {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
+
 .highlight {
   color: #b71a86;
+}
+
+.correct_btn {
+    /* border: 0.0625rem solid #006FBC; */
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.back_btn {
+    border: 0.0625rem solid #EB6120;
+    margin-top: 0.3rem;
+
 }
 </style>

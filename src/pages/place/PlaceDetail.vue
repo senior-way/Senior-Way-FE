@@ -56,8 +56,8 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-import no_barrier from '@/assets/no_barrier_free.png';
-import yes_barrier from '@/assets/yes_barrier_free.png';
+import no_barrier from '@/assets/img/no_barrier_free.png';
+import yes_barrier from '@/assets/img/yes_barrier_free.png';
 
 const testId = 1;
 const place = ref(null);

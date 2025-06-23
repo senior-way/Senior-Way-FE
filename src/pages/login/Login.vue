@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <header><p>SENIORWAY</p></header>
+    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -34,6 +34,8 @@
     </footer>
   </div>
 </template>
+
+
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
@@ -71,12 +73,12 @@ const tryLogin = async () => {
   padding: 0;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.03rem;
 }
-ol,
-ul {
+
+ol,ul {
   list-style: none;
 }
+
 input {
   width: 250px;
   height: 45px;
@@ -86,6 +88,7 @@ input {
   outline: none;
   margin-top: 0.4375rem;
 }
+
 button {
   width: 250px;
   border-radius: 0.75rem;
@@ -94,7 +97,15 @@ button {
   border: none;
 }
 /* header */
-header {
+.header_logo {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  width: 15rem; 
+  display: block; 
+  margin: 0 auto;
+}
+
+/* header {
   font-weight: 400;
   text-align: center;
   font-size: 2rem;
@@ -102,7 +113,8 @@ header {
     1px 1px 0 #b71a86;
   letter-spacing: 2px;
   margin-top: 2.59375rem;
-}
+} */
+
 /* footer */
 footer {
   text-align: center;
@@ -110,6 +122,7 @@ footer {
 }
 
 footer p {
+  font-family : 'Font-Medium';
   font-size: 1rem;
   text-decoration: underline;
   color: #7d828d;
@@ -118,6 +131,7 @@ footer p {
 .highlight {
   color: #b71a86;
 }
+
 /* class */
 .wrap {
   width: 100%;
@@ -130,43 +144,54 @@ footer p {
   display: flex;
   background-color: #f6f6f6;
 }
+
 .container {
-  margin-top: 7.90625rem;
+  margin-top: 5rem;
   flex-grow: 1;
 }
+
 .panel_item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .login_btn_wrap {
   flex-direction: column;
   display: flex;
   align-items: center;
 }
+
 .login_btn {
+  font-family: 'Font-Medium';
+  font-size: 1.25rem;
   height: 50px;
   border: 0.0625rem solid #b71a86;
-  font-size: 1.25rem;
 }
+
 .main_text {
+  font-family: 'Font-Medium';
   font-size: 1.375rem;
   font-weight: 700;
 }
+
 .input_pw {
   margin-top: 3.125rem;
   margin-bottom: 2.5rem;
 }
+
 .find_idpw_btn_wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 1.5625rem;
 }
+
 .find_btn {
+  font-family: 'Font-Medium';
+  font-size: 1.125rem;
   height: 70px;
   border: 0.0625rem solid #7d828d;
-  font-size: 1.125rem;
   color: #7d828d;
 }
 </style>
