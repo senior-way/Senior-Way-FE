@@ -1,6 +1,12 @@
 <template>
   <div class="wrap">
-    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
+    <header>
+      <img
+        src="@/assets/img/seniorway_logo.png"
+        alt="SENIORWAY Logo"
+        class="header_logo"
+      />
+    </header>
     <div class="container">
       <div class="content">
         <div class="login_wrap">
@@ -35,7 +41,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
@@ -51,14 +56,26 @@ const tryLogin = async () => {
   }
   // 데이터 확인
   try {
-    const res = await axios.post(`http://주소작성`, {
+    const res = await axios.post(`http://localhost:3000/추후입력`, {
       id: id.value,
       pw: pw.value,
     });
 
     if (res.data.success) {
       alert('로그인 성공');
-      // 토큰 저장, 홈으로 이동?
+      // 토큰 저장
+      sessionStorage.setItem('token', res.data.token);
+      // 내정보 불러오기
+      const profileRes = await axios.get('http://localhost:3000/추후입력', {
+        headers: {
+          Authorization: `Bearer ${res.data.token}`,
+        },
+      });
+      // 로컬에 정보 저장
+      const myProfile = profileRes.data;
+      sessionStorage.setItem('myProfile', JSON.stringify(myProfile));
+      // 홈으로 이동
+      router.replace('/');
     } else {
       alert('로그인 실패: ' + res.data.message);
     }
@@ -67,6 +84,7 @@ const tryLogin = async () => {
   }
 };
 </script>
+
 <style scoped>
 * {
   margin: 0;
@@ -75,7 +93,8 @@ const tryLogin = async () => {
   line-height: 1;
 }
 
-ol,ul {
+ol,
+ul {
   list-style: none;
 }
 
@@ -100,8 +119,8 @@ button {
 .header_logo {
   padding-top: 2rem;
   padding-bottom: 2rem;
-  width: 15rem; 
-  display: block; 
+  width: 15rem;
+  display: block;
   margin: 0 auto;
 }
 
@@ -122,7 +141,7 @@ footer {
 }
 
 footer p {
-  font-family : 'Font-Medium';
+  font-family: 'Font-Medium';
   font-size: 1rem;
   text-decoration: underline;
   color: #7d828d;

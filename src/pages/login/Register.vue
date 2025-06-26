@@ -1,6 +1,12 @@
 <template>
   <div class="wrap">
-    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
+    <header>
+      <img
+        src="@/assets/img/seniorway_logo.png"
+        alt="SENIORWAY Logo"
+        class="header_logo"
+      />
+    </header>
     <div class="container">
       <div class="content">
         <div class="breadcrumb" v-if="currentStep < 4">
@@ -17,23 +23,43 @@
           <!-- 개인정보 동의창 -->
           <div v-if="currentStep === -1" class="form_list">
             <div class="input_wrap agree_wrap">
-              <p class="main_text">개인정보 이용 동의 여부를 <br />체크해주세요.</p>
+              <p class="main_text">
+                개인정보 이용 동의 여부를 <br />체크해주세요.
+              </p>
 
               <label class="checkbox_label">
-                <input type="checkbox" v-model="isAgreed" class="custom_checkbox" />
+                <input
+                  type="checkbox"
+                  v-model="isAgreed"
+                  class="custom_checkbox"
+                />
                 <span class="check_text">
-                  [필수] 개인정보 수집 및 이용 동의<br/> <span class="sub_text2">(수집 항목: 이메일, 이름, 성별, 생년월일)</span>
+                  [필수] 개인정보 수집 및 이용 동의<br />
+                  <span class="sub_text2"
+                    >(수집 항목: 이메일, 이름, 성별, 생년월일)</span
+                  >
                 </span>
               </label>
             </div>
 
             <div class="input_wrap">
               <p class="agree_detail_box">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint aliquid ab, hic voluptate animi tenetur explicabo illo iste eius! Perferendis velit magni, odio sed enim corrupti esse doloribus ut ad? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias hic aut sed accusamus qui laborum, dolore velit dolorum non quasi quas? Voluptatibus non iusto deleniti suscipit nihil ad quia totam.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint aliquid ab, hic voluptate animi tenetur explicabo illo iste eius! Perferendis velit magni, odio sed enim corrupti esse doloribus ut ad? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias hic aut sed accusamus qui laborum, dolore velit dolorum non quasi quas? Voluptatibus non iusto deleniti suscipit nihil ad quia totam.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+                aliquid ab, hic voluptate animi tenetur explicabo illo iste
+                eius! Perferendis velit magni, odio sed enim corrupti esse
+                doloribus ut ad? Lorem ipsum dolor, sit amet consectetur
+                adipisicing elit. Molestias hic aut sed accusamus qui laborum,
+                dolore velit dolorum non quasi quas? Voluptatibus non iusto
+                deleniti suscipit nihil ad quia totam. Lorem ipsum dolor sit
+                amet consectetur adipisicing elit. Sint aliquid ab, hic
+                voluptate animi tenetur explicabo illo iste eius! Perferendis
+                velit magni, odio sed enim corrupti esse doloribus ut ad? Lorem
+                ipsum dolor, sit amet consectetur adipisicing elit. Molestias
+                hic aut sed accusamus qui laborum, dolore velit dolorum non
+                quasi quas? Voluptatibus non iusto deleniti suscipit nihil ad
+                quia totam.
               </p>
             </div>
-
 
             <div class="input_wrap">
               <button
@@ -51,8 +77,10 @@
           <!-- 아이디 입력 창 -->
           <div v-if="currentStep === 0" class="form_list">
             <div class="input_wrap">
-              <p class="main_text">사용하실 <span class="highlight">아이디</span>를<br />
-                입력해주세요.</p>
+              <p class="main_text">
+                사용하실 <span class="highlight">아이디</span>를<br />
+                입력해주세요.
+              </p>
               <input type="text" class="input_id" v-model="userId" />
             </div>
             <div class="input_wrap">
@@ -68,7 +96,10 @@
           <!-- 비밀번호 입력 창 -->
           <div v-if="currentStep === 1" class="form_list">
             <div class="input_wrap">
-              <p class="main_text">사용하실 <span class="highlight">비밀번호</span>를<br />입력해주세요.</p>
+              <p class="main_text">
+                사용하실
+                <span class="highlight">비밀번호</span>를<br />입력해주세요.
+              </p>
               <input type="password" class="input_id" v-model="password" />
             </div>
             <div class="input_wrap">
@@ -83,7 +114,12 @@
           <div v-if="currentStep === 2" class="form_list">
             <div class="input_wrap">
               <p class="main_text">
-                앞에서 입력한 <span class="highlight">비밀번호</span>를<br /><span class="highlight">한 번 더</span> 입력해주세요.
+                앞에서 입력한
+                <span class="highlight">비밀번호</span>를<br /><span
+                  class="highlight"
+                  >한 번 더</span
+                >
+                입력해주세요.
               </p>
               <input type="password" class="input_id" v-model="checkPassword" />
             </div>
@@ -98,11 +134,15 @@
           <div v-if="currentStep === 3" class="form_list">
             <div class="input_wrap">
               <div class="input_name_wrap">
-                <p class="main_text"><span class="highlight">이름</span>을 입력해주세요.</p>
+                <p class="main_text">
+                  <span class="highlight">이름</span>을 입력해주세요.
+                </p>
                 <input type="text" class="input_name" v-model="userName" />
               </div>
               <div class="drop_wrap">
-                <p class="main_text"><span class="highlight">성별</span>을 선택해주세요.</p>
+                <p class="main_text">
+                  <span class="highlight">성별</span>을 선택해주세요.
+                </p>
                 <select v-model="userGender" class="drop_gender">
                   <option disabled value="">성별 선택하기</option>
                   <option>남성</option>
@@ -111,7 +151,9 @@
                 </select>
               </div>
               <div class="select_brith_wrap">
-                <p class="main_text"><span class="highlight">생년월일</span>을 선택해주세요.</p>
+                <p class="main_text">
+                  <span class="highlight">생년월일</span>을 선택해주세요.
+                </p>
                 <input type="date" v-model="userBirth" class="select_brith" />
               </div>
               <div class="input_wrap">
@@ -155,7 +197,7 @@
                   </div>
                 </div>
                 <p class="sub_text" style="color: #7d828d">
-                  잘못된 부분이 있다면 뒤로가기를 눌러<br/>
+                  잘못된 부분이 있다면 뒤로가기를 눌러<br />
                   이전 페이지로 돌아가서 다시 선택해주세요.
                 </p>
                 <div class="register_btn_wrap">
@@ -186,13 +228,17 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from 'axios';
 
-const steps = ['아이디\n입력', '비밀번호\n입력', '비밀번호\n확인', '정보\n입력'];
+const steps = [
+  '아이디\n입력',
+  '비밀번호\n입력',
+  '비밀번호\n확인',
+  '정보\n입력',
+];
 const currentStep = ref(-1);
 const router = useRouter();
 
@@ -262,7 +308,6 @@ const submitRegistration = async () => {
 };
 </script>
 
-
 <style scoped>
 * {
   margin: 0;
@@ -307,8 +352,8 @@ button:active {
 .header_logo {
   padding-top: 2rem;
   padding-bottom: 2rem;
-  width: 15rem; 
-  display: block; 
+  width: 15rem;
+  display: block;
   margin: 0 auto;
 }
 
@@ -329,7 +374,6 @@ footer p {
 .highlight {
   color: #b71a86;
 }
-
 
 /* class */
 .wrap {
@@ -521,12 +565,11 @@ footer p {
 
 /* 비활성 버튼 스타일 */
 .btn.disabled {
-  border-color: #7D828D;
-  color: #7D828D;
+  border-color: #7d828d;
+  color: #7d828d;
   cursor: not-allowed;
   background-color: #ffffff;
 }
-
 
 /* 성별 드랍 */
 .drop_gender {
@@ -542,7 +585,6 @@ footer p {
   outline: none;
   appearance: none;
 }
-
 
 /* 정보 확인 페이지 */
 .check_wrap {
@@ -577,7 +619,6 @@ footer p {
   padding-left: 0.5rem;
 }
 
-
 .register_btn_wrap {
   display: flex;
   align-items: center;
@@ -589,14 +630,13 @@ footer p {
 }
 
 .correct_btn {
-    /* border: 0.0625rem solid #006FBC; */
-    margin-top: 1rem;
-    margin-bottom: 0.3rem;
+  /* border: 0.0625rem solid #006FBC; */
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .back_btn {
-    border: 0.0625rem solid #EB6120;
-    margin-top: 0.3rem;
-
+  border: 0.0625rem solid #eb6120;
+  margin-top: 0.3rem;
 }
 </style>

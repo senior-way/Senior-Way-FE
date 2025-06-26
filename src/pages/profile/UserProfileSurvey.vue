@@ -1,6 +1,12 @@
 <template>
   <div class="wrap">
-    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
+    <header>
+      <img
+        src="@/assets/img/seniorway_logo.png"
+        alt="SENIORWAY Logo"
+        class="header_logo"
+      />
+    </header>
     <div class="container">
       <div class="content">
         <div class="breadcrumb">
@@ -20,7 +26,11 @@
                 하고 싶은 체험을<br /><span class="highlight">모두</span>
                 선택해주세요.
               </div>
-              <img src="@/assets/img/evaluation.png" alt="체험선택" class="sub_img">
+              <img
+                src="@/assets/img/evaluation.png"
+                alt="체험선택"
+                class="sub_img"
+              />
             </div>
             <div class="select_gird">
               <div
@@ -46,7 +56,11 @@
                 이용할 이동 수단을<br /><span class="highlight">모두</span>
                 선택해주세요.
               </div>
-              <img src="@/assets/img/public-transport.png" alt="교통수단" class="sub_img">
+              <img
+                src="@/assets/img/public-transport.png"
+                alt="교통수단"
+                class="sub_img"
+              />
             </div>
             <div class="select_gird">
               <div
@@ -72,7 +86,11 @@
                 휠체어 사용 여부를<br />
                 선택해주세요.
               </div>
-              <img src="@/assets/img/wheelchair.png" alt="휠체어" class="sub_img">
+              <img
+                src="@/assets/img/wheelchair.png"
+                alt="휠체어"
+                class="sub_img"
+              />
             </div>
             <div class="select_gird">
               <div class="select_btn_wrap">
@@ -108,7 +126,7 @@
                 반려동물 동반 여부를<br />
                 선택해주세요.
               </div>
-              <img src="@/assets/img/pets.png" alt="반려동물" class="sub_img">
+              <img src="@/assets/img/pets.png" alt="반려동물" class="sub_img" />
             </div>
             <div class="select_gird">
               <div class="select_btn_wrap">
@@ -145,24 +163,40 @@
                 전자기기 활용 능력을<br />
                 선택해주세요.
               </div>
-              <img src="@/assets/img/smartphone.png" alt="스마트폰" class="sub_img" />
+              <img
+                src="@/assets/img/smartphone.png"
+                alt="스마트폰"
+                class="sub_img"
+              />
             </div>
 
             <div class="digital_skill_btns">
               <img
-                :src="digitalSkillLevel === 'high' ? smartphoneHighSelect : smartphoneHighNone"
+                :src="
+                  digitalSkillLevel === 'high'
+                    ? smartphoneHighSelect
+                    : smartphoneHighNone
+                "
                 alt="상"
                 class="digital_img_btn"
                 @click="selectDigitalSkill('high')"
               />
               <img
-                :src="digitalSkillLevel === 'medium' ? smartphoneMediumSelect : smartphoneMediumNone"
+                :src="
+                  digitalSkillLevel === 'medium'
+                    ? smartphoneMediumSelect
+                    : smartphoneMediumNone
+                "
                 alt="중"
                 class="digital_img_btn"
                 @click="selectDigitalSkill('medium')"
               />
               <img
-                :src="digitalSkillLevel === 'low' ? smartphoneLowSelect : smartphoneLowNone"
+                :src="
+                  digitalSkillLevel === 'low'
+                    ? smartphoneLowSelect
+                    : smartphoneLowNone
+                "
                 alt="하"
                 class="digital_img_btn"
                 @click="selectDigitalSkill('low')"
@@ -184,7 +218,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import smartphoneHighNone from '@/assets/img/smartphone_high_none.png';
@@ -199,7 +232,7 @@ const steps = [
   '이동\n수단',
   '휠체어\n사용',
   '반려\n동물',
-  '스마\n트폰'
+  '스마\n트폰',
 ];
 
 const experienceOptions = [
@@ -221,11 +254,11 @@ const usesWheelchair = ref(null);
 const withPet = ref(null);
 
 // 전자기기 활용 능력 기준 low, medium, high
-const digitalSkillLevel = ref('')  // 기본값 비워둘 수도 있음
+const digitalSkillLevel = ref(''); // 기본값 비워둘 수도 있음
 const selectDigitalSkill = (level) => {
-  digitalSkillLevel.value = level
+  digitalSkillLevel.value = level;
   console.log('디지털 스킬 레벨:', level);
-}
+};
 
 const step = ref(0);
 
@@ -264,8 +297,24 @@ const goToNextPage = () => {
   step.value++;
 };
 
+const postProfileData = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const newProfileData = {
+      userId: store.users.id,
+      ageGroup: '60-69',
+      gender: 'female',
+      mobilityList: ['버스', '지하철', '도보'],
+      digitalLiteracy: 'low',
+      hasPet: false,
+      useWheelchair: true,
+      preferredCategoryIds: [1, 3],
+    };
+  } catch (error) {
+    alert('오류 발생');
+  }
+};
 </script>
-
 
 <style scoped>
 * {
@@ -278,8 +327,8 @@ const goToNextPage = () => {
 /* header */
 .header_logo {
   padding-top: 2rem;
-  width: 15rem; 
-  display: block; 
+  width: 15rem;
+  display: block;
   margin: 0 auto;
 }
 
@@ -371,7 +420,6 @@ footer p {
   z-index: 2;
 }
 
-
 /* 본문 */
 .survey_content {
   margin-top: 1.5rem;
@@ -439,7 +487,7 @@ footer p {
 }
 .select_two_option_btn.selected {
   border-color: #b71a86;
-  background-color: #b71a8630
+  background-color: #b71a8630;
 }
 
 .digital_skill_btns {
@@ -476,7 +524,7 @@ footer p {
   cursor: pointer;
 }
 
-.btn_final{
+.btn_final {
   width: 300px;
   height: 50px;
   margin-top: 1rem;

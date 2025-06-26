@@ -1,6 +1,12 @@
 <template>
   <div class="wrap">
-    <header><img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" /></header>
+    <header>
+      <img
+        src="@/assets/img/seniorway_logo.png"
+        alt="SENIORWAY Logo"
+        class="header_logo"
+      />
+    </header>
     <div class="container">
       <div class="content">
         <div class="register_btn_wrap">
@@ -16,7 +22,7 @@
           </button>
         </div>
         <div class="kakao_login_btn_wrap">
-          <button class="kakao_login_btn">
+          <button class="kakao_login_btn" @click="tryKakaoLogin">
             <img :src="kakaoLoginBtn" alt="카카오 로그인" />
           </button>
           <p class="kakao_login_text">카카오 계정으로 가입했어요!</p>
@@ -29,12 +35,15 @@
   </div>
 </template>
 
-
 <script setup>
 import kakaoLoginBtn from '@/assets/img/kakao_login.png';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const KAKAO_SECRET = import.meta.env.VITE_KAKAO_CLIENT_ID;
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_SECRET}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 const goToLogin = () => {
   router.push('/login');
@@ -43,8 +52,11 @@ const goToLogin = () => {
 const goToRegister = () => {
   router.push('/register');
 };
+//카카오 로그인 함수
+const tryKakaoLogin = async () => {
+  window.location.href = kakaoAuthUrl;
+};
 </script>
-
 
 <style scoped>
 * {
@@ -58,8 +70,8 @@ const goToRegister = () => {
 .header_logo {
   padding-top: 2rem;
   padding-bottom: 5rem;
-  width: 15rem; 
-  display: block; 
+  width: 15rem;
+  display: block;
   margin: 0 auto;
 }
 
@@ -125,7 +137,7 @@ footer {
 }
 
 .sub {
-  font-family : 'Font-Medium';
+  font-family: 'Font-Medium';
   font-size: 1rem;
   color: #7d828d;
   margin-top: 1.8125rem;

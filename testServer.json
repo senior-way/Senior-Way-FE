@@ -32,5 +32,17 @@
       "description": "침대가 있다.",
       "isBarrierFree": false
     }
+  ],
+  "profile": [
+    {
+      "userId": 1,
+      "ageGroup": "60-69",
+      "gender": "female",
+      "mobilityList": ["버스", "지하철", "도보"],
+      "digitalLiteracy": "low",
+      "hasPet": false,
+      "useWheelchair": true,
+      "preferredCategoryIds": [1, 3]
+    }
   ]
 }
