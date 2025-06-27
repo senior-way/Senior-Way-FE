@@ -15,7 +15,7 @@
 
         <button class="survey_btn" @click="goTo('profilesurvey')">관광지 추천받고 일정 만들기</button>
         <button class="home_btn" @click="goTo('tripschedule')">저장된 여행 일정 확인</button>
-        <button class="home_btn">무장애 관광지 검색</button>
+        <button class="home_btn" @click="goTo('searchplace')">무장애 관광지 검색</button>
         <button class="home_btn" @click="goTo('board')">여행자 커뮤니티</button>
       </div>
     </div>
