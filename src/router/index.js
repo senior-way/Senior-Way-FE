@@ -6,6 +6,7 @@ import LoginHome from '@/pages/login/LoginHome.vue';
 import UserProfileSurvey from '@/pages/profile/UserProfileSurvey.vue';
 import TripSchedule from '@/pages/home/TripSchedule.vue';
 import PlaceList from '@/pages/place/PlaceList.vue';
+import SearchPlace from '@/pages/place/SearchPlace.vue';
 import Board from '@/pages/home/BoardPreview.vue';
 
 const router = createRouter({
@@ -50,6 +51,11 @@ const router = createRouter({
       path: '/place/:id',
       name: 'placedetail',
       component: () => import('@/pages/place/PlaceDetail.vue'),
+    },
+    {
+      path: '/searchplace',
+      name: 'searchplace',
+      component: SearchPlace,
     },
     {
       path: '/board',
