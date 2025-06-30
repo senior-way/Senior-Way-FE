@@ -10,12 +10,11 @@
       <div class="content">
         <!-- 검색창 -->
         <div class="search-bar">
-            <img src="@/assets/img/search-icon.png" alt="검색 아이콘" class="search-icon" />
-            <input type="text" placeholder="검색어를 입력하세요" class="search-input" ref="searchInput"/>
-            <!-- 검색창 마이크 버튼 -->
             <button class="mic-btn" @click="startSTT">
-            <img src="@/assets/img/mic-icon.png" alt="마이크 아이콘" />
+             <img src="@/assets/img/mic-icon.png" alt="검색 아이콘" class="search-icon" />
             </button>
+            <input type="text" placeholder="검색어를 입력하세요" class="search-input" ref="searchInput"/>
+            <img src="@/assets/img/search-icon.png" alt="마이크 아이콘" />
         </div>
 
         <!-- 음성 안내 -->
