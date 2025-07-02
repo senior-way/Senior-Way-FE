@@ -42,7 +42,11 @@
               <div class="border"><p>설명</p></div>
               <div class="place_name">{{ place.description }}</div>
             </div>
+            <div class="map_wrap">
+             <KakaoMap :address="place.address" />
+            </div>
           </div>
+
           <div class="btn_wrap">
             <button class="sound_btn">음성 해설</button>
             <button class="add_btn">일정에 추가</button>
@@ -58,6 +62,7 @@
 
 
 <script setup>
+  import KakaoMap from '@/components/KakaoMap.vue';   
   import axios from 'axios';
   import { onMounted, ref } from 'vue';
   import { useRoute } from 'vue-router'; 
@@ -155,7 +160,8 @@ button {
   display: flex;
   padding: 0 0.9375rem;
   width: 330px;
-  height: 35px;
+  min-height: 35px;
+  height: auto;
   align-items: center;
   margin-bottom: 0.3125rem;
 }
@@ -191,6 +197,14 @@ button {
   display: block;
 }
 
+/* kakaomap지도 */
+.map_wrap {
+  width: 95%;
+  margin: 1rem auto 0;
+  position: relative;
+
+}
+
 .btn_wrap {
   position: absolute;
   bottom: 15px;
@@ -200,5 +214,6 @@ button {
   width: 330px;
   height: 50px;
   justify-content: space-between;
+  background-color: #ffffff;
 }
 </style>
