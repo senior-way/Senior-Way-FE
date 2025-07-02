@@ -21,9 +21,7 @@ script.onload = () => {
 script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${KAKAO_APP_KEY}&libraries=services,clusterer,drawing`;
 document.head.appendChild(script);
 
-
 function init() {
-
   const app = createApp(App);
 
   app.use(createPinia());

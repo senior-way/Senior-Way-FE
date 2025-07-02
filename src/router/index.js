@@ -9,6 +9,7 @@ import PlaceList from '@/pages/place/PlaceList.vue';
 import SearchPlace from '@/pages/place/SearchPlace.vue';
 import Board from '@/pages/home/BoardPreview.vue';
 import KakaoCallback from '@/pages/login/KakaoCallback.vue';
+import MyPage from '@/mypage/MyPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: Register,
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: MyPage,
     },
     {
       path: '/profilesurvey',
