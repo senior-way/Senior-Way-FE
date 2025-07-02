@@ -273,7 +273,7 @@ const toggleExperience = (item) => {
   }
 };
 
-// 이동수단 선택했을 시
+// 이동수단 선택
 const toggleVehicle = (item) => {
   if (selectedVehicle.value.includes(item)) {
     selectedVehicle.value = selectedVehicle.value.filter((v) => v !== item);
@@ -292,8 +292,45 @@ const selectWithPet = (value) => {
   withPet.value = value;
 };
 
-// 다음페이지 이동
+// 다음페이지 이동(유효성 검사 포함)
 const goToNextPage = () => {
+  switch (step.value) {
+    case 0:
+      if (selectedExperiences.value.length === 0) {
+        alert('하고 싶은 체험을 1개 이상 선택해주세요.');
+        return;
+      }
+      break;
+    case 1:
+      if (selectedVehicle.value.length === 0) {
+        alert('이용할 이동 수단을 1개 이상 선택해주세요.');
+        return; 
+      }
+      break;
+    case 2:
+      if (usesWheelchair.value === null) {
+        alert('휠체어 사용 여부를 선택해주세요.');
+        return; 
+      }
+      break;
+    case 3:
+      if (withPet.value === null) {
+        alert('반려동물 동반 여부를 선택해주세요.');
+        return;
+      }
+      break;
+    case 4:
+      if (digitalSkillLevel.value === '') {
+        alert('전자기기 활용 능력을 선택해주세요.');
+        return; 
+      }
+      // 데이터 전송 함수 호출
+      console.log('설문 완료! 데이터를 전송합니다.');
+      postProfileData();
+
+      return; 
+  }
+
   step.value++;
 };
 
