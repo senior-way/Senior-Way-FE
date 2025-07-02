@@ -3,9 +3,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 
-// 1. 부모 컴포넌트로부터 주소(address)를 전달받기 위한 props 정의
 const props = defineProps({
   address: {
     type: String,
@@ -15,7 +14,6 @@ const props = defineProps({
 
 const container = ref(null); // 지도를 담을 ref
 
-// ✅ loadMap을 먼저 정의
 const loadMap = (address) => {
   if (window.kakao && window.kakao.maps) {
     window.kakao.maps.load(() => {

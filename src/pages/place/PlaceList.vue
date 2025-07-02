@@ -44,9 +44,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'; // onMounted 추가
+import { ref, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router';
-import axios from 'axios'; // axios import
+import axios from 'axios'; 
 
 const router = useRouter();
 
@@ -111,7 +111,7 @@ const confirmSelection = () => {
   display: flex;
   flex-direction: column;
   background-color: #f6f6f6;
-  position: relative; /* 버튼 위치 기준점 */
+  position: relative;
 }
 .header_logo {
   padding-top: 2rem;
