@@ -2,7 +2,11 @@
   <div class="wrap">
     <!-- 헤더 -->
     <header>
-      <img src="@/assets/img/seniorway_logo.png" alt="SENIORWAY Logo" class="header_logo" />
+      <img
+        src="@/assets/img/seniorway_logo.png"
+        alt="SENIORWAY Logo"
+        class="header_logo"
+      />
     </header>
 
     <!-- 본문 -->
@@ -10,19 +14,32 @@
       <div class="content">
         <!-- 검색창 -->
         <div class="search-bar">
-            <button class="mic-btn" @click="startSTT">
-             <img src="@/assets/img/mic-icon.png" alt="검색 아이콘" class="search-icon" />
-            </button>
-            <input type="text" placeholder="검색어를 입력하세요" class="search-input" ref="searchInput"/>
-            <img src="@/assets/img/search-icon.png" alt="마이크 아이콘" />
+          <button class="mic-btn" @click="startSTT">
+            <img
+              src="@/assets/img/mic-icon.png"
+              alt="검색 아이콘"
+              class="search-icon"
+            />
+          </button>
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요"
+            class="search-input"
+            ref="searchInput"
+          />
+          <img src="@/assets/img/search-icon.png" alt="마이크 아이콘" />
         </div>
 
         <!-- 음성 안내 -->
         <div class="voice-guide">
-            <!-- 큰 마이크 버튼 -->
-            <button class="big-mic-btn" @click="startSTT">
-            <img src="@/assets/img/mic-icon.png" alt="음성 마이크" class="big-mic" />
-            </button>
+          <!-- 큰 마이크 버튼 -->
+          <button class="big-mic-btn" @click="startSTT">
+            <img
+              src="@/assets/img/mic-icon.png"
+              alt="음성 마이크"
+              class="big-mic"
+            />
+          </button>
           <p class="guide-text">
             음성 인식으로 검색이 가능합니다.<br />
             마이크 버튼을 누르고 검색하고 싶은<br />
@@ -41,55 +58,53 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+import { ref } from 'vue';
 
-    const searchInput = ref(null);
+const searchInput = ref(null);
 
-    const startSTT = () => {
-    const input = document.querySelector('.search-input');
-    if (!input) return;
+const startSTT = () => {
+  const input = document.querySelector('.search-input');
+  if (!input) return;
 
-    // 1. 검색창에 커서 깜빡이게 (focus)
-    input.focus();
+  // 1. 검색창에 커서 깜빡이게 (focus)
+  input.focus();
 
-    // 2. 브라우저가 Web Speech API를 지원하는지 확인
-    if (!('webkitSpeechRecognition' in window)) {
-        alert('음성 인식을 지원하지 않는 브라우저입니다.');
-        return;
-    }
+  // 2. 브라우저가 Web Speech API를 지원하는지 확인
+  if (!('webkitSpeechRecognition' in window)) {
+    alert('음성 인식을 지원하지 않는 브라우저입니다.');
+    return;
+  }
 
-    const recognition = new webkitSpeechRecognition(); // Chrome 전용
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
+  const recognition = new webkitSpeechRecognition(); // Chrome 전용
+  recognition.lang = 'ko-KR';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
 
-    recognition.start();
+  recognition.start();
 
-    // 3. 음성 인식 성공 시
-    recognition.onresult = (event) => {
+  // 3. 음성 인식 성공 시
+  recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript;
     console.log('인식된 텍스트:', transcript);
 
     if (searchInput.value) {
-        searchInput.value.value = transcript;
+      searchInput.value.value = transcript;
     } else {
-        console.warn('searchInput DOM이 존재하지 않음');
+      console.warn('searchInput DOM이 존재하지 않음');
     }
-    };
+  };
 
+  // 4. 오류 처리
+  recognition.onerror = (event) => {
+    console.error('STT 오류:', event.error);
+  };
 
-    // 4. 오류 처리
-    recognition.onerror = (event) => {
-        console.error('STT 오류:', event.error);
-    };
-
-    // 5. 5초 뒤 자동 종료
-    setTimeout(() => {
-        recognition.stop();
-        console.log('음성 인식 자동 종료됨 (5초 타이머)');
-    }, 5000);
-    };
-
+  // 5. 5초 뒤 자동 종료
+  setTimeout(() => {
+    recognition.stop();
+    console.log('음성 인식 자동 종료됨 (5초 타이머)');
+  }, 5000);
+};
 </script>
 
 <style scoped>
@@ -167,12 +182,12 @@
 }
 
 .mic-btn {
-  background: none;      
-  border: none;         
-  padding: 0;          
-  outline: none;       
-  cursor: pointer;     
-  display: flex;       
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
