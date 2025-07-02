@@ -56,10 +56,13 @@ const tryLogin = async () => {
   }
   // 데이터 확인
   try {
-    const res = await axios.post(`http://localhost:3000/추후입력`, {
-      id: id.value,
-      pw: pw.value,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+      {
+        id: id.value,
+        pw: pw.value,
+      }
+    );
 
     if (res.data.success) {
       alert('로그인 성공');

@@ -251,6 +251,9 @@ const userName = ref('');
 const userGender = ref('');
 const userBirth = ref('');
 
+//이메일형식
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 //브레드크럼 카운트 증가
 const goToNextPage = () => {
   currentStep.value++;
@@ -258,17 +261,24 @@ const goToNextPage = () => {
 // 아이디 중복 확인
 const checkId = async () => {
   try {
-    // 입력 없을때
+    // 입력 없을 때
     if (userId.value.trim() === '') {
       alert('아이디를 입력해 주세요.');
       return;
     }
-    // 입력 있을때
-    // 주소 나중에 바꾸기
+    // 이메일 형식 확인
+    const isValidEmail = emailRegex.test(userId.value);
+    if (!isValidEmail) {
+      alert('올바른 이메일 형식이 아닙니다.');
+      return;
+    }
+
+    //중복 확인
     const res = await Axios.get(
-      `http://localhost:3000/users?userId=${userId.value}`
+      `${import.meta.env.VITE_API_BASE_URL}/api/users?userId=${userId.value}`
     );
-    if (res.data.length === 0) {
+
+    if (res.data.exists === false) {
       alert('사용 가능한 아이디입니다.');
       goToNextPage();
     } else {
@@ -280,7 +290,7 @@ const checkId = async () => {
 };
 //비밀번호 확인
 const isPasswordConfirmed = () => {
-  if (password.value === checkPassword.value) {
+  if (password.value.trim() === checkPassword.value.trim()) {
     goToNextPage();
   } else {
     alert('비밀번호가 일치하지 않습니다.');
@@ -298,10 +308,12 @@ const submitRegistration = async () => {
       userBirth: userBirth.value,
     };
 
-    //주소 바꾸기
-    //라우팅 홈으로 바꾸기
-    await Axios.post('http://localhost:3000/users', newUser);
-    router.push('/loginhome');
+    //데이터 전달
+    await Axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/auth/signup`,
+      newUser
+    );
+    router.push('/home');
   } catch (error) {
     alert('오류가 발생했습니다.');
   }

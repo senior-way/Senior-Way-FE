@@ -45,15 +45,12 @@ const KAKAO_SECRET = import.meta.env.VITE_KAKAO_CLIENT_ID;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_SECRET}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
-const goToLogin = () => {
-  router.push('/login');
-};
+//페이지 이동
+const goToLogin = () => router.push('/login');
+const goToRegister = () => router.push('/register');
 
-const goToRegister = () => {
-  router.push('/register');
-};
 //카카오 로그인 함수
-const tryKakaoLogin = async () => {
+const tryKakaoLogin = () => {
   window.location.href = kakaoAuthUrl;
 };
 </script>
