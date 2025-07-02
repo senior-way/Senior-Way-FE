@@ -13,13 +13,14 @@
     {
       "id": 1,
       "name": "보수동 책방골목",
-      "image": "https://loremflickr.com/300/300/cat",
+      "image": "https://storage.doopedia.co.kr/upload/_upload/image5/travel/editor/2020/06/13/20200613221422441_thumb.jpg",
       "address": "부산광역시 중구 보수동 1가",
       "openingHours": "오전 10:00 ~ 오후 8:30",
       "holiday": "없음",
       "price": "없음",
       "description": "부산광역시 중구에 위치한 명소. 여러 종류의 고서, 동양학, 소설, 외국원서, 만화, 잡지, 교과서, 헌책 등 각 서점이 전문적으로 운영되고 있다.",
-      "isBarrierFree": true
+      "isBarrierFree": true,
+      "tags": ["역사·문화·예술", "실내", "휠체어"]
     },
     {
       "id": 2,
@@ -30,7 +31,8 @@
       "holiday": "없음",
       "price": "없음",
       "description": "침대가 있다.",
-      "isBarrierFree": false
+      "isBarrierFree": false,
+      "tags": ["역사·문화·예술", "야외"]
     }
   ],
   "profile": [
