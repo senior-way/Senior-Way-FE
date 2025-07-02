@@ -26,7 +26,6 @@
           <img :src="spot.image" :alt="spot.name" class="spot-image" />
           <div class="card-content">
             <h3 class="spot-title">{{ spot.name }}</h3>
-            <p class="spot-description">{{ spot.description }}</p>
             <div class="tag-container">
               <span v-for="tag in spot.tags" :key="tag" class="tag">
                 #{{ tag }}
@@ -116,6 +115,7 @@ const confirmSelection = () => {
 }
 .header_logo {
   padding-top: 2rem;
+  padding-bottom: 0.5rem;
   width: 15rem;
   display: block;
   margin: 0 auto;
@@ -143,7 +143,6 @@ const confirmSelection = () => {
   font-family: 'Font-Medium';
   font-size: 1rem;
   color: #000000;
-  margin-top: 0.5rem;
 }
 
 /* 추천 관광지 카드 리스트 */
@@ -181,8 +180,8 @@ const confirmSelection = () => {
   font-size: 1.125rem; 
 }
 .spot-description {
-  font-family: 'Font-Regular';
-  font-size: 0.875rem; 
+  font-family: 'Font-Medium';
+  font-size: 1rem; 
   color: #555;
   margin-top: 0.25rem;
 }

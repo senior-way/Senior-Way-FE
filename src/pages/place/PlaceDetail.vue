@@ -23,7 +23,7 @@
           </div>
           <div class="description_wrap">
             <div class="infoItem_wrap">
-              <div class="border"><p>장소</p></div>
+              <div class="border"><p>주소</p></div>
               <div class="place_name">{{ place.address }}</div>
             </div>
             <div class="infoItem_wrap">
@@ -93,14 +93,15 @@
 
 <style scoped>
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-weight: bold;
   line-height: 1;
   letter-spacing: -0.03rem;
 }
 
 header {
+  font-family: 'Font-Bold';
   font-size: 2rem;
   padding-top: 2.03125rem;
   padding-bottom: 1.03125rem;
@@ -112,12 +113,13 @@ button {
   border: 0.0625rem solid #7d828d;
   border-radius: 0.75rem;
   background-color: #ffffff;
+  font-family: 'Font-Medium';
   font-size: 1.25rem;
-  font-weight: bold;
 }
 
 /* class */
 .wrap {
+  position: relative;
   width: 360px;
   height: 740px;
   margin: 0 auto;
@@ -129,16 +131,24 @@ button {
 
 .container {
   width: 330px;
-  height: 582px;
+  min-height: 580px;
   border-radius: 0.625rem;
   background-color: #ffffff;
   padding-top: 0.625rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 80px;
 }
 
 .infoItem_wrap {
@@ -157,8 +167,8 @@ button {
   margin-right: 0.75rem;
   border-radius: 0.75rem;
   background-color: #d9d9d9;
+  font-family: "Font-Bold";
   font-size: 1rem;
-  font-weight: bold;
   justify-content: center;
   align-items: center;
 }
@@ -168,19 +178,10 @@ button {
   height: 35px;
 }
 
-/* 스크롤바 */
-.description_wrap {
-  height: 220px;
-  overflow-y: auto;
-}
-
-.description_wrap::-webkit-scrollbar {
-  display: none;
-}
-
 .place_name {
   flex: 1;
-  font-size: 0.875rem;
+  font-family: 'Font-Medium';
+  font-size: 1rem;
 }
 
 .spot-image {
@@ -191,10 +192,13 @@ button {
 }
 
 .btn_wrap {
+  position: absolute;
+  bottom: 15px;
+  left: 50%; 
+  transform: translateX(-50%);
   display: flex;
   width: 330px;
   height: 50px;
-  margin-top: 1rem;
   justify-content: space-between;
 }
 </style>
