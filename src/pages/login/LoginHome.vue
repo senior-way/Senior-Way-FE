@@ -72,17 +72,6 @@ const tryKakaoLogin = () => {
   margin: 0 auto;
 }
 
-/* header {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  text-shadow: -1px -1px 0 #b71a86, 1px -1px 0 #b71a86, -1px 1px 0 #b71a86,
-    1px 1px 0 #b71a86;
-  letter-spacing: 2px;
-  margin-top: 2.59375rem;
-  margin-bottom: 4.28125rem;
-} */
-
 /* footer */
 footer {
   font-family: 'Font-Medium';

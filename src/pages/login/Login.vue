@@ -15,7 +15,7 @@
               <li class="panel_item">
                 <div class="login_panel">
                   <div class="input_id">
-                    <p class="main_text">아이디를 입력해주세요.</p>
+                    <p class="main_text">이메일을 입력해주세요.</p>
                     <input type="text" class="id" id="id" v-model="id" />
                   </div>
                   <div class="input_pw">
@@ -51,7 +51,7 @@ const pw = ref('');
 // 로그인 시도
 const tryLogin = async () => {
   if (!id.value || !pw.value) {
-    alert('아이디와 비밀번호를 입력해 주세요.');
+    alert('이메일과 비밀번호를 입력해 주세요.');
     return;
   }
   // 데이터 확인
