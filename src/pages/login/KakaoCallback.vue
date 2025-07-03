@@ -24,13 +24,13 @@ onMounted(async () => {
       { code }
     );
     // 토큰 정상 발급
-    if (res.data?.token) {
-      localStorage.setItem('token', res.data.token);
-      router.push('/');
+    const accessToken = res.data?.accessToken; // 서버 응답에 맞춰 accessToken 사용
+    if (accessToken) {
+      localStorage.setItem('token', accessToken);
+      router.replace('/');
     } else {
-      // 토큰 못받음
       alert('토큰을 받아오지 못했습니다.');
-      router.push('/loginhome');
+      router.replace('/loginhome');
     }
   } catch (error) {
     //오류 종류
