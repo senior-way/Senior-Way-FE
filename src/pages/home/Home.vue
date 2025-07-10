@@ -10,7 +10,7 @@
 
         <div class="row_btn_wrap">
           <button class="sub_btn half" @click="goTo('loginhome')">로그인/회원가입</button>
-          <button class="sub_btn half">내 정보 확인</button>
+          <button class="sub_btn half" @click="goTo('mypage')">내 정보 확인</button>
         </div>
 
         <button class="survey_btn" @click="goTo('profilesurvey')">관광지 추천받고 일정 만들기</button>
