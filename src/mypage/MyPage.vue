@@ -5,6 +5,7 @@
         src="@/assets/img/seniorway_logo.png"
         alt="SENIORWAY Logo"
         class="header_logo"
+        @click="goToHome"
       />
     </header>
     <div class="container">
@@ -34,6 +35,13 @@
 
 <script setup>
 import profileImg from '@/assets/img/profile_img.jpg';
+import {useRouter} from 'vue-router';
+
+const router=useRouter();
+
+const goToHome = () => {
+  router.push('/');
+};
 </script>
 
 <style scoped>
@@ -51,6 +59,7 @@ import profileImg from '@/assets/img/profile_img.jpg';
   width: 15rem;
   display: block;
   margin: 0 auto;
+  cursor: pointer;
 }
 
 button {
@@ -102,19 +111,18 @@ button {
   min-height: 35px;
   height: auto;
   align-items: center;
-  margin-bottom: 0.3125rem;
+  margin-bottom: 0.5rem;
 }
 
 .border {
   display: flex;
   width: 70px;
-  height: 20px;
+  height: 30px;
   line-height: 20px;
   margin-right: 0.75rem;
   border-radius: 0.75rem;
   background-color: #d9d9d9;
-  font-family: 'Font-medium';
-  font-weight: 500;
+  font-family: 'Font-Bold';
   font-size: 1rem;
   justify-content: center;
   align-items: center;
@@ -138,17 +146,5 @@ button {
   max-width: 330px;
   object-fit: cover;
   display: block;
-}
-
-.btn_wrap {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  width: 330px;
-  height: 50px;
-  justify-content: space-between;
-  background-color: #ffffff;
 }
 </style>
