@@ -5,6 +5,7 @@
         src="@/assets/img/seniorway_logo.png"
         alt="SENIORWAY Logo"
         class="header_logo"
+        @click="goToHome"
       />
     </header>
     <div class="container">
@@ -34,6 +35,13 @@
 
 <script setup>
 import profileImg from '@/assets/img/profile_img.jpg';
+import {useRouter} from 'vue-router';
+
+const router=useRouter();
+
+const goToHome = () => {
+  router.push('/');
+};
 </script>
 
 <style scoped>
@@ -51,6 +59,7 @@ import profileImg from '@/assets/img/profile_img.jpg';
   width: 15rem;
   display: block;
   margin: 0 auto;
+  cursor: pointer;
 }
 
 button {
