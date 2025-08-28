@@ -5,18 +5,19 @@
         src="@/assets/img/seniorway_logo.png"
         alt="SENIORWAY Logo"
         class="header_logo"
+        @click="goTo('/')"
       />
     </header>
     <div class="container">
       <div class="content">
         <div class="register_btn_wrap">
-          <button class="large_btn" @click="goToRegister">
+          <button class="large_btn"  @click="goTo('register')">
             <p class="main">회원가입</p>
             <p class="sub">처음 방문했어요!</p>
           </button>
         </div>
         <div class="login_btn_wrap">
-          <button class="large_btn" @click="goToLogin">
+          <button class="large_btn"  @click="goTo('login')">
             <p class="main">로그인</p>
             <p class="sub">일반 계정이 있어요!</p>
           </button>
@@ -46,8 +47,11 @@ const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_SECRET}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 //페이지 이동
-const goToLogin = () => router.push('/login');
-const goToRegister = () => router.push('/register');
+const goTo = (name) => {
+  router.push({ name });
+};
+// const goToLogin = () => router.push('/login');
+// const goToRegister = () => router.push('/register');
 
 //카카오 로그인 함수
 const tryKakaoLogin = () => {
@@ -70,6 +74,7 @@ const tryKakaoLogin = () => {
   width: 15rem;
   display: block;
   margin: 0 auto;
+  cursor: pointer;
 }
 
 /* footer */
