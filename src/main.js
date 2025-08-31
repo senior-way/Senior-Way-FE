@@ -4,6 +4,9 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
+import { DatePicker, Popup } from 'vant';
+import 'vant/lib/index.css'
+
 import '@/assets/main.css';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,5 +29,7 @@ function init() {
 
   app.use(createPinia());
   app.use(router);
+  app.use(DatePicker);
+  app.use(Popup);
   app.mount('#app');
 }
