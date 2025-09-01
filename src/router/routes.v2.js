@@ -40,6 +40,16 @@ const routesV2 = [
     meta: { title: '회원가입' },
   },
 
+  // 관광지 상세페이지
+    {
+    path: '/v2/tourplace/:id',
+    name: 'TourplaceDetailV2',
+    component: () => import('@/newpages/tourplace/TourplaceDetailPage.vue'),
+    meta: { 
+      noHeader: true,
+      title: '관광지 상세' },
+  },
+
   // 404
   {
     path: '/v2/:pathMatch(.*)*',
