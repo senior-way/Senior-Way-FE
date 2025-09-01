@@ -3,7 +3,7 @@
     <button
       v-for="it in items"
       :key="it"
-      class="row bodyMedium22px"
+      class="row bodyMedium20px"
       :class="{ on: selected === it }"
       :aria-pressed="selected === it"
       @click="select(it)"
