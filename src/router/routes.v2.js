@@ -32,6 +32,14 @@ const routesV2 = [
     meta: { title: '회원가입' },
   },
 
+  // 선호도조사
+  {
+    path: '/v2/survey',
+    name: 'Survey',
+    component: () => import('@/newpages/survey/SurveyPage.vue'),
+    meta: { title: '회원가입' },
+  },
+
   // 404
   {
     path: '/v2/:pathMatch(.*)*',
