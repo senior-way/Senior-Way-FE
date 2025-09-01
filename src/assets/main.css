@@ -45,6 +45,12 @@ html { font-size: clamp(12px, 4.444vw, 16px); }
   font-family: 'GmarketSansBold', sans-serif;
 }
 
+.bodyBold22px {
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-family: 'GmarketSansBold', sans-serif;
+}
+
 .bodyBold20px {
   font-size: 1.25rem;
   font-weight: 700;
