@@ -123,8 +123,8 @@ import TextInput from '@/components/input/TextInput.vue'
 import StepBreadcrumb from '@/components/layout/StepBreadcrumb.vue'
 
 /* 방금 만든 모달들: 경로는 네 구조에 맞춰 조정해줘 */
-import ConfirmModal from '@/components/layout/SimpleModal.vue'     // 단일 확인
-import ActionModal from '@/components/layout/SelectModal.vue'          // 확인/보조 2버튼
+import ConfirmModal from '@/components/modal/SimpleModal.vue'     // 단일 확인
+import ActionModal from '@/components/modal/SelectModal.vue'          // 확인/보조 2버튼
 
 // 단계 데이터
 const signupSteps = [

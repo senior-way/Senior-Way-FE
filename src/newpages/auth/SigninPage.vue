@@ -191,7 +191,7 @@ import StepBreadcrumb from '@/components/layout/StepBreadcrumb.vue'
 import TextInput from '@/components/input/TextInput.vue'
 import WheelDateInput from '@/components/input/DateInput.vue'
 import SubmitButton from '@/components/button/SubmitButton.vue'
-import SimpleModal from '@/components/layout/SimpleModal.vue'
+import SimpleModal from '@/components/modal/SimpleModal.vue'
 
 import pwClosed from '@/assets/icons/pw_hide_eye.png'
 import pwOpen from '@/assets/icons/pw_show_eye.png'

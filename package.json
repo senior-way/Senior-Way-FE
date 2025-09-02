@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "mock": "json-server --watch db.json --port 8080",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -29,3 +29,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Mock API (local only)
+db.json
+*.local.json
+!db.example.jso
