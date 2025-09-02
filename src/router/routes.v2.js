@@ -39,9 +39,9 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
-  // 관광지 상세 (헤더 숨김) — db.json 연동 시 /v2/tourplace/1 등으로 진입
+  // 관광지 상세 (헤더 숨김)
   {
-    path: '/v2/tourplaces/:id',
+    path: '/v2/tourplace/:id',
     name: 'TourplaceDetailV2',
     component: () => import('@/newpages/tourplace/TourplaceDetailPage.vue'),
     meta: { title: '관광지 상세', noHeader: true },

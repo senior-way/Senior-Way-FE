@@ -49,7 +49,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
+
 import KakaoMap from '@/components/KakaoMap.vue'
 import GrayTagRow from '@/components/layout/GrayTagRow.vue'
 import SimpleHeader from '@/components/layout/SimpleHeader.vue'
@@ -60,24 +63,33 @@ import yes_barrier from '@/assets/img/yes_barrier_free.png'
 import calendarIcon from '@/assets/icons/schedule.png'
 import micIcon from '@/assets/icons/microphone.png'
 
-// 목업 데이터
-const places = [
-  {
-    id: 2,
-    name: '송도 해상 케이블카',
-    image:
-      'https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop',
-    isBarrierFree: false,
-    address: '부산광역시 서구 송도해변로 171',
-    openingHours: '오전 9:00 ~ 오후 9:00',
-    holiday: '없음',
-    price: '17,000원',
-    description:
-      '유리 바닥으로 된 케이블카를 타고 바다와 산 경관을 감상할 수 있는 케이블카 관광 명소입니다.',
-  },
-]
+const route = useRoute()
+const place = ref(null)
 
-const place = ref(places[0])
+async function loadPlace() {
+  try {
+    const idParam = route.params?.id
+    if (idParam) {
+      // /tourplace/:id
+      const { data } = await axios.get(`/api/tourplace/${idParam}`)
+      place.value = data
+    } else {
+      // /tourplace (첫 항목만 사용)
+      const { data } = await axios.get('/api/tourplace', { params: { _limit: 1 } })
+      place.value = Array.isArray(data) ? data[0] ?? null : null
+    // 백엔드 연결 시, 하단 코드 사용.
+    //   const { data } = await axios.get('/api/tourplace', { params: { page: 0, size: 1, sort: 'id,asc' } })
+    //   place.value = Array.isArray(data) ? data[0] ?? null : (data?.content?.[0] ?? null)
+    }
+  } catch (err) {
+    console.error('장소 불러오기 실패:', err)
+    place.value = null
+  }
+}
+
+onMounted(loadPlace)
+// 상세 페이지에서 다른 id로 전환될 수 있으므로 감시
+watch(() => route.params?.id, () => loadPlace())
 
 function onAddSchedule() {
   console.log('add schedule for place:', place.value?.id)
