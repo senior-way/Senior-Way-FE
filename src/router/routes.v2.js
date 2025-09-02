@@ -39,6 +39,30 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
+    // 실제사용예정/ 기본 추천 결과 - 쿼리 기반
+  // {
+  //   path: '/v2/recommend',
+  //   name: 'RecommendV2',
+  //   component: () => import('@/newpages/recommend/RecommendMockPage.vue'), 
+  //   props: route => ({
+  //     // 쿼리 기본값 세팅(설문이 비어도 안전)
+  //     exp: route.query.exp ?? 'any',
+  //     move: route.query.move ?? 'walk',
+  //     wc: route.query.wc ?? 'no',
+  //     pets: route.query.pets ?? 'no',
+  //     dev: route.query.dev ?? 'mid'
+  //   }),
+  //   meta: { title: '추천 결과' }
+  // },
+
+  // 임시사용/ 목 데이터 테스트 전용 경로 (나중에 삭제함)
+  {
+    path: '/v2/recommend/mock',
+    name: 'RecommendMockV2',
+    component: () => import('@/newpages/tourplace/RecommendPlacesPage.vue'),
+    meta: { title: '추천 관광지', noHeader: true }
+  },
+
   // 관광지 상세 (헤더 숨김)
   {
     path: '/v2/tourplace/:id',
