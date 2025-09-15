@@ -46,7 +46,7 @@ defineEmits(['left', 'right'])
 
 .btn {
   --icon-size: 24px;
-  --icon-gap: 12px;           /* ← 여기 숫자 키우면 화살표-텍스트 간격이 넓어짐 */
+  --icon-gap: 12px;         
   --pad-left: 8px;
   --pad-right: 8px;
 
@@ -61,13 +61,13 @@ defineEmits(['left', 'right'])
 .back {
   --btn-color: var(--color-mediumgray);
   --pad-left: calc(12px + var(--icon-size) + var(--icon-gap));
-  --label-pad-left: var(--icon-gap);   /* ← 라벨 내부 여백 추가 */
+  --label-pad-left: var(--icon-gap);   
   background: #fff; color: #222;
 }
 .primary {
   --btn-color: var(--color-primary);
   --pad-right: calc(12px + var(--icon-size) + var(--icon-gap));
-  --label-pad-right: var(--icon-gap);  /* ← 라벨 내부 여백 추가 */
+  --label-pad-right: var(--icon-gap);
   background: var(--color-primary); color: #fff;
 }
 
