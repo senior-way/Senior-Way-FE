@@ -39,13 +39,12 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
-    // 실제사용예정/ 기본 추천 결과 - 쿼리 기반
+  // 실제사용 예정(쿼리 기반) - 보류
   // {
   //   path: '/v2/recommend',
   //   name: 'RecommendV2',
-  //   component: () => import('@/newpages/recommend/RecommendMockPage.vue'), 
+  //   component: () => import('@/newpages/recommend/RecommendPage.vue'),
   //   props: route => ({
-  //     // 쿼리 기본값 세팅(설문이 비어도 안전)
   //     exp: route.query.exp ?? 'any',
   //     move: route.query.move ?? 'walk',
   //     wc: route.query.wc ?? 'no',
@@ -55,13 +54,29 @@ const routesV2 = [
   //   meta: { title: '추천 결과' }
   // },
 
-  // 임시사용/ 목 데이터 테스트 전용 경로 (나중에 삭제함)
+  // 임시/목데이터 추천 페이지
   {
     path: '/v2/recommend/mock',
     name: 'RecommendMockV2',
     component: () => import('@/newpages/tourplace/RecommendPlacesPage.vue'),
-    meta: { title: '추천 관광지', noHeader: true }
+    meta: { title: '추천 관광지', noHeader: true },
   },
+
+  // 선택한 관광지 확인 (쿼리 ids 기반)
+  {
+    path: '/v2/plan/selected',
+    name: 'SelectedPlacesV2',
+    component: () => import('@/newpages/tourplace/SelectedPlacesPage.vue'),
+    meta: { title: '선택한 관광지', noHeader: true },
+  },
+
+  // 생성된 일정 확인
+  // {
+  //   path: '/v2/plan/:id',
+  //   name: 'PlanResultV2',
+  //   component: () => import('@/newpages/plan/PlanResultPage.vue'),
+  //   meta: { title: '생성된 일정', noHeader: true },
+  // },
 
   // 관광지 상세 (헤더 숨김)
   {
