@@ -47,6 +47,13 @@ const routesV2 = [
     meta: { title: '관광지 상세', noHeader: true },
   },
 
+  // 보호자 위치
+  {
+    path: '/v2/location',
+    name: 'LocationV2',
+    component: () => import('@/newpages/location/Location.vue'),
+  },
+
   // 404
   {
     path: '/v2/:pathMatch(.*)*',
