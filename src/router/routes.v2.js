@@ -39,21 +39,6 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
-  // 실제사용 예정(쿼리 기반) - 보류
-  // {
-  //   path: '/v2/recommend',
-  //   name: 'RecommendV2',
-  //   component: () => import('@/newpages/recommend/RecommendPage.vue'),
-  //   props: route => ({
-  //     exp: route.query.exp ?? 'any',
-  //     move: route.query.move ?? 'walk',
-  //     wc: route.query.wc ?? 'no',
-  //     pets: route.query.pets ?? 'no',
-  //     dev: route.query.dev ?? 'mid'
-  //   }),
-  //   meta: { title: '추천 결과' }
-  // },
-
   // 임시/목데이터 추천 페이지
   {
     path: '/v2/recommend/mock',
@@ -70,21 +55,29 @@ const routesV2 = [
     meta: { title: '선택한 관광지', noHeader: true },
   },
 
-  // 생성된 일정 확인
-  // {
-  //   path: '/v2/plan/:id',
-  //   name: 'PlanResultV2',
-  //   component: () => import('@/newpages/plan/PlanResultPage.vue'),
-  //   meta: { title: '생성된 일정', noHeader: true },
-  // },
+  // 일정 타임라인
+  {
+    path: '/v2/plan/timeline',
+    name: 'ScheduleTimelineV2',
+    component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
+    meta: { title: '일정 타임라인' }, // 헤더 노출
+  },
 
-  // 관광지 상세 (헤더 숨김)
+  // 관광지 상세
   {
     path: '/v2/tourplace/:id',
     name: 'TourplaceDetailV2',
     component: () => import('@/newpages/tourplace/TourplaceDetailPage.vue'),
     meta: { title: '관광지 상세', noHeader: true },
   },
+
+  // 무장애 관광지 검색
+  {
+  path: '/v2/accessible',
+  name: 'BarrierFreePlacesV2',
+  component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
+  meta: { title: '무장애 관광지', noHeader: true},
+},
 
   // 404
   {
