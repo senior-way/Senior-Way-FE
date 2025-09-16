@@ -1,7 +1,7 @@
 <!-- src/components/input/TextInput.vue -->
 <template>
   <div class="text-input" :class="{ select: isSelect }">
-    <!-- 라벨: 슬롯로 주면 <em> 강조색 적용 -->
+    <!-- <em> 강조색 적용 -->
     <label class="label bodyBold24px" :for="inputId">
       <slot name="label">{{ label }}</slot>
     </label>
@@ -19,7 +19,6 @@
         @input="$emit('update:modelValue', $event.target.value)"
       />
 
-      <!-- select -->
       <select
         v-else
         class="input bodyMedium20px"

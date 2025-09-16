@@ -32,7 +32,7 @@ function onClick () {
 
 <style scoped>
 .auth-card {
-  width: 250px;
+  width: 280px;
   height: 150px;
   display: flex;
   flex-direction: column;
@@ -74,6 +74,7 @@ function onClick () {
 
 .title {
   line-height: 1.1;
+  letter-spacing: -0.03rem;
 }
 
 .subtitle {
