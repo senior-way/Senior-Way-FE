@@ -98,9 +98,8 @@ const routesV2 = [
   {
     path: '/v2/location',
     name: 'LocationV2',
-    component: () => import('@/newpages/location/Location.vue'),
+    component: () => import('@/newpages/guardian/Location.vue'),
   },
-
 
   // 404
   {
