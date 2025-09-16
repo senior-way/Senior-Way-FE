@@ -11,8 +11,8 @@ const routesV2 = [
   {
     path: '/v2/login',
     name: 'LoginV2',
-    component: () => import('@/newpages/auth/LoginPage.vue'),
-    meta: { title: '로그인'},
+    component: () => import('@/newpages/auth/LoginPage.vue'), 
+    meta: { title: '로그인' },
   },
 
   // Auth 홈
@@ -23,12 +23,28 @@ const routesV2 = [
     meta: { title: 'Auth' },
   },
 
-  // 회원가입
+  // 보호자 홈
+  {
+    path: '/v2/guardian',
+    name: 'GuardianHomeV2', 
+    component: () => import('@/newpages/guardian/GuardianHome.vue'),
+    meta: { title: 'Guardian' },
+  },
+
+  // 회원가입 유형 선택
+  {
+    path: '/v2/signin/select',
+    name: 'SignupSelectV2',
+    component: () => import('@/newpages/auth/SignupSelectPage.vue'),
+    meta: { title: '회원가입 유형 선택' },
+  },
+
+  // 일반 회원가입
   {
     path: '/v2/signin',
     name: 'SigninV2',
     component: () => import('@/newpages/auth/SigninPage.vue'),
-    meta: { title: '회원가입'},
+    meta: { title: '회원가입' },
   },
 
   // 보호자 회원가입
@@ -76,7 +92,7 @@ const routesV2 = [
     path: '/v2/accessible',
     name: 'BarrierFreePlacesV2',
     component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
-    meta: { title: '무장애 관광지', noHeader: true},
+    meta: { title: '무장애 관광지', noHeader: true },
   },
 
   // 404

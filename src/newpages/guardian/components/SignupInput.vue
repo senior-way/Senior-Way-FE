@@ -40,7 +40,7 @@ const emit = defineEmits(['update:modelValue']);
 .input-field { width: 100%; }
 
 .input-label {
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   display: block;
   color: var(--color-black);
 }

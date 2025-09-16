@@ -4,7 +4,7 @@
       <AuthCardButton
         title="회원가입"
         subtitle="처음 방문했어요!"
-        :to="{ name: 'SigninV2' }"
+        :to="{ name: 'SignupSelectV2' }"
       />
       <AuthCardButton
         title="로그인"
