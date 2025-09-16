@@ -47,7 +47,7 @@ function goDetail() {
   width: 330px;
   height: 162px;
   background: #fff;
-  border: 1px solid var(--color-mediumgray);
+  border: 1px solid var(--color-primary);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -59,6 +59,7 @@ function goDetail() {
   width: 100%;
   height: 100px;
   object-fit: cover;
+  border-bottom: 1px solid var(--color-primary)
 }
 
 .card-row {
