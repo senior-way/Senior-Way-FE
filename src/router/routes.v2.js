@@ -11,7 +11,7 @@ const routesV2 = [
   {
     path: '/v2/login',
     name: 'LoginV2',
-    component: () => import('@/newpages/auth/LoginPage.vue'), 
+    component: () => import('@/newpages/auth/LoginPage.vue'),
     meta: { title: '로그인' },
   },
 
@@ -23,10 +23,18 @@ const routesV2 = [
     meta: { title: 'Auth' },
   },
 
+  // 마이페이지
+  {
+    path: '/v2/mypage',
+    name: 'MyPageV2',
+    component: () => import('@/newpages/home/MyPage.vue'),
+    meta: { title: '마이페이지', noHeader: true },
+  },
+
   // 보호자 홈
   {
     path: '/v2/guardian',
-    name: 'GuardianHomeV2', 
+    name: 'GuardianHomeV2',
     component: () => import('@/newpages/guardian/GuardianHome.vue'),
     meta: { title: 'Guardian' },
   },
@@ -89,11 +97,12 @@ const routesV2 = [
 
   // 무장애 관광지 검색
   {
-  path: '/v2/accessible',
-  name: 'BarrierFreePlacesV2',
-  component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
-  meta: { title: '무장애 관광지', noHeader: true},
+    path: '/v2/barrierfree',
+    name: 'BarrierFreePlacesV2',
+    component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
+    meta: { title: '무장애 관광지', noHeader: true },
   },
+
   // 보호자 위치
   {
     path: '/v2/location',
