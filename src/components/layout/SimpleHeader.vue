@@ -24,7 +24,7 @@ const props = defineProps({
   padding: 12px 12px;
   background: transparent;
 }
-.with-border{ border-bottom: 1px solid var(--color-lightgray); }
+/* .with-border{ border-bottom: 1px solid var(--color-lightgray); } */
 
 .title{
   margin: 0;
