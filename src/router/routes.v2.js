@@ -78,6 +78,13 @@ const routesV2 = [
   component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
   meta: { title: '무장애 관광지', noHeader: true},
 },
+  // 보호자 위치
+  {
+    path: '/v2/location',
+    name: 'LocationV2',
+    component: () => import('@/newpages/location/Location.vue'),
+  },
+
 
   // 404
   {
