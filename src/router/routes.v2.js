@@ -7,12 +7,12 @@ const routesV2 = [
     redirect: { name: 'AuthHomeV2' },
   },
 
-  // 로그인 (헤더 숨김)
+  // 로그인
   {
     path: '/v2/login',
     name: 'LoginV2',
     component: () => import('@/newpages/auth/LoginPage.vue'),
-    meta: { title: '로그인', noHeader: true },
+    meta: { title: '로그인'},
   },
 
   // Auth 홈
@@ -23,12 +23,20 @@ const routesV2 = [
     meta: { title: 'Auth' },
   },
 
-  // 회원가입 (헤더 숨김)
+  // 회원가입
   {
     path: '/v2/signin',
     name: 'SigninV2',
     component: () => import('@/newpages/auth/SigninPage.vue'),
-    meta: { title: '회원가입', noHeader: true },
+    meta: { title: '회원가입'},
+  },
+
+  // 보호자 회원가입
+  {
+    path: '/v2/guardian/signup',
+    name: 'GuardianSignupV2',
+    component: () => import('@/newpages/guardian/GuardianSignup.vue'),
+    meta: { title: '보호자 회원가입' },
   },
 
   // 선호도 조사
@@ -55,15 +63,7 @@ const routesV2 = [
     meta: { title: '선택한 관광지', noHeader: true },
   },
 
-  // 일정 타임라인
-  {
-    path: '/v2/plan/timeline',
-    name: 'ScheduleTimelineV2',
-    component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
-    meta: { title: '일정 타임라인' }, // 헤더 노출
-  },
-
-  // 관광지 상세
+  // 관광지 상세 (헤더 숨김)
   {
     path: '/v2/tourplace/:id',
     name: 'TourplaceDetailV2',
@@ -73,11 +73,11 @@ const routesV2 = [
 
   // 무장애 관광지 검색
   {
-  path: '/v2/accessible',
-  name: 'BarrierFreePlacesV2',
-  component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
-  meta: { title: '무장애 관광지', noHeader: true},
-},
+    path: '/v2/accessible',
+    name: 'BarrierFreePlacesV2',
+    component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
+    meta: { title: '무장애 관광지', noHeader: true},
+  },
 
   // 404
   {
