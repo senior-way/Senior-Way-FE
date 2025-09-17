@@ -1,6 +1,3 @@
-// src/router/routes.v2.js
-import ErrorPage from '@/newpages/home/ErrorPage.vue'
-
 const routesV2 = [
   {
     path: '/v2',
@@ -103,6 +100,14 @@ const routesV2 = [
     meta: { title: '무장애 관광지', noHeader: true },
   },
 
+  // 일정 상세
+  {
+    path: '/v2/schedule/timeline',
+    name: 'ScheduleTimelineV2',
+    component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
+    meta: { title: '일정 타임라인' },
+  },
+
   // 보호자 위치
   {
     path: '/v2/location',
@@ -114,9 +119,9 @@ const routesV2 = [
   {
     path: '/v2/:pathMatch(.*)*',
     name: 'NotFoundV2',
-    component: ErrorPage,
+    component: () => import('@/newpages/home/ErrorPage.vue'),
     meta: { title: '페이지를 찾을 수 없음' },
-  },
+  }
 ]
 
 export default routesV2
