@@ -37,7 +37,9 @@ function currentFullPath() {
 
 async function checkAuth() {
   try {
-    await axios.get('/api/auth/me', { withCredentials: true });
+    await axios.get(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
+      withCredentials: true,
+    });
     return true;
   } catch {
     return false;
@@ -47,10 +49,14 @@ async function checkAuth() {
 async function exchangeToken(token) {
   phase.value = 'exchanging';
   try {
-    await axios.post('/api/alarm/guardian/accept', null, {
-      params: { token },
-      withCredentials: true,
-    });
+    await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/alarm/guardian/accept`,
+      null,
+      {
+        params: { token },
+        withCredentials: true,
+      }
+    );
     phase.value = 'success';
     setTimeout(() => router.replace({ name: 'Home' }), 1500);
   } catch (e) {
