@@ -32,7 +32,6 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import TextInput from '@/components/input/TextInput.vue'
 import SubmitButton from '@/components/button/SubmitButton.vue'
-import { useRouter } from 'vue-router'
 
 const email = ref('')
 const pw = ref('')

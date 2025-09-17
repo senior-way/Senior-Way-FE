@@ -1,5 +1,6 @@
+<!-- src/newpages/tourplace/components/SearchBar.vue -->
 <template>
-  <div class="bf-search-panel">
+  <div class="bf-search-panel" ref="rootEl">
     <div class="searchbar">
       <svg class="icon search left" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -48,20 +49,62 @@
         <span class="qa-text bodyMedium20px">음성 인식</span>
       </button>
 
-      <button type="button" class="qa-btn" @click="emit('openFilters')">
+      <button type="button" class="qa-btn" @click="openFilters">
         <span class="qa-icon">
           <img :src="filterPng" alt="" class="qa-icon-img" />
         </span>
         <span class="qa-text bodyMedium20px">조건 검색</span>
       </button>
     </div>
+
+    <teleport to="body">
+      <div v-if="showSheet" class="sheet-backdrop" @click="showSheet=false" />
+      <div
+        v-if="showSheet"
+        class="sheet"
+        role="dialog"
+        aria-modal="true"
+        :style="sheetBox"
+      >
+        <div class="sheet-header">
+          <strong>카테고리 필터</strong>
+          <button class="sheet-close" @click="showSheet=false" aria-label="닫기">×</button>
+        </div>
+
+        <div class="sheet-body">
+          <div class="cat-grid">
+            <button
+              v-for="c in categories" :key="c.id"
+              type="button"
+              class="tile bodyMedium16px"
+              :class="{ on: selectedCats.includes(c.id) }"
+              :aria-pressed="selectedCats.includes(c.id)"
+              @click="toggleCat(c.id)"
+            >
+              <img v-if="c.icon" :src="c.icon" alt="" class="icon" />
+              <span class="label">{{ c.label }}</span>
+            </button>
+          </div>
+
+          <div class="sheet-actions">
+            <button type="button" class="reset-btn bodyMedium16px" @click="clearCats">전체 해제</button>
+            <button type="button" class="apply-btn bodyMedium16px" @click="applyCats">적용</button>
+          </div>
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import micPng from '@/assets/icons/mic-icon.png'
 import filterPng from '@/assets/icons/filter-icon.png'
+import selectNature from '@/assets/icons/select_nature.png'
+import selectCulture from '@/assets/icons/select_culture.png'
+import selectActivity from '@/assets/icons/select_activity.png'
+import selectShopping from '@/assets/icons/select_shopping.png'
+import selectFood from '@/assets/icons/select_food.png'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -71,6 +114,16 @@ const props = defineProps({
   useWebSpeech: { type: Boolean, default: false },
   lang: { type: String, default: 'ko-KR' },
   enableClear: { type: Boolean, default: true },
+  categories: {
+    type: Array,
+    default: () => [
+      { id: '12', label: '관광지',   icon: selectNature   },
+      { id: '14', label: '문화시설', icon: selectCulture  },
+      { id: '28', label: '레포츠',   icon: selectActivity },
+      { id: '38', label: '쇼핑',     icon: selectShopping },
+      { id: '39', label: '음식점',   icon: selectFood     },
+    ]
+  },
 })
 const emit = defineEmits([
   'update:modelValue','filter','search','openFilters','voice',
@@ -90,12 +143,19 @@ function onInput(e) {
 function onEnter() { if (!composing.value) emitSearch() }
 function emitSearch() { emit('search', inner.value.trim()) }
 
+const selectedCats = ref([])
+
 function doFilter() {
   const q = inner.value.trim().toLowerCase()
   if (!props.items?.length) return emit('filter', [])
-  const filtered = q
-    ? props.items.filter(it => String(it.name || '').toLowerCase().includes(q))
-    : props.items.slice()
+  const ids = selectedCats.value
+  const filtered = props.items.filter(it => {
+    const nameMatch = !q || String(it.name || '').toLowerCase().includes(q)
+    const raw = it.content_type_id ?? it.contentTypeId ?? it.category ?? ''
+    const type = typeof raw === 'number' ? String(raw) : String(raw)
+    const catMatch = !ids.length || ids.includes(type)
+    return nameMatch && catMatch
+  })
   emit('filter', filtered)
 }
 function debouncedFilter() {
@@ -108,17 +168,16 @@ function clearInput() {
   doFilter()
 }
 
-/*  STT */
-const listening = ref(false)     // 인식 중 UI 표시
-let recognition = null           // 브라우저 STT 인스턴스
-let sttTimer = null              // 자동 종료 타이머
-let lastStart = 0                // 연속 탭 레이스 방지
-const COOL = 800                 // 최소 간격(ms)
-const composing = ref(false)     // IME 조합 상태(한글)
+/* STT */
+const listening = ref(false)
+let recognition = null
+let sttTimer = null
+let lastStart = 0
+const COOL = 800
+const composing = ref(false)
 function onCompStart(){ composing.value = true }
 function onCompEnd(){ composing.value = false }
 
-/** 브라우저 STT 인스턴스 생성 */
 function setupRecognizer() {
   if (!props.useWebSpeech) return null
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -131,7 +190,7 @@ function setupRecognizer() {
     listening.value = true
     emit('stt-start')
     clearTimeout(sttTimer)
-    sttTimer = setTimeout(() => { try { rec.stop() } catch {} }, 8000) // 무응답 자동 종료
+    sttTimer = setTimeout(() => { try { rec.stop() } catch {} }, 8000)
   }
   rec.onend = () => {
     listening.value = false
@@ -151,8 +210,6 @@ function setupRecognizer() {
   }
   return rec
 }
-
-/** 연속 클릭 start race 발생 방지 */
 function safeStart(rec) {
   const now = Date.now()
   if (now - lastStart < COOL) return
@@ -160,7 +217,6 @@ function safeStart(rec) {
   try { rec.abort?.() } catch {}
   try { rec.start() } catch {}
 }
-
 function onMicClick() {
   if (props.useWebSpeech) {
     if (!recognition) recognition = setupRecognizer()
@@ -168,11 +224,42 @@ function onMicClick() {
   }
 }
 
-onMounted(() => {})
+/* BottomSheet */
+const showSheet = ref(false)
+const rootEl = ref(null)
+const sheetBox = ref({ left: '0px', width: '100vw' })
+
+function updateSheetBox () {
+  const r = rootEl.value?.getBoundingClientRect()
+  if (!r) return
+  sheetBox.value = {
+    left: `${Math.round(r.left)}px`,
+    width: `${Math.round(r.width)}px`,
+  }
+}
+function openFilters(){
+  showSheet.value = true
+  emit('openFilters')
+  nextTick(updateSheetBox)
+}
+function toggleCat(id){
+  const i = selectedCats.value.indexOf(id)
+  if (i >= 0) selectedCats.value.splice(i,1)
+  else selectedCats.value.push(id)
+}
+function clearCats(){ selectedCats.value = [] }
+function applyCats(){
+  doFilter()
+  showSheet.value = false
+}
+function onResize(){ if (showSheet.value) updateSheetBox() }
+
+onMounted(() => { window.addEventListener('resize', onResize) })
 onUnmounted(() => {
   if (t) clearTimeout(t)
   clearTimeout(sttTimer)
   try { recognition?.abort?.() } catch {}
+  window.removeEventListener('resize', onResize)
 })
 </script>
 
@@ -187,7 +274,6 @@ onUnmounted(() => {
   align-items: center;
   padding: 0 104px 0 56px;
 }
-
 .icon.search.left {
   position: absolute;
   left: 12px;
@@ -195,7 +281,6 @@ onUnmounted(() => {
   height: 24px;
   color: var(--color-black);
 }
-
 .input {
   flex: 1 1 0;
   width: 100%;
@@ -214,7 +299,6 @@ onUnmounted(() => {
   color: var(--color-mediumgray);
   cursor: pointer;
 }
-
 .submit-btn.right {
   position: absolute;
   right: 6px;
@@ -248,4 +332,81 @@ onUnmounted(() => {
 .qa-text { color: var(--color-black); }
 
 .sr{ position:absolute; width:1px; height:1px; margin:-1px; clip:rect(0,0,0,0); overflow:hidden; }
+
+/* BottomSheet */
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 999; }
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;         /* inline style로 덮어씀 */
+  width: 100vw;     /* inline style로 덮어씀 */
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 24px rgba(0,0,0,.12);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1000;
+}
+.sheet-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 1px solid #eee;
+}
+.sheet-close { border: 0; background: transparent; font-size: 20px; line-height: 1; cursor: pointer; }
+.sheet-body { padding: 16px; }
+
+/* 아이콘 타일 */
+.cat-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 145px);
+  grid-auto-rows: 100px;
+  gap: 10px;
+  justify-content: center;
+}
+.tile{
+  box-sizing: border-box;
+  width: 145px;
+  height: 100px;
+  border: 1px solid var(--color-mediumgray);
+  border-radius: 12px;
+  background: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  white-space: pre-line;
+  cursor: pointer;
+  user-select: none;
+}
+.tile.on{
+  border: 1.5px solid var(--color-primary);
+  background: var(--color-primary-10);
+}
+.icon{
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  display: block;
+}
+.label{ line-height: 1.3; }
+
+.sheet-actions {
+  display: flex; justify-content: space-between; gap: 10px; margin-top: 12px;
+}
+.reset-btn {
+  flex: 1 1 0; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--color-lightgray);
+  background: #fff;
+  color: var(--color-black);
+  cursor: pointer;
+}
+.apply-btn {
+  flex: 1 1 0; height: 40px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+}
 </style>

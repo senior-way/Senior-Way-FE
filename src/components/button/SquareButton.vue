@@ -51,10 +51,11 @@ defineEmits(['click'])
   transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
 }
 .square-btn .icon{
-  width:52px;
-  height:52px;
+  width:48px;
+  height:48px;
   object-fit:contain;
   display:block;
+  margin-bottom: 4px;
 }
 .square-btn .label{
   line-height:1;
