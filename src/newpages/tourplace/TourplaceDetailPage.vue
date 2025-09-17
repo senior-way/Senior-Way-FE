@@ -1,29 +1,61 @@
+<!-- src/newpages/tourplace/TourplaceDetailPage.vue -->
 <template>
   <div v-if="place" class="wrap">
     <SimpleHeader :title="place.name" :withBorder="false" />
 
     <div class="container">
-      <img :src="place.image" alt="장소 이미지" class="spot-image" />
+      <div class="hero" @mouseenter="pause" @mouseleave="play">
+        <transition name="fade" mode="out-in">
+          <img
+            :key="current"
+            :src="slides[current]"
+            :alt="`${place.name} 이미지 ${current+1}/${slides.length}`"
+            class="spot-image"
+          />
+        </transition>
 
+        <div v-if="slides.length > 1" class="dots" role="tablist" aria-label="이미지 인디케이터">
+          <button
+            v-for="(s, i) in slides"
+            :key="i"
+            class="dot-btn"
+            :class="{ active: i === current }"
+            :aria-label="`${i + 1}번째 이미지 보기`"
+            :aria-selected="i === current"
+            role="tab"
+            @click="go(i)"
+          />
+        </div>
+      </div>
+
+      <!-- 배리어프리 안내 -->
       <img
         :src="place.isBarrierFree ? yes_barrier : no_barrier"
         alt="배리어프리 안내"
         class="isBarrierImg"
       />
 
+      <!-- 공통 정보 -->
       <div class="graytag-list">
-        <GrayTagRow label="운영시간" :text="place.openingHours" />
-        <GrayTagRow label="휴무일" :text="place.holiday" />
-        <GrayTagRow label="요금" :text="place.price" />
-        <GrayTagRow label="설명" :text="place.description" />
-        <GrayTagRow label="주소" :text="place.address" />
+        <GrayTagRow label="주소" :text="addressFull" />
+        <GrayTagRow label="전화번호" :text="place.phone || '정보 없음'" />
+        <GrayTagRow v-if="place.description" label="설명" :text="place.description" />
+      </div>
+
+      <!-- 타입별 상세 -->
+      <div class="graytag-list" v-if="typeRows.length">
+        <GrayTagRow
+          v-for="row in typeRows"
+          :key="row.label"
+          :label="row.label"
+          :text="row.text"
+        />
       </div>
 
       <div class="map_wrap">
-        <KakaoMap :address="place.address" />
+        <KakaoMap :address="addressFull" />
       </div>
 
-      <!-- 컨테이너 가장 하단 버튼 2개 -->
       <div class="cta-grid">
         <SquareButton
           label="일정 추가"
@@ -49,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -68,37 +100,167 @@ const place = ref(null)
 
 async function loadPlace() {
   try {
-    const idParam = route.params?.id
-    if (idParam) {
-      // /tourplace/:id
-      const { data } = await axios.get(`/api/tourplace/${idParam}`)
-      place.value = data
+    const rawId = (route.params?.id ?? '').toString().trim()
+    const id = Number(rawId)
+    let data = null
+
+    if (Number.isFinite(id)) {
+      try {
+        const { data: one } = await axios.get(`/api/tourplace/${id}`)
+        data = one
+      } catch (e) {
+        if (e?.response?.status === 404) {
+          const { data: arr } = await axios.get('/api/tourplace', { params: { id } })
+          data = Array.isArray(arr) ? arr[0] ?? null : null
+        } else {
+          throw e
+        }
+      }
     } else {
-      // /tourplace (첫 항목만 사용)
-      const { data } = await axios.get('/api/tourplace', { params: { _limit: 1 } })
-      place.value = Array.isArray(data) ? data[0] ?? null : null
-    // 백엔드 연결 시, 하단 코드 사용.
-    //   const { data } = await axios.get('/api/tourplace', { params: { page: 0, size: 1, sort: 'id,asc' } })
-    //   place.value = Array.isArray(data) ? data[0] ?? null : (data?.content?.[0] ?? null)
+      const { data: arr } = await axios.get('/api/tourplace', { params: { _limit: 1, _sort: 'id', _order: 'asc' } })
+      data = Array.isArray(arr) ? arr[0] ?? null : null
     }
+
+    place.value = normalizePlace(data)
+    resetCarousel()
   } catch (err) {
     console.error('장소 불러오기 실패:', err)
     place.value = null
   }
 }
 
-onMounted(loadPlace)
-// 상세 페이지에서 다른 id로 전환될 수 있으므로 감시
-watch(() => route.params?.id, () => loadPlace())
-
-function onAddSchedule() {
-  console.log('add schedule for place:', place.value?.id)
-  // 추후 일정 페이지 구현 후, 기존 사용자 일정에 추가하는 로직 필요함.(leeday)
+function normalizePlace(raw) {
+  if (!raw) return null
+  return {
+    id: raw.id,
+    type_id: raw.type_id ?? raw.contentTypeId,
+    name: raw.name ?? raw.title,
+    phone: raw.phone ?? raw.tel,
+    address: raw.address ?? raw.addr1,
+    addressDetail: raw.addressDetail ?? raw.addr2,
+    image: raw.image ?? raw.firstimage,
+    thumbnails: raw.thumbnails ?? raw.imageUrls ?? [],
+    isBarrierFree: !!raw.isBarrierFree,
+    openingHours: raw.openingHours,
+    holiday: raw.holiday,
+    price: raw.price,
+    description: raw.description,
+    openDate: raw.openDate,
+    experience: raw.experience,
+    parkingInfo: raw.parkingInfo,
+    petAllowed: raw.petAllowed,
+    discount: raw.discount,
+    parking: raw.parking,
+    operatingPeriod: raw.operatingPeriod,
+    items: raw.items,
+    signatureMenu: raw.signatureMenu,
+    menus: raw.menus,
+  }
 }
 
+const addressFull = computed(() => {
+  const a = place.value?.address || ''
+  const b = place.value?.addressDetail || ''
+  return b ? `${a} ${b}`.trim() : a
+})
+
+const typeRows = computed(() => {
+  const p = place.value
+  if (!p) return []
+  const rowsByType = {
+    12: [
+      { label: '개방일', text: p.openDate },
+      { label: '휴무일', text: p.holiday },
+      { label: '체험 안내', text: p.experience },
+      { label: '주차 정보', text: p.parkingInfo },
+      { label: '반려동물', text: ynToText(p.petAllowed) },
+    ],
+    14: [
+      { label: '휴무일', text: p.holiday },
+      { label: '이용 요금', text: p.price },
+      { label: '할인 정보', text: p.discount },
+      { label: '주차 여부', text: ynToAvail(p.parking) },
+      { label: '반려동물', text: ynToText(p.petAllowed) },
+    ],
+    28: [
+      { label: '운영 기간', text: p.operatingPeriod },
+      { label: '휴무일', text: p.holiday },
+      { label: '이용 요금', text: p.price },
+      { label: '주차 여부', text: ynToAvail(p.parking) },
+      { label: '반려동물', text: ynToText(p.petAllowed) },
+    ],
+    38: [
+      { label: '판매 품목', text: p.items },
+      { label: '영업 시간', text: p.openingHours },
+      { label: '휴무일', text: p.holiday },
+      { label: '주차 여부', text: ynToAvail(p.parking) },
+      { label: '반려동물', text: ynToText(p.petAllowed) },
+    ],
+    39: [
+      { label: '대표 메뉴', text: p.signatureMenu },
+      { label: '취급 메뉴', text: p.menus },
+      { label: '주차 여부', text: ynToAvail(p.parking) },
+    ],
+  }
+  const list = rowsByType[p.type_id] ?? []
+  return list.filter(row => !!String(row.text ?? '').trim())
+})
+
+function ynToText(v) {
+  if (v === true || v === 'Y' || v === 'y') return '가능'
+  if (v === false || v === 'N' || v === 'n') return '불가'
+  return v ?? ''
+}
+function ynToAvail(v) {
+  if (v === true || v === 'Y' || v === 'y') return '주차 가능'
+  if (v === false || v === 'N' || v === 'n') return '주차 불가'
+  return v ?? ''
+}
+
+/* ---------- 캐러셀 ---------- */
+const current = ref(0)
+const INTERVAL = 3500
+let timer = null
+
+const slides = computed(() => {
+  const base = []
+  if (place.value?.image) base.push(place.value.image)
+  if (Array.isArray(place.value?.thumbnails) && place.value.thumbnails.length) {
+    base.push(...place.value.thumbnails)
+  }
+  return base
+})
+
+function next() { current.value = (current.value + 1) % slides.value.length }
+function play() {
+  stop()
+  if (slides.value.length > 1) {
+    timer = setInterval(next, INTERVAL)
+  }
+}
+function pause() { stop() }
+function stop() {
+  if (timer) { clearInterval(timer); timer = null }
+}
+function go(i) {
+  current.value = i
+  play()
+}
+function resetCarousel() {
+  current.value = 0
+  play()
+}
+
+watch(slides, resetCarousel)
+onMounted(() => { loadPlace(); })
+onBeforeUnmount(stop)
+watch(() => route.params?.id, async () => { await loadPlace() })
+/* ---------- 액션 ---------- */
+function onAddSchedule() {
+  console.log('add schedule for place:', place.value?.id)
+}
 function onVoiceGuide() {
   console.log('open voice guide for place:', place.value?.id)
-  // 추후 음성 해설 페이지 디자인 후, 해당하는 아이디 페이지로의 연결 로직 필요함.(leeday)
 }
 </script>
 
@@ -118,13 +280,32 @@ function onVoiceGuide() {
   padding: 15px;
 }
 
+.hero {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
 .spot-image {
   width: 100%;
   aspect-ratio: 1 / 0.75;
   display: block;
-  border-radius: 12px;
   object-fit: cover;
+  border-radius: 12px;
 }
+
+.fade-enter-active, .fade-leave-active { transition: opacity .35s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+.dots {
+  position: absolute;
+  left: 0; right: 0; bottom: 8px;
+  display: flex; gap: 6px; justify-content: center;
+}
+.dot-btn {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 0; background: rgba(255,255,255,0.5); padding: 0; cursor: pointer;
+}
+.dot-btn.active { background: var(--color-primary); }
 
 .isBarrierImg {
   width: 100%;
@@ -137,6 +318,12 @@ function onVoiceGuide() {
   display: grid;
   place-items: center;
   width: 100%;
+  row-gap: 2px;
+  margin-top: 4px;
+}
+
+.graytag-list + .graytag-list { 
+  margin-top: 18px;      /* 두 리스트 사이 간격 */
 }
 
 .map_wrap {

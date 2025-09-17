@@ -68,7 +68,7 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
-  // 임시/목데이터 추천 페이지
+  // 임시/목데이터 추천 페이지 
   {
     path: '/v2/recommend/mock',
     name: 'RecommendMockV2',
@@ -107,6 +107,14 @@ const routesV2 = [
     component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
     meta: { title: '일정 타임라인', noHeader: true },
   },
+
+  // 저장된 일정 상세 페이지
+  // {
+  //   path: '/v2/schedule/saved/:id',
+  //   name: 'SavedScheduleDetail',
+  //   component: () => import('@/newpages/schedule/SavedScheduleDetail.vue'),
+  //   meta: { title: '저장한 일정', noHeader: true },
+  // },
 
   // 보호자 위치
   {
