@@ -66,8 +66,25 @@ function onConfirm() {
 </script>
 
 <style scoped>
-:deep(.sw-modal-body) { width: 100%; }
-.sw-modal-body-inner { display: grid; gap: 10px; justify-items: center; }
+:deep(.sw-modal-body) {
+  width: 100%;
+}
+
+.sw-modal-body-inner {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+/* 한글 단어 단위 줄바꿈(본문/에러 공통) */
+.sw-modal-body-inner p,
+.sw-error {
+  white-space: normal;
+  word-break: keep-all;      /* 띄어쓰기 기준 줄바꿈 */
+  overflow-wrap: break-word; 
+  line-break: strict;   
+}
+
 .sw-input{
   width: 100%;
   max-width: 250px;
@@ -82,5 +99,9 @@ function onConfirm() {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(0,0,0,0.02);
 }
-.sw-error{ color: var(--color-red); margin-top: -2px; }
+
+.sw-error{
+  color: var(--color-red);
+  margin-top: -2px;
+}
 </style>

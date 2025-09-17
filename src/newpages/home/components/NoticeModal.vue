@@ -35,7 +35,27 @@ const openProxy = computed({
 </script>
 
 <style scoped>
-.nm-wrap{ text-align: center; padding: 0 6px; }
-.nm-title{ margin: 8px 0 6px; color: var(--color-black); }
-.nm-msg{ margin: 6px 0 0; color: var(--color-black); }
+.nm-wrap {
+  text-align: center;
+  padding: 0 6px;
+}
+
+/* 한글 단어 단위 줄바꿈 */
+.nm-title,
+.nm-msg {
+  white-space: normal;
+  word-break: keep-all;     /* 단어(띄어쓰기) 기준 줄바꿈 */
+  overflow-wrap: break-word;
+  line-break: strict;      
+}
+
+.nm-title {
+  margin: 8px 0 6px;
+  color: var(--color-black);
+}
+
+.nm-msg {
+  margin: 6px 0 0;
+  color: var(--color-black);
+}
 </style>
