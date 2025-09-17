@@ -100,7 +100,7 @@ const routesV2 = [
     meta: { title: '무장애 관광지', noHeader: true },
   },
 
-  // 일정 상세
+  // 일정 상세 (추천 결과 타임라인)
   {
     path: '/v2/schedule/timeline',
     name: 'ScheduleTimelineV2',
@@ -108,13 +108,21 @@ const routesV2 = [
     meta: { title: '일정 타임라인', noHeader: true },
   },
 
-  // 저장된 일정 상세 페이지
-  // {
-  //   path: '/v2/schedule/saved/:id',
-  //   name: 'SavedScheduleDetail',
-  //   component: () => import('@/newpages/schedule/SavedScheduleDetail.vue'),
-  //   meta: { title: '저장한 일정', noHeader: true },
-  // },
+  // 저장된 일정 목록
+  {
+    path: '/v2/schedule/saved',
+    name: 'SavedScheduleListV2',
+    component: () => import('@/newpages/schedule/SavedScheduleListPage.vue'),
+    meta: { title: '저장된 일정', noHeader: true },
+  },
+
+  // 저장된 일정 상세
+  {
+    path: '/v2/schedule/saved/:id',
+    name: 'SavedScheduleDetail',
+    component: () => import('@/newpages/schedule/SavedScheduleDetailPage.vue'),
+    meta: { title: '저장된 일정 상세', noHeader: true },
+  },
 
   // 보호자 위치
   {
