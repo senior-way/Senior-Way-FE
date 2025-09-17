@@ -84,7 +84,7 @@ const routesV2 = [
     meta: { title: '선택한 관광지', noHeader: true },
   },
 
-  // 관광지 상세 (헤더 숨김)
+  // 관광지 상세
   {
     path: '/v2/tourplace/:id',
     name: 'TourplaceDetailV2',
@@ -105,7 +105,7 @@ const routesV2 = [
     path: '/v2/schedule/timeline',
     name: 'ScheduleTimelineV2',
     component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
-    meta: { title: '일정 타임라인' },
+    meta: { title: '일정 타임라인', noHeader: true },
   },
 
   // 보호자 위치
