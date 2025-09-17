@@ -79,12 +79,48 @@ import iconWithdraw from '@/assets/icons/delete-account.png'
 const router = useRouter()
 const route  = useRoute()
 
-const profile = {
-  name:  '이다연',
-  email: 'carrotday0429@gmail.com',
-  birth: '1999.10.11.',
+const profile = ref({
+  name: '',
+  email: '',
+  birth: ''
+})
+
+async function fetchUserInfo() {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    const response = await axios.get('http://localhost:8080/api/user', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    const data = response.data
+    // birth가 LocalDate로 넘어오면 문자열로 변환
+    profile.value = {
+      name: data.username,
+      email: data.email,
+      birth: data.birth ? data.birth : '' 
+    }
+  } catch (error) {
+    console.error('유저 정보 가져오기 실패', error)
+  }
 }
 
+onMounted(() => {
+  fetchUserInfo()
+})
+
+
+function onLogout () {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('role')
+  router.replace({ name: 'LoginV2' })
+}
+function onChangePw () {
+  router.push({ name: 'AuthHomeV2', query: { modal: 'changePw' } })
+}
+function onWithdraw () {
+  router.push({ name: 'AuthHomeV2', query: { modal: 'withdraw' } })
+}
 function onContact () {
   router.push({ name: 'AuthHomeV2', query: { modal: 'contact' } })
 }
