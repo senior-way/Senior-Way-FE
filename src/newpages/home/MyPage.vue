@@ -15,14 +15,14 @@
 
         <div class="action-grid">
           <SquareButton label="문의 하기"      :icon="iconContact"   @click="onContact" />
-          <SquareButton label="로그아웃"       :icon="iconLogout"    @click="openPwdModal('logout')" />
+          <SquareButton label="로그아웃"       :icon="iconLogout"    @click="doLogoutWithNotice" />
           <SquareButton label="비밀번호 변경"  :icon="iconPassword"  @click="openPwdModal('changePw')" />
           <SquareButton label="회원 탈퇴"      :icon="iconWithdraw"  @click="openPwdModal('withdraw')" />
         </div>
       </div>
     </section>
 
-    <!-- 비밀번호 확인 -->
+    <!-- 비밀번호 확인 (비번변경/회원탈퇴) -->
     <PasswordConfirmModal
       v-model="pwdOpen"
       :loading="pwdLoading"
@@ -39,13 +39,22 @@
       @confirm="onWithdrawConfirm"
     />
 
-    <!-- 비밀번호 변경 완료 알림 (확인 시 로그아웃) -->
+    <!-- 비밀번호 변경 완료 알림 (확인 시 로그아웃하고/ 로그인 페이지 이동) -->
     <NoticeModal
       v-model="pwChangedOpen"
       title="완료"
       message="비밀번호 변경이 완료되었습니다."
       confirmText="확인"
-      @confirm="doLogout"
+      @confirm="doLogoutToLogin"
+    />
+
+    <!-- 로그아웃 완료 알림 (확인 누르면/ 홈페이지 이동) -->
+    <NoticeModal
+      v-model="logoutDoneOpen"
+      title="알림"
+      message="로그아웃 되었습니다."
+      confirmText="확인"
+      @confirm="goHomeAfterLogout"
     />
   </main>
 </template>
@@ -53,7 +62,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-// import axios from 'axios'
+import axios from 'axios'
 
 import SimpleHeader from '@/components/layout/SimpleHeader.vue'
 import GrayTagRow from '@/components/layout/GrayTagRow.vue'
@@ -80,11 +89,11 @@ function onContact () {
   router.push({ name: 'AuthHomeV2', query: { modal: 'contact' } })
 }
 
-/* 비밀번호 확인 플로우 */
+/* 비밀번호 확인 */
 const pwdOpen = ref(false)
 const pwdLoading = ref(false)
 const pwdError = ref('')
-const pwdAction = ref/** @type {'logout'|'withdraw'|'changePw'|null} */(null)
+const pwdAction = ref/** @type {'withdraw'|'changePw'|null} */(null)
 
 function openPwdModal(action) {
   pwdAction.value = action
@@ -97,14 +106,13 @@ async function onPwdSubmit(currentPw) {
   pwdLoading.value = true
   pwdError.value = ''
   try {
+    // API 연동
     // await axios.post('/api/auth/verify-password', { password: currentPw }, { withCredentials: true })
     if ((currentPw || '').length < 4) throw new Error('INVALID')
 
     pwdOpen.value = false
 
-    if (pwdAction.value === 'logout') {
-      doLogout()
-    } else if (pwdAction.value === 'changePw') {
+    if (pwdAction.value === 'changePw') {
       router.push({ name: 'AuthHomeV2', query: { modal: 'changePw' } })
     } else if (pwdAction.value === 'withdraw') {
       withdrawConfirmOpen.value = true
@@ -117,38 +125,49 @@ async function onPwdSubmit(currentPw) {
 }
 
 /* 로그아웃 */
-function doLogout () {
+function clearAuth() {
   // await axios.post('/api/auth/logout', null, { withCredentials: true })
   localStorage.removeItem('accessToken')
   localStorage.removeItem('role')
+}
+
+/* 비밀번호 변경 완료되면/ 로그아웃 후 로그인 페이지로 */
+const pwChangedOpen = ref(false)
+function doLogoutToLogin () {
+  clearAuth()
   router.replace({ name: 'LoginV2' })
 }
 
-/* 회원탈퇴  후,홈으로 이동 */
+/* 로그아웃 확인 시/ 홈으로 */
+const logoutDoneOpen = ref(false)
+function doLogoutWithNotice () {
+  clearAuth()
+  logoutDoneOpen.value = true
+}
+function goHomeAfterLogout () {
+  router.replace({ name: 'AuthHomeV2' })
+}
+
+/* 회원탈퇴 진행 후/ 홈으로 */
 const withdrawConfirmOpen = ref(false)
 async function onWithdrawConfirm () {
   // await axios.delete('/api/auth/account', { withCredentials: true })
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('role')
-  router.replace({ name: 'AuthHomeV2' }) // 홈 페이지 이동
+  clearAuth()
+  router.replace({ name: 'AuthHomeV2' })
 }
 
-/* 비밀번호 변경 완료 후, 모달 띄우고, 확인 시 로그아웃 */
-const pwChangedOpen = ref(false)
-
+/* 비번변경 완료 모달 */
 function clearPwChangedFlag() {
   const q = { ...route.query }
   delete q.pwChanged
   router.replace({ query: q })
 }
-
 function checkPwChangedFlag() {
   if (route.query.pwChanged) {
     pwChangedOpen.value = true
     clearPwChangedFlag()
   }
 }
-
 onMounted(checkPwChangedFlag)
 watch(() => route.query.pwChanged, () => checkPwChangedFlag())
 </script>
