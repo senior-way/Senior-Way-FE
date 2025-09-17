@@ -63,6 +63,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import SignupInput from '@/newpages/guardian/components/SignupInput.vue'
 import SignupEmailInput from '@/newpages/guardian/components/SignupEmail.vue'
 import SubmitButton from '@/components/button/SubmitButton.vue'
@@ -108,10 +109,11 @@ const pw2Error = computed(() => {
 
 const isNameValid = computed(() => !!name.value.trim())
 
+const submitting = ref(false)  // 버튼 클릭 잠금용 상태
+
 const canSubmit = computed(() =>
   isEmailValid.value && emailChecked.value === true &&
-  isPwValid.value && isPwSame.value &&
-  isNameValid.value
+  isPwValid.value && isPwSame.value && isNameValid.value
 )
 
 // 이름 숫자 제거
@@ -119,9 +121,10 @@ watch(name, (v) => {
   const cleaned = (v || '').replace(/\d+/g, '')
   if (cleaned !== v) name.value = cleaned
 })
+
 // 입력 변경 시 이메일 체크 상태 리셋
-watch([email, pw, pw2, name], () => {
-  if (emailChecked.value !== null) emailChecked.value = null
+watch(email, () => {
+  emailChecked.value = null
 })
 
 const emailStatus = computed(() => {
@@ -145,10 +148,25 @@ async function checkEmail() {
   }
 }
 
-function submit() {
-  // TODO: 가입 API 성공 시에만 모달 오픈
-  modalOpen.value = true
+async function submit() {
+  if (!canSubmit.value) return
+
+  submitting.value = true
+  try {
+    await axios.post('http://localhost:8080/api/auth/guardian-signup', {
+      username: name.value,
+      password: pw.value,
+      email: email.value
+    })
+    modalOpen.value = true
+  } catch (e) {
+    console.error('회원가입 실패', e?.response?.data || e.message)
+    alert('회원가입에 실패했습니다.')
+  } finally {
+    submitting.value = false
+  }
 }
+
 function onModalConfirm() {
   modalOpen.value = false
   router.replace({ name: 'LoginV2' })
