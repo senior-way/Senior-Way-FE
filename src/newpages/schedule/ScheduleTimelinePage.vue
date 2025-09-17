@@ -13,7 +13,7 @@
         role="listitem"
         :aria-label="`${idx + 1}일차`"
       >
-      
+
         <h2 class="day-label bodyMedium24px">일정 {{ idx + 1 }}일차</h2>
 
         <div v-for="item in group.items" :key="`${group.date}-${item.id}`" class="entry">
@@ -59,52 +59,77 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, nextTick, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
 import SimpleHeader from '@/components/layout/SimpleHeader.vue'
 import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue'
 import BottomDualButtons from '@/components/button/DualButton.vue'
 
+const route = useRoute()
 const router = useRouter()
 
-const schedule = {
-  schedule_id: 1001,
-  user_id: 1,
-  title: '부산 1박 2일',
-  start_date: '2025-09-20T09:00:00',
-  end_date: '2025-09-21T18:00:00',
+/* 서버/세션 데이터 로드  */
+const serverSchedule = ref(null) // { id,title,startDate,endDate,days:[{date,items:[{id,name,image,time}]}] }
+const loading = ref(false)
+
+onMounted(loadTimeline)
+
+async function loadTimeline() {
+  loading.value = true
+  try {
+    const rid = route.query.rid
+    if (rid) {
+      /* 실제 백엔드 추천 결과 조회 */
+      // const { data } = await axios.get(`/api/schedules/${encodeURIComponent(rid)}`, { withCredentials: true })
+      // serverSchedule.value = normalizeSchedule(data)
+    }
+
+    if (!serverSchedule.value) {
+      // 세션 미리보기 폴백
+      const raw = sessionStorage.getItem('schedule:preview')
+      if (raw) {
+        serverSchedule.value = normalizeSchedule(JSON.parse(raw))
+      } else {
+        // 기존 하드코드(데모)
+        serverSchedule.value = normalizeSchedule(buildHardcodedDemo())
+      }
+    }
+  } catch (e) {
+    console.error('타임라인 로드 실패:', e)
+    // 폴백
+    serverSchedule.value = normalizeSchedule(buildHardcodedDemo())
+  } finally {
+    loading.value = false
+  }
 }
 
-const scheduleTouristSpots = [
-  { id: 1, schedule_id: 1001, tourist_spot_id: 501, sequence_order: 1, stay_time: 120 },
-  { id: 2, schedule_id: 1001, tourist_spot_id: 502, sequence_order: 2, stay_time: 90  },
-  { id: 3, schedule_id: 1001, tourist_spot_id: 503, sequence_order: 3, stay_time: 60  },
-  { id: 4, schedule_id: 1001, tourist_spot_id: 504, sequence_order: 4, stay_time: 90  },
-  { id: 5, schedule_id: 1001, tourist_spot_id: 505, sequence_order: 5, stay_time: 120 },
-]
-
-const spotsById = {
-  501: { id: 501, name: '광안리 해수욕장',    image: 'https://picsum.photos/id/1011/400/250' },
-  502: { id: 502, name: '송도 해상 케이블카', image: 'https://picsum.photos/id/1012/400/250' },
-  503: { id: 503, name: '부산시립미술관',      image: 'https://picsum.photos/id/1014/400/250' },
-  504: { id: 504, name: '부산타워',            image: 'https://picsum.photos/id/1020/400/250' },
-  505: { id: 505, name: '해운대 해수욕장',     image: 'https://picsum.photos/id/1016/400/250' },
+function normalizeSchedule(raw) {
+  if (!raw) return null
+  // { days:[{date:'YYYY-MM-DD', items:[{id,name,image,time:'HH:mm'}]}], title? }
+  return {
+    id: raw.id ?? 'unknown',
+    title: raw.title ?? '추천 일정',
+    startDate: raw.startDate ?? '',
+    endDate: raw.endDate ?? '',
+    days: Array.isArray(raw.days) ? raw.days.map(d => ({
+      date: d.date,
+      items: (d.items || []).map(it => ({
+        id: it.id, name: it.name, image: it.image, time: it.time || '09:00'
+      }))
+    })) : []
+  }
 }
 
-const GAP_MIN = 20
+/* 타임라인 표시용 계산 */
 const timeline = computed(() => {
   const rows = []
-  let cursor = new Date(schedule.start_date)
-  const rowsOfThisSchedule = scheduleTouristSpots
-    .filter(r => r.schedule_id === schedule.schedule_id)
-    .sort((a, b) => a.sequence_order - b.sequence_order)
-  for (const r of rowsOfThisSchedule) {
-    const spot = spotsById[r.tourist_spot_id]
-    if (!spot) continue
-    const dateStr = cursor.toISOString().slice(0, 10)
-    const timeStr = toHHMM(cursor)
-    rows.push({ id: spot.id, date: dateStr, time: timeStr, name: spot.name, image: spot.image })
-    cursor = addMinutes(cursor, r.stay_time + GAP_MIN)
+  const sched = serverSchedule.value
+  if (!sched || !Array.isArray(sched.days)) return rows
+  for (const day of sched.days) {
+    for (const it of (day.items || [])) {
+      rows.push({ date: day.date, time: it.time, id: it.id, name: it.name, image: it.image })
+    }
   }
   return rows
 })
@@ -120,18 +145,21 @@ const grouped = computed(() => {
 })
 
 function goDetail(id) { console.log('detail:', id) }
-function addMinutes(d, min) { const nd = new Date(d); nd.setMinutes(nd.getMinutes() + Number(min || 0)); return nd }
-function toHHMM(d) { const h = String(d.getHours()).padStart(2, '0'); const m = String(d.getMinutes()).padStart(2, '0'); return `${h}:${m}` }
+function onRestartSurvey() { router.replace({ name: 'SurveyV2' }) }
 
+/* 저장 모달 */
 const saveOpen = ref(false)
 const saveTitle = ref('')
 const titleInput = ref(null)
 const saving = ref(false)
 const canSave = computed(() => saveTitle.value.trim().length >= 2)
 const rightDisabled = computed(() => saving.value || timeline.value.length === 0)
+const defaultTitlePlaceholder = computed(() =>
+  serverSchedule.value?.title || '예: 부산 1박 2일 (가을)'
+)
 
 function openSaveModal() {
-  saveTitle.value = schedule.title || ''
+  saveTitle.value = serverSchedule.value?.title || ''
   saveOpen.value = true
   nextTick(() => titleInput.value?.focus())
 }
@@ -143,33 +171,48 @@ async function confirmSave() {
   try {
     const payload = {
       title: saveTitle.value.trim(),
-      start_date: schedule.start_date,
-      end_date: schedule.end_date,
-      items: timeline.value,
+      start_date: serverSchedule.value?.startDate || '',
+      end_date: serverSchedule.value?.endDate || '',
+      items: timeline.value, // 평면화된 아이템
     }
-    const newId = await saveSchedule(payload)
-    saveOpen.value = false
-    router.push({ name: 'SavedScheduleDetail', params: { id: newId } })
+    /* 실제 저장 API */
+    // const { data } = await axios.post('/api/schedules', payload, { withCredentials: true })
+    // const newId = data?.id
+    // router.push({ name: 'SavedScheduleDetail', params: { id: newId } })
+
+    // 데모: 로컬 저장
+    const tmpId = Math.floor(Math.random() * 1e9)
+    localStorage.setItem(`savedSchedule:${tmpId}`, JSON.stringify(payload))
+    alert('저장되었습니다. (로컬)')
   } finally {
     saving.value = false
+    saveOpen.value = false
   }
 }
 
-async function saveSchedule(payload) {
-  const tmpId = Math.floor(Math.random() * 1e9)
-  localStorage.setItem(`savedSchedule:${tmpId}`, JSON.stringify(payload))
-  return tmpId
-}
-
-function onRestartSurvey() {
-  router.replace({ name: 'SurveyV2' })
+/* ---------------- 데모 하드코드 폴백 ---------------- */
+function buildHardcodedDemo() {
+  const start = new Date(); start.setHours(9,0,0,0)
+  const days = []
+  const spots = [
+    { id: 501, name: '광안리 해수욕장',    image: 'https://picsum.photos/id/1011/400/250', time: '09:00' },
+    { id: 502, name: '송도 해상 케이블카', image: 'https://picsum.photos/id/1012/400/250', time: '11:00' },
+    { id: 503, name: '부산시립미술관',      image: 'https://picsum.photos/id/1014/400/250', time: '14:00' },
+  ]
+  const day1 = start.toISOString().slice(0,10)
+  const day2 = new Date(start); day2.setDate(day2.getDate()+1)
+  const day2Str = day2.toISOString().slice(0,10)
+  days.push({ date: day1, items: spots })
+  days.push({ date: day2Str, items: spots.map((s,i)=>({ ...s, id: s.id+10, time: i===0?'09:30':i===1?'12:00':'15:00' })) })
+  return { id:'demo', title:'부산 1박 2일', startDate:start.toISOString(), endDate:day2.toISOString(), days }
 }
 </script>
+
 
 <style scoped>
 .timeline {
   position: relative;
-  padding: 0 1rem 100px; /* 버튼 높이 고려해 하단 여백 확보 */
+  padding: 0 1rem 100px; 
   overflow-x: hidden;
 }
 
