@@ -66,8 +66,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import SimpleHeader from '@/components/layout/SimpleHeader.vue'
 import BarrierFreeSearchPanel from '@/newpages/tourplace/components/SearchBar.vue'
 import TourplaceCard from '@/newpages/tourplace/components/SearchCard.vue'
@@ -75,22 +76,31 @@ import TourplaceCard from '@/newpages/tourplace/components/SearchCard.vue'
 const router = useRouter()
 
 const query = ref('')
-const items = ref([
-  { id: 1,  name: '광안리 해수욕장',      image: 'https://picsum.photos/id/1011/400/250', content_type_id: 12 },
-  { id: 2,  name: '송도 해상 케이블카',   image: 'https://picsum.photos/id/1012/400/250', content_type_id: 28 },
-  { id: 3,  name: '일제강제동원 역사관',  image: 'https://picsum.photos/id/1013/400/250', content_type_id: 14 },
-  { id: 4,  name: '부산시립미술관',       image: 'https://picsum.photos/id/1014/400/250', content_type_id: 14 },
-  { id: 5,  name: '감천문화마을',         image: 'https://picsum.photos/id/1015/400/250', content_type_id: 12 },
-  { id: 6,  name: '해운대 해수욕장',      image: 'https://picsum.photos/id/1016/400/250', content_type_id: 12 },
-  { id: 7,  name: '태종대 유원지',        image: 'https://picsum.photos/id/1018/400/250', content_type_id: 28 },
-  { id: 8,  name: '오륙도 스카이워크',    image: 'https://picsum.photos/id/1019/400/250', content_type_id: 28 },
-  { id: 9,  name: '부산타워',             image: 'https://picsum.photos/id/1020/400/250', content_type_id: 12 },
-  { id: 10, name: '동래읍성',             image: 'https://picsum.photos/id/1021/400/250', content_type_id: 12 },
-  { id: 11, name: '광복동 패션거리',      image: 'https://picsum.photos/id/1025/400/250', content_type_id: 38 },
-  { id: 12, name: '밀면 맛집',           image: 'https://picsum.photos/id/1035/400/250', content_type_id: 39 },
-])
+const items = ref([]) // ✅ 초기엔 빈 배열
+const list = ref([])
 
-const list = ref(items.value.slice())
+async function loadItems() {
+  try {
+    const { data } = await axios.get('http://localhost:8080/api/tourist-spot/barrier-free', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    })
+    // ✅ 필드명 변환 (API → 컴포넌트 props 맞추기)
+    const mapped = data.map(item => ({
+      id: item.contentId,
+      name: item.title,
+      image: item.firstImage || 'https://via.placeholder.com/400x250?text=No+Image',
+      content_type_id: item.contentTypeId,
+    }))
+    items.value = mapped
+    list.value = mapped.slice()
+  } catch (err) {
+    console.error('무장애 관광지 목록 불러오기 실패:', err)
+    items.value = []
+    list.value = []
+  }
+}
 
 function onFilter(result) {
   list.value = result
@@ -113,6 +123,11 @@ const pagedList = computed(() => {
   const start = (page.value - 1) * pageSize
   return list.value.slice(start, start + pageSize)
 })
+
+onMounted(() => {
+  loadItems()
+})
+
 </script>
 
 <style scoped>
