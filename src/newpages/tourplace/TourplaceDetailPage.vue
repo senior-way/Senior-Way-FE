@@ -77,7 +77,14 @@
     </div>
   </div>
 
-  <p v-else class="empty bodyBold32px">데이터를 불러올 수 없음</p>
+  <p v-else-if="!loading && loadError" class="empty bodyBold32px">
+    데이터를 불러올 수 없음
+  </p>
+
+  <!-- 로딩 중에는 아무 것도 표시하지 않거나 스피너 표시 가능 -->
+  <p v-else class="empty bodyBold32px">
+    <!-- optional: 로딩 중 표시 -->
+  </p>
 </template>
 
 <script setup>
@@ -102,25 +109,19 @@ async function loadPlace() {
   try {
     const rawId = (route.params?.id ?? '').toString().trim()
     const id = Number(rawId)
-    let data = null
-
-    if (Number.isFinite(id)) {
-      try {
-        const { data: one } = await axios.get(`/api/tourplace/${id}`)
-        data = one
-      } catch (e) {
-        if (e?.response?.status === 404) {
-          const { data: arr } = await axios.get('/api/tourplace', { params: { id } })
-          data = Array.isArray(arr) ? arr[0] ?? null : null
-        } else {
-          throw e
-        }
-      }
-    } else {
-      const { data: arr } = await axios.get('/api/tourplace', { params: { _limit: 1, _sort: 'id', _order: 'asc' } })
-      data = Array.isArray(arr) ? arr[0] ?? null : null
+    if (!Number.isFinite(id)) {
+      place.value = null
+      return
     }
 
+    // 실제 백엔드 경로에 맞춰 GET 요청
+    const { data } = await axios.get(`http://localhost:8080/api/tourist-spot/detail/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}` // 필요 시
+      }
+    })
+
+    // normalizePlace로 매핑
     place.value = normalizePlace(data)
     resetCarousel()
   } catch (err) {
@@ -129,34 +130,39 @@ async function loadPlace() {
   }
 }
 
+
 function normalizePlace(raw) {
   if (!raw) return null
+  const spot = raw.spot ?? {}
+  const detail = raw.detail ?? {}
+
   return {
-    id: raw.id,
-    type_id: raw.type_id ?? raw.contentTypeId,
-    name: raw.name ?? raw.title,
-    phone: raw.phone ?? raw.tel,
-    address: raw.address ?? raw.addr1,
-    addressDetail: raw.addressDetail ?? raw.addr2,
-    image: raw.image ?? raw.firstimage,
-    thumbnails: raw.thumbnails ?? raw.imageUrls ?? [],
-    isBarrierFree: !!raw.isBarrierFree,
-    openingHours: raw.openingHours,
-    holiday: raw.holiday,
-    price: raw.price,
-    description: raw.description,
-    openDate: raw.openDate,
-    experience: raw.experience,
-    parkingInfo: raw.parkingInfo,
-    petAllowed: raw.petAllowed,
-    discount: raw.discount,
-    parking: raw.parking,
-    operatingPeriod: raw.operatingPeriod,
-    items: raw.items,
-    signatureMenu: raw.signatureMenu,
-    menus: raw.menus,
+    id: spot.touristSpotId,
+    type_id: spot.contentTypeId,
+    name: spot.title,
+    phone: spot.tel,
+    address: spot.addr1,
+    addressDetail: spot.addr2,
+    image: spot.firstimage,
+    thumbnails: [spot.firstimage, spot.firstimage2].filter(Boolean),
+    isBarrierFree: detail.chkBarrierFree === 'Y', // 예시, 실제 데이터 확인 필요
+    openingHours: detail.useTime,
+    holiday: detail.restDate,
+    price: detail.price,
+    description: spot.description,
+    openDate: detail.openDate,
+    experience: detail.expGuide,
+    parkingInfo: detail.parkingAvailable,
+    petAllowed: detail.chkPet === 'Y',
+    discount: detail.discount,
+    parking: detail.parking,
+    operatingPeriod: detail.operatingPeriod,
+    items: detail.items,
+    signatureMenu: detail.signatureMenu,
+    menus: detail.menus,
   }
 }
+
 
 const addressFull = computed(() => {
   const a = place.value?.address || ''
