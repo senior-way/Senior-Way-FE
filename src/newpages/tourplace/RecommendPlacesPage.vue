@@ -36,25 +36,41 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import axios from "axios"
 import SimpleHeader from "@/components/layout/SimpleHeader.vue"
 import RecommendCard from "@/newpages/tourplace/components/RecommendCard.vue"
 
 const router = useRouter()
 
-const spots = ref([
-  { id: 4, name: "성산일출봉", image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?q=80&w=1200&auto=format&fit=crop", tags: ["일출","트레킹","유네스코","오름"] },
-  { id: 3, name: "해운대 해수욕장", image: "https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop", tags: ["해변","산책","일몰","맛집"] },
-  { id: 1, name: "경복궁", image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?q=80&w=1200&auto=format&fit=crop", tags: ["궁궐","한옥","역사","도심"] },
-  { id: 2, name: "송도 해상 케이블카", image: "https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop", tags: ["케이블카","바다뷰","스릴","야경"] },
-  { id: 5, name: "성산일출봉2", image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?q=80&w=1200&auto=format&fit=crop", tags: ["일출","트레킹","유네스코","오름"] },
-  { id: 6, name: "해운대 해수욕장2", image: "https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop", tags: ["해변","산책","일몰","맛집"] },
-  { id: 7, name: "경복궁2", image: "https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?q=80&w=1200&auto=format&fit=crop", tags: ["궁궐","한옥","역사","도심"] },
-  { id: 8, name: "송도 해상 케이블카2", image: "https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop", tags: ["케이블카","바다뷰","스릴","야경"] }
-])
-
+const spots = ref([])
 const selected = ref([])
+
+function tagByType(tid) {
+  const map = { 12: "관광지", 14: "문화시설", 28: "레포츠", 38: "쇼핑", 39: "음식점" }
+  return map[tid] || "추천"
+}
+function buildTags(p) {
+  const tags = [tagByType(p.type_id)]
+  if (p.isBarrierFree) tags.push("배리어프리")
+  return tags
+}
+function mapPlace(p) {
+  return {
+    id: p.id,
+    name: p.name,
+    image: p.image,
+    tags: buildTags(p),
+  }
+}
+
+async function loadSpots() {
+  const { data } = await axios.get("/api/tourplace", {
+    params: { _sort: "id", _order: "asc", _limit: 50 },
+  })
+  spots.value = (Array.isArray(data) ? data : []).map(mapPlace)
+}
 
 function toggle(id) {
   const i = selected.value.indexOf(id)
@@ -69,6 +85,8 @@ function confirm() {
   if (!selected.value.length) return
   router.push({ name: "SelectedPlacesV2", query: { ids: selected.value.join(",") } })
 }
+
+onMounted(loadSpots)
 </script>
 
 <style scoped>
@@ -106,7 +124,7 @@ function confirm() {
   position: sticky;
   bottom: 0;
   z-index: 10;
-  background: #f6f6f6; 
+  background: #f6f6f6;
 }
 
 .footer-inner {
