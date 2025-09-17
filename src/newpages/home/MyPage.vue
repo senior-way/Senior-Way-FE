@@ -1,7 +1,7 @@
 <!-- src/newpages/home/MyPage.vue -->
 <template>
   <main class="profile">
-    <SimpleHeader title="내 프로필" />
+    <SimpleHeader title="내 정보 관리" />
 
     <section class="panel">
       <div class="panel-content">
@@ -85,7 +85,7 @@ function onContact () {
   min-height: 620px;
   display: grid;
   justify-items: center;
-  row-gap: 16px;
+  row-gap: 10px;
   background: var(--color-white);
   border-radius: 12px;            
   padding: 16px;
@@ -115,10 +115,5 @@ function onContact () {
   column-gap: 8px; 
   justify-items: stretch;
   margin-top: 12px;
-}
-
-:deep(.square-btn){
-  width: 100%;
-  height: 120px;
 }
 </style>

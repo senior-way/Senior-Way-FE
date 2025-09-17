@@ -36,7 +36,7 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import SimpleHeader from '@/components/layout/SimpleHeader.vue'
 import SelectedCard from '@/newpages/tourplace/components/SelectedCard.vue'
-import BottomDualButtons from '@/newpages/tourplace/components/DualButton.vue'
+import BottomDualButtons from '@/components/button/DualButton.vue'
 
 const route = useRoute()
 const router = useRouter()

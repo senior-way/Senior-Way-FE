@@ -40,7 +40,6 @@
             label="이름을 입력해주세요."
             placeholder="이름 입력"
           />
-
         </div>
       </div>
 

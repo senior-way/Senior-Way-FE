@@ -35,7 +35,7 @@ const showHeader = computed(() => route.meta.noHeader !== true)
   background: #f6f6f6;
   display: flex;
   flex-direction: column;
-  padding-top: max(12px, env(safe-area-inset-top, 0px));      /* 노치 대응 */
+  /* padding-top: max(12px, env(safe-area-inset-top, 0px));       */
   padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
 }
 
