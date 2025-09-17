@@ -40,14 +40,6 @@
             label="이름을 입력해주세요."
             placeholder="이름 입력"
           />
-
-          <!-- 전화번호 -->
-          <SignupInput
-            v-model="phone"
-            type="text"
-            label="전화번호를 입력해주세요."
-            placeholder="010-1234-5678"
-          />
         </div>
       </div>
 
@@ -82,7 +74,6 @@ const email = ref('')
 const pw = ref('')
 const pw2 = ref('')
 const name = ref('')
-const phone = ref('')
 
 const checking = ref(false)
 const emailChecked = ref(null)
@@ -116,15 +107,11 @@ const pw2Error = computed(() => {
 })
 
 const isNameValid = computed(() => !!name.value.trim())
-const isPhoneValid = computed(() => {
-  const d = (phone.value || '').replace(/\D/g, '')
-  return d.length >= 10 && d.length <= 11
-})
 
 const canSubmit = computed(() =>
   isEmailValid.value && emailChecked.value === true &&
   isPwValid.value && isPwSame.value &&
-  isNameValid.value && isPhoneValid.value
+  isNameValid.value
 )
 
 // 이름 숫자 제거
@@ -133,25 +120,9 @@ watch(name, (v) => {
   if (cleaned !== v) name.value = cleaned
 })
 // 입력 변경 시 이메일 체크 상태 리셋
-watch([email, pw, pw2, name, phone], () => {
+watch([email, pw, pw2, name], () => {
   if (emailChecked.value !== null) emailChecked.value = null
 })
-
-// 전화번호 포맷
-function normalizePhone(v) {
-  let d = (v || '').replace(/\D/g, '').slice(0, 11)
-  if (d.startsWith('02')) {
-    if (d.length <= 2) return d
-    if (d.length <= 5) return `${d.slice(0,2)}-${d.slice(2)}`
-    if (d.length <= 9) return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`
-    return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`
-  } else {
-    if (d.length <= 3) return d
-    if (d.length <= 7) return `${d.slice(0,3)}-${d.slice(3)}`
-    return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`
-  }
-}
-watch(phone, (v) => { phone.value = normalizePhone(v) })
 
 const emailStatus = computed(() => {
   if (emailChecked.value === true) return 'success'
