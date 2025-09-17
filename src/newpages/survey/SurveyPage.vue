@@ -110,7 +110,7 @@
 
       <SurveyOptions6Up v-model="durationModel" :items="durationItems" />
       <form class="cta-wrap" @submit.prevent="finish">
-        <SubmitButton label="설문 끝내기" variant="primary" :disabled="sel.duration === null" />
+        <SubmitButton label="추천 일정 생성하기" variant="primary" :disabled="sel.duration === null" />
       </form>
       <p class="note bodyMedium16px">현재 <a href="#">선호도 조사</a> 진행중입니다.</p>
     </section>
