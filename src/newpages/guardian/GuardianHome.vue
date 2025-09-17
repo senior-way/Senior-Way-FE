@@ -134,10 +134,14 @@ async function confirmLink() {
       wardEmail: wardEmail.value.trim(),
       wardName: wardName.value.trim() || undefined,
     };
-    await axios.post('/api/alarm/guardian/invite', null, {
-      params: payload,
-      withCredentials: true,
-    });
+    await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/alarm/guardian/invite`,
+      null,
+      {
+        params: payload,
+        withCredentials: true,
+      }
+    );
 
     // 데모 동작: 성공처럼 처리
     alert('연동 메일 전송이 완료되었습니다.');
