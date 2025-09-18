@@ -2,8 +2,7 @@
 <template>
   <div class="page" v-if="loaded">
     <SimpleHeader :title="title || '저장된 일정'" />
-
-    <main class="timeline" role="list" v-if="groups.length">
+    <main ref="timelineRef" class="timeline" role="list" v-if="groups.length">
       <div class="rail" aria-hidden="true"></div>
 
       <section
@@ -41,8 +40,12 @@
     <div v-else class="empty bodyMedium16px">항목이 없습니다.</div>
 
     <div class="bottom">
-      <button class="bar-btn ghost bodyMedium16px" @click="goList">
-        목록으로
+      <button
+        class="bar-btn primary bodyMedium16px"
+        :disabled="saving"
+        @click="saveBoth"
+      >
+        {{ saving ? '저장 중…' : 'PDF&이미지로 저장' }}
       </button>
       <button class="bar-btn danger bodyMedium16px" @click="askDelete">
         삭제하기
@@ -73,6 +76,7 @@ import SimpleHeader from '@/components/layout/SimpleHeader.vue';
 import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue';
 import NoticeModal from '@/newpages/home/components/NoticeModal.vue';
 import axios from 'axios';
+import { saveElementAsImageAndPdf } from '@/utils/exportCapture';
 
 const route = useRoute();
 const router = useRouter();
@@ -82,6 +86,8 @@ const items = ref([]); // [{id,name,image,date,time}]
 const loaded = ref(false);
 const confirmOpen = ref(false);
 const notFoundOpen = ref(false);
+const timelineRef = ref(null);
+const saving = ref(false);
 
 onMounted(async () => {
   const id = route.params.id;
@@ -184,10 +190,34 @@ async function doDelete() {
         Authorization: jwt ? `Bearer ${jwt}` : undefined,
       },
     });
-  } catch (e) {
-    // 실패해도 무시
-  }
+  } catch (e) {}
   goList();
+}
+
+function fileBaseName () {
+  const base = (title.value || '일정').replace(/[\\/:*?"<>|]/g, '').trim() || '일정';
+  return base;
+}
+
+async function saveBoth () {
+  if (saving.value) return;
+  saving.value = true;
+  try {
+    await document.fonts?.ready;
+    await saveElementAsImageAndPdf(timelineRef.value, {
+      baseName: fileBaseName(),
+      scale: 3,
+      format: 'a4',
+      orientation: 'p',
+      marginMM: 10,
+      shrink: 0.75
+    });
+  } catch (e) {
+    console.error('저장 실패:', e);
+    alert('파일 저장 중 오류가 발생했어요.');
+  } finally {
+    saving.value = false;
+  }
 }
 </script>
 
@@ -281,6 +311,10 @@ async function doDelete() {
   border: 1px solid var(--color-mediumgray);
   background: #fff;
   color: var(--color-black);
+}
+.bar-btn.primary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 .bar-btn.danger {
   border-color: var(--color-red);
