@@ -55,13 +55,13 @@ onMounted(async () => {
   if (!code) return
 
   console.log(code)
-  const res = await axios.get(`${API_BASE_URL}/api/oauth/kakao/callback`, {
+  const res = await axios.get(`${API_BASE_URL}/oauth/kakao/callback`, {
     params: { code },
     withCredentials: true
   })
 
   localStorage.setItem('accessToken', res.data.accessToken)
-  router.replace('/') 
+  router.replace('/v2') 
 })
 
 
