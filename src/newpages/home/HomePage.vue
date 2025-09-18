@@ -45,11 +45,11 @@
 
       <div class="home-banner-row">
         <FestivalBanner
-          :endpoint="'/api/festivals/upcoming/detail'"
+          endpoint="/api/festivals/upcoming/detail"
           :interval="4000"
-          :pauseOnHover="true"
-          :linkToDetail="true"
-          :mockFallback="true"
+          :pause-on-hover="true"
+          :link-to-detail="true"
+          :mock-fallback="true"
         />
       </div>
 
