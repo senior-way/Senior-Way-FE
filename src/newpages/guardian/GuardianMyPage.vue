@@ -1,7 +1,7 @@
 <!-- src/newpages/home/MyPage.vue -->
 <template>
   <main class="profile">
-    <SimpleHeader title="내 정보 관리" />
+    <SimpleHeader title="내 정보 관리" :enable-voice="false" />
 
     <section class="panel">
       <div class="panel-content">
