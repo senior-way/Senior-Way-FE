@@ -6,7 +6,7 @@
         <h2 class="home-card-title bodyMedium28px" v-fitline="{ max:28, min:18 }">
           추천 관광 일정 생성하기
         </h2>
-        <p class="home-card-desc bodyLight16px">
+        <p class="home-card-desc bodyLight16px" v-fitline="{ max:16, min:12 }">
           내가 원하는 여행 스타일을 입력하면<br />
           나에게 딱 맞는 추천 관광 일정이 생성돼요!
         </p>
@@ -19,7 +19,7 @@
         <h3 class="home-card-title bodyMedium26px" v-fitline="{ max:26, min:16 }">
           저장된 일정 확인
         </h3>
-        <p class="home-card-desc bodyLight16px">
+        <p class="home-card-desc bodyLight16px" v-fitline="{ max:16, min:12 }">
           원하는 관광 일정을 저장하고<br />
           관광지 정보도 확인해보세요!
         </p>
@@ -31,7 +31,7 @@
         <h3 class="home-card-title bodyMedium26px" v-fitline="{ max:26, min:16 }">
           무장애 관광지 찾기
         </h3>
-        <p class="home-card-desc bodyLight16px">
+        <p class="home-card-desc bodyLight16px" v-fitline="{ max:16, min:12 }">
           휠체어 이용이 가능한<br />
           무장애 관광지를 살펴보세요!
         </p>
@@ -58,7 +58,6 @@ import surveyIcon from '@/assets/icons/home/home-survey.png'
 import scheduleIcon from '@/assets/icons/home/home-schedule.png'
 import barrierIcon from '@/assets/icons/home/home-barrier.png'
 
-// 지시어 로컬 등록
 import fitline from '@/directives/fitline'
 const vFitline = fitline
 
@@ -78,7 +77,7 @@ function showGuide () { alert('준비중입니다.') }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.05em;
 }
 
 .home-card {
@@ -90,7 +89,7 @@ function showGuide () { alert('준비중입니다.') }
   text-align: left;
   cursor: pointer;
 }
-.home-card-title { margin: 0; white-space: nowrap; } /* 줄바꿈 금지, 말줄임 제거 */
+.home-card-title { margin: 0; white-space: nowrap; }
 .home-card-desc { margin: 0; color: var(--color-mediumgray); line-height: 1; }
 .home-card-texts { display: flex; flex-direction: column; }
 
