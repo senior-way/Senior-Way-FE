@@ -25,7 +25,7 @@ const routesV2 = [
     path: '/v2/home',
     name: 'HomeV2',
     component: () => import('@/newpages/home/HomePage.vue'),
-    meta: { title: '홈', noHeader: true},
+    meta: { title: '홈', noHeader: true },
   },
 
   // 마이페이지
