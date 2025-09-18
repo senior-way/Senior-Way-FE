@@ -74,6 +74,7 @@ import BarrierFreeSearchPanel from '@/newpages/tourplace/components/SearchBar.vu
 import TourplaceCard from '@/newpages/tourplace/components/SearchCard.vue'
 
 const router = useRouter()
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const query = ref('')
 const items = ref([]) // 초기엔 빈 배열
@@ -81,7 +82,7 @@ const list = ref([])
 
 async function loadItems() {
   try {
-    const { data } = await axios.get('http://localhost:8080/api/tourist-spot/barrier-free', {
+    const { data } = await axios.get(`${baseUrl}/tourist-spot/barrier-free`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },

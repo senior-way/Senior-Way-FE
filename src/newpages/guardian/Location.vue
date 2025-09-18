@@ -14,6 +14,8 @@
 <script>
 import axios from "axios";
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+
 export default {
   data() {
     return {
@@ -33,7 +35,7 @@ export default {
         }
 
         // 2. axios GET 요청에 Authorization 헤더 추가
-        const res = await axios.get("http://localhost:8080/api/location/protected", {
+        const res = await axios.get(`${baseUrl}/location/protected`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

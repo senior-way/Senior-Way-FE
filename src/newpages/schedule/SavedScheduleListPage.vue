@@ -71,6 +71,7 @@ import SavedScheduleCard from '@/newpages/schedule/components/SavedScheduleCard.
 import axios from 'axios';
 
 const router = useRouter();
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const list = ref([]);
 
@@ -98,7 +99,7 @@ async function loadList() {
     localStorage.getItem('token') ||
     '';
   try {
-    const res = await axios.get('http://localhost:8080/api/schedules/list', {
+    const res = await axios.get(`${baseUrl}/schedules/list`, {
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : undefined,
       },

@@ -37,10 +37,11 @@ import axios from 'axios';
 import TextInput from '@/components/input/TextInput.vue';
 import SubmitButton from '@/components/button/SubmitButton.vue';
 
-const email = ref('');
-const pw = ref('');
-const loading = ref(false);
-const router = useRouter();
+const email = ref('')
+const pw = ref('')
+const loading = ref(false)
+const router = useRouter()
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 function getRoleFromToken(token) {
   try {
@@ -69,7 +70,7 @@ async function login() {
   loading.value = true;
   try {
     const res = await axios.post(
-      'http://localhost:8080/api/auth/login',
+      `${baseUrl}/auth/login`,
       {
         email: email.value,
         password: pw.value,

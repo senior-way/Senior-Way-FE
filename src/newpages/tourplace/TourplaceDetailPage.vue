@@ -104,6 +104,7 @@ import micIcon from '@/assets/icons/microphone.png'
 
 const route = useRoute()
 const place = ref(null)
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 async function loadPlace() {
   try {
@@ -115,7 +116,7 @@ async function loadPlace() {
     }
 
     // 실제 백엔드 경로에 맞춰 GET 요청
-    const { data } = await axios.get(`http://localhost:8080/api/tourist-spot/detail/${id}`, {
+    const { data } = await axios.get(`${baseUrl}/tourist-spot/detail/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}` // 필요 시
       }
