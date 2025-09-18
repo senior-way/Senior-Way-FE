@@ -163,7 +163,7 @@ import iconPersonal from '@/assets/icons/home/personal.png'
 const icons = {
   connect: iconConnect,
   schedule: iconSchedule,
-  location: iconLocation || iconSchedule,
+  location: iconLocation,
   manual: iconManual,
   personal: iconPersonal,
 }
