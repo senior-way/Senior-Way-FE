@@ -47,7 +47,7 @@ defineEmits(['click'])
 <style scoped>
 .big-icon-btn{
   width: 300px;
-  height: 150px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;

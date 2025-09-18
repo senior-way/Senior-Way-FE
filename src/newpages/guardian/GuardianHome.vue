@@ -9,6 +9,11 @@
           @click="openLinkModal"
         />
         <BigIconButton
+          label="보유 일정 확인"
+          variant="red"
+          @click="goLocation"
+        />
+        <BigIconButton
           label="현재 위치 확인"
           variant="blue"
           @click="goLocation"
@@ -162,7 +167,7 @@ onMounted(() => {
 
 <style scoped>
 .page {
-  padding: 4.5rem 1rem;
+  padding: 3.8rem 1rem;
 }
 
 .container {

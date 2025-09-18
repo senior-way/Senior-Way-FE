@@ -32,7 +32,7 @@ import { computed } from 'vue'
 const props = defineProps({
   id: { type: [String, Number], required: true },
   title: { type: String, default: '' },
-  items: { type: Array, default: () => [] },
+  image: { type: String, default: '' },
   savedAt: { type: [Number, String, Date], default: null },
   startDate: { type: [String, Number, Date], default: null },
   endDate: { type: [String, Number, Date], default: null },
@@ -40,9 +40,7 @@ const props = defineProps({
 defineEmits(['open'])
 
 const mainImage = computed(() => {
-  const arr = Array.isArray(props.items) ? props.items : []
-  const found = arr.find(it => it && it.image)
-  return found ? found.image : ''
+  return props.image || ''
 })
 
 const nightsDaysText = computed(() => {
@@ -56,10 +54,6 @@ const nightsDaysText = computed(() => {
       const diff = Math.round((ed - sd) / 86400000)
       days = diff + 1
     }
-  }
-  if (!days) {
-    const dates = Array.from(new Set((props.items || []).map(it => it?.date).filter(Boolean)))
-    days = dates.length
   }
   if (!days) return ''
   const nights = Math.max(0, days - 1)
