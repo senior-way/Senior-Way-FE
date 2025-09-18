@@ -89,24 +89,17 @@ const notFoundOpen = ref(false);
 const timelineRef = ref(null);
 const saving = ref(false);
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 onMounted(async () => {
   const id = route.params.id;
-  const jwt =
-    localStorage.getItem('accessToken') ||
-    localStorage.getItem('jwt') ||
-    localStorage.getItem('token') ||
-    '';
   try {
-    const res = await axios.get(
-      `${baseUrl}/schedules/${id}/json`,
-      {
-        headers: {
-          Authorization: jwt ? `Bearer ${jwt}` : undefined,
-        },
-      }
-    );
+    const token = localStorage.getItem('accessToken');
+    const res = await axios.get(`${baseUrl}/schedules/${id}/json`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = res.data;
     title.value = data.title || '저장된 일정';
     // days: { day1: [...], day2: [...] }
@@ -181,27 +174,23 @@ function askDelete() {
 }
 async function doDelete() {
   const id = route.params.id;
-  const jwt =
-    localStorage.getItem('accessToken') ||
-    localStorage.getItem('jwt') ||
-    localStorage.getItem('token') ||
-    '';
   try {
     await axios.delete(`${baseUrl}/schedules/${id}`, {
       headers: {
-        Authorization: jwt ? `Bearer ${jwt}` : undefined,
+        Authorization: `Bearer ${token}`,
       },
     });
   } catch (e) {}
   goList();
 }
 
-function fileBaseName () {
-  const base = (title.value || '일정').replace(/[\\/:*?"<>|]/g, '').trim() || '일정';
+function fileBaseName() {
+  const base =
+    (title.value || '일정').replace(/[\\/:*?"<>|]/g, '').trim() || '일정';
   return base;
 }
 
-async function saveBoth () {
+async function saveBoth() {
   if (saving.value) return;
   saving.value = true;
   try {
@@ -210,7 +199,7 @@ async function saveBoth () {
       baseName: fileBaseName(),
       scale: 3,
       marginMM: 10,
-      gutterMM: 6
+      gutterMM: 6,
     });
   } catch (e) {
     console.error('저장 실패:', e);

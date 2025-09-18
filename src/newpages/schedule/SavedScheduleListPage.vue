@@ -71,7 +71,7 @@ import SavedScheduleCard from '@/newpages/schedule/components/SavedScheduleCard.
 import axios from 'axios';
 
 const router = useRouter();
-const baseUrl = import.meta.env.VITE_API_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const list = ref([]);
 
