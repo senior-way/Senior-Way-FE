@@ -125,8 +125,11 @@ const actualIconOpacity = computed(() =>
 .desc {
   margin: 0;
   line-height: 1.38;
-  word-break: break-all;
-  overflow-wrap: anywhere;
   color: var(--color-darkgray);
+  letter-spacing: -0.03em;
+
+  word-break: keep-all;      
+  overflow-wrap: break-word;  
+  hyphens: auto;              
 }
 </style>

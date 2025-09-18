@@ -32,14 +32,16 @@
       </div>
 
       <div class="mini-actions">
-        <button class="mini-btn" type="button" @click="showGuide">
-          <img class="mini-icon" :src="mini.manual" alt="" />
-          <span class="mini-label bodyMedium14px">이용 안내</span>
-        </button>
-        <button class="mini-btn" type="button" @click="goMyPage">
-          <img class="mini-icon" :src="mini.personal" alt="" />
-          <span class="mini-label bodyMedium14px">마이페이지</span>
-        </button>
+        <SmallIconButton
+          :icon="icons.manual"
+          label="이용 안내"
+          @click="showGuide"
+        />
+        <SmallIconButton
+          :icon="icons.personal"
+          label="마이페이지"
+          @click="goMyPage"
+        />
       </div>
     </section>
 
@@ -150,6 +152,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 import BigIconCardBtn from '@/newpages/guardian/components/BigIconButton.vue'
+import SmallIconButton from '@/newpages/guardian/components/SmallIconButton.vue'
 
 import iconConnect from '@/assets/icons/home/guardian-connect.png'
 import iconSchedule from '@/assets/icons/home/guardian-schedule.png'
@@ -160,9 +163,10 @@ import iconPersonal from '@/assets/icons/home/personal.png'
 const icons = {
   connect: iconConnect,
   schedule: iconSchedule,
-  location: iconLocation || iconSchedule
+  location: iconLocation || iconSchedule,
+  manual: iconManual,
+  personal: iconPersonal,
 }
-const mini = { manual: iconManual, personal: iconPersonal }
 
 const router = useRouter()
 
@@ -216,7 +220,7 @@ function goSchedule() {
   router.push({ name: 'SavedScheduleListV2', query })
 }
 function goLocation() { router.push({ name: 'LocationV2' }) }
-function goMyPage() { router.push({ name: 'MyPageV2' }) }
+function goMyPage() { router.push({ name: 'GuardianMyPageV2' }) }
 function showGuide() { openAlert('준비 중입니다.') }
 
 function openLinkModal() {
@@ -292,6 +296,7 @@ onBeforeUnmount(() => {
   justify-items: center;
 }
 
+/* 미니 버튼 컨테이너 레이아웃 */
 .mini-actions {
   margin-top: 1rem;
   display: grid;
@@ -302,30 +307,7 @@ onBeforeUnmount(() => {
   justify-items: center;
 }
 
-.mini-btn {
-  width: 145px;
-  height: 88px;
-  border-radius: 12px;
-  background: var(--color-white);
-  display: grid;
-  place-items: center;
-  gap: 8px;
-  cursor: pointer;
-  padding: 12px;
-}
-
-.mini-icon {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  display: block;
-}
-
-.mini-label {
-  color: var(--color-black);
-  line-height: 1;
-}
-
+/* 모달 스타일 */
 .gd-modal-backdrop {
   position: fixed;
   inset: 0;
