@@ -105,7 +105,12 @@ onMounted(async () => {
     // TimeLine과 동일하게 매핑
     const arr = [];
     // API 응답이 data.days에 중첩되지 않고 최상위 객체일 수 있음을 처리
-    const daysObject = (data.days && typeof data.days === 'object' && Object.keys(data.days).length) ? data.days : data;
+    const daysObject =
+      data.days &&
+      typeof data.days === 'object' &&
+      Object.keys(data.days).length
+        ? data.days
+        : data;
 
     if (daysObject && typeof daysObject === 'object') {
       Object.entries(daysObject).forEach(([dayKey, spots], idx) => {
@@ -166,9 +171,22 @@ function goList() {
 function askDelete() {
   confirmOpen.value = true;
 }
-function doDelete() {
-  // 서버 삭제 API 필요시 구현
-  // router.replace({ name: 'SavedScheduleListV2' })
+async function doDelete() {
+  const id = route.params.id;
+  const jwt =
+    localStorage.getItem('accessToken') ||
+    localStorage.getItem('jwt') ||
+    localStorage.getItem('token') ||
+    '';
+  try {
+    await axios.delete(`http://localhost:8080/api/schedules/${id}`, {
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : undefined,
+      },
+    });
+  } catch (e) {
+    // 실패해도 무시
+  }
   goList();
 }
 </script>
