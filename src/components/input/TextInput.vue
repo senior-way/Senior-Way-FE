@@ -9,7 +9,7 @@
     <div class="input-wrap" :class="{ select: isSelect }">
       <!-- text / email -->
       <input
-        v-if="as === 'text' || as === 'email'"
+        v-if="as === 'text' || as === 'email' || as === 'password'"
         class="input bodyMedium20px"
         :id="inputId"
         :type="as"
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -53,14 +53,16 @@ const props = defineProps({
   placeholder: { type: String, default: '' },
   accent: { type: String, default: 'var(--color-primary)' },
   id: { type: String, default: '' },
-  disabled: { type: Boolean, default: false }
-})
+  disabled: { type: Boolean, default: false },
+});
 
-const inputId = computed(() => props.id || `ti-${Math.random().toString(36).slice(2, 8)}`)
-const isSelect = computed(() => props.as === 'select')
+const inputId = computed(
+  () => props.id || `ti-${Math.random().toString(36).slice(2, 8)}`
+);
+const isSelect = computed(() => props.as === 'select');
 const normalizedOptions = computed(() =>
-  props.options.map(o => (typeof o === 'string' ? { label: o, value: o } : o))
-)
+  props.options.map((o) => (typeof o === 'string' ? { label: o, value: o } : o))
+);
 </script>
 
 <style scoped>
@@ -132,7 +134,7 @@ const normalizedOptions = computed(() =>
   left: 0;
   right: 0;
   bottom: 0;
-  height: 6px; 
+  height: 6px;
   background: var(--accent);
   border-radius: 2px;
 }

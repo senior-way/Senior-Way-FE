@@ -23,19 +23,25 @@
             수집 개인정보 : 이메일, 이름, 성별, 생년월일
           </p>
 
-          <div class="terms-box bodyMedium18px" role="region" aria-label="약관 상세" tabindex="0">
+          <div
+            class="terms-box bodyMedium18px"
+            role="region"
+            aria-label="약관 상세"
+            tabindex="0"
+          >
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas
             consectetur voluptatem minus? Perspiciatis, animi? Culpa, laudantium
-            beatae eligendi sequi illum tempora, explicabo quidem ipsam doloribus
-            ad recusandae quo doloremque repudiandae? Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Explicabo, facilis hic. Aspernatur id
-            doloribus, non, dicta atque facilis alias tenetur voluptate repellat
-            omnis dolores provident nostrum saepe optio minus neque.
+            beatae eligendi sequi illum tempora, explicabo quidem ipsam
+            doloribus ad recusandae quo doloremque repudiandae? Lorem ipsum
+            dolor sit amet consectetur adipisicing elit. Explicabo, facilis hic.
+            Aspernatur id doloribus, non, dicta atque facilis alias tenetur
+            voluptate repellat omnis dolores provident nostrum saepe optio minus
+            neque.
             <br /><br />
             Ex quibusdam veritatis officia qui iusto earum sint eaque possimus
             quos delectus voluptates eius sapiente cumque provident eveniet
-            officiis corporis unde, fugit commodi! Accusamus incidunt hic id enim
-            alias voluptates.
+            officiis corporis unde, fugit commodi! Accusamus incidunt hic id
+            enim alias voluptates.
             <br /><br />
             Magnam, quia ipsum. Eveniet in eaque porro commodi voluptate quam,
             vero amet qui fuga ad sit dolores doloribus ipsam omnis minima velit
@@ -54,11 +60,7 @@
 
       <template v-else-if="currentKey === 'email'">
         <div class="panel-content">
-          <TextInput
-            v-model="email"
-            as="email"
-            placeholder="name@example.com"
-          >
+          <TextInput v-model="email" as="email" placeholder="name@example.com">
             <template #label>사용하실 <em>이메일</em>을 입력해주세요.</template>
           </TextInput>
         </div>
@@ -67,32 +69,46 @@
           <SubmitButton
             label="이메일 중복 확인"
             :disabled="!isEmailValid"
-            @click="next()"
+            @click="checkEmailAndNext()"
           />
         </div>
       </template>
 
       <template v-else-if="currentKey === 'pw'">
         <div class="panel-content">
-          <TextInput v-model="pw" as="text" placeholder="8~20자, 영문/숫자 조합">
+          <TextInput
+            v-model="pw"
+            as="password"
+            placeholder="8~20자, 영문/숫자 조합"
+          >
             <template #label><em>비밀번호</em>를 입력해주세요.</template>
           </TextInput>
         </div>
 
         <div class="cta-gap">
-          <SubmitButton label="다음 페이지" :disabled="pw.length < 8" @click="next()" />
+          <SubmitButton
+            label="다음 페이지"
+            :disabled="pw.length < 8"
+            @click="next()"
+          />
         </div>
       </template>
 
       <template v-else-if="currentKey === 'pw2'">
         <div class="panel-content">
-          <TextInput v-model="pw2" as="text" placeholder="비밀번호 재입력">
-            <template #label><em>비밀번호</em>를 한 번 더 입력해주세요.</template>
+          <TextInput v-model="pw2" as="password" placeholder="비밀번호 재입력">
+            <template #label
+              ><em>비밀번호</em>를 한 번 더 입력해주세요.</template
+            >
           </TextInput>
         </div>
 
         <div class="cta-gap">
-          <SubmitButton label="다음 페이지" :disabled="pw2 !== pw" @click="next()" />
+          <SubmitButton
+            label="다음 페이지"
+            :disabled="pw2 !== pw"
+            @click="next()"
+          />
         </div>
       </template>
 
@@ -140,7 +156,9 @@
             </div>
             <div class="review-row pw">
               <div class="review-label bodyMedium20px">비밀번호:</div>
-              <div class="review-value bodyMedium20px">{{ showPw ? pw : maskedPw }}</div>
+              <div class="review-value bodyMedium20px">
+                {{ showPw ? pw : maskedPw }}
+              </div>
               <button
                 type="button"
                 class="pw-toggle"
@@ -166,13 +184,18 @@
           </div>
 
           <p class="review-note bodyMedium20px">
-            잘못된 부분이 있다면<br /> 뒤로가기를 눌러 이전 페이지로 <br />돌아가서 다시 선택해주세요.
+            잘못된 부분이 있다면<br />
+            뒤로가기를 눌러 이전 페이지로 <br />돌아가서 다시 선택해주세요.
           </p>
         </div>
 
         <div class="cta-gap review-actions">
           <SubmitButton label="회원가입을 완료하겠습니다." @click="submit()" />
-          <SubmitButton label="뒤로가서 다시 선택하겠습니다." variant="mediumgray" @click="currentKey='profile'" />
+          <SubmitButton
+            label="뒤로가서 다시 선택하겠습니다."
+            variant="mediumgray"
+            @click="currentKey = 'profile'"
+          />
         </div>
       </template>
     </section>
@@ -186,57 +209,81 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import StepBreadcrumb from '@/components/layout/StepBreadcrumb.vue'
-import TextInput from '@/components/input/TextInput.vue'
-import WheelDateInput from '@/components/input/DateInput.vue'
-import SubmitButton from '@/components/button/SubmitButton.vue'
-import SimpleModal from '@/components/modal/SimpleModal.vue'
+import { computed, ref } from 'vue';
+import axios from 'axios';
+import StepBreadcrumb from '@/components/layout/StepBreadcrumb.vue';
+import TextInput from '@/components/input/TextInput.vue';
+import WheelDateInput from '@/components/input/DateInput.vue';
+import SubmitButton from '@/components/button/SubmitButton.vue';
+import SimpleModal from '@/components/modal/SimpleModal.vue';
 
-import pwClosed from '@/assets/icons/pw_hide_eye.png'
-import pwOpen from '@/assets/icons/pw_show_eye.png'
+import pwClosed from '@/assets/icons/pw_hide_eye.png';
+import pwOpen from '@/assets/icons/pw_show_eye.png';
 
 const steps = [
-  { key: 'terms',   label: '정보제공 동의' },
-  { key: 'email',   label: '이메일' },
-  { key: 'pw',      label: '비밀번호' },
-  { key: 'pw2',     label: '비밀번호 확인' },
+  { key: 'terms', label: '정보제공 동의' },
+  { key: 'email', label: '이메일' },
+  { key: 'pw', label: '비밀번호' },
+  { key: 'pw2', label: '비밀번호 확인' },
   { key: 'profile', label: '개인정보' },
-]
+];
 
-const currentKey = ref('terms')
-const idx = computed(() => steps.findIndex(s => s.key === currentKey.value))
+const currentKey = ref('terms');
+const idx = computed(() => steps.findIndex((s) => s.key === currentKey.value));
 
-const agree  = ref(false)
-const email  = ref('')
-const pw     = ref('')
-const pw2    = ref('')
-const name   = ref('')
-const gender = ref('')
-const birth  = ref('')
+const agree = ref(false);
+const email = ref('');
+const pw = ref('');
+const pw2 = ref('');
+const name = ref('');
+const gender = ref('');
+const birth = ref('');
 
-const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value))
-const maskedPw = computed(() => pw.value ? '•'.repeat(Math.max(8, pw.value.length)) : '')
-const showPw = ref(false)
+const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
+const maskedPw = computed(() =>
+  pw.value ? '•'.repeat(Math.max(8, pw.value.length)) : ''
+);
+const showPw = ref(false);
 
-const modalOpen = ref(false)
+const modalOpen = ref(false);
 
-function next () {
-  if (idx.value < steps.length - 1) currentKey.value = steps[idx.value + 1].key
+function next() {
+  if (idx.value < steps.length - 1) currentKey.value = steps[idx.value + 1].key;
 }
-function goToPrev (key) {
-  const target = steps.findIndex(s => s.key === key)
-  if (target <= idx.value) currentKey.value = key
+
+async function checkEmailAndNext() {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/user/check-email`,
+      {
+        params: { email: email.value },
+        withCredentials: true,
+      }
+    );
+    if (res.data) {
+      next();
+      return true;
+    } else {
+      alert('이미 사용 중인 이메일입니다.');
+      return false;
+    }
+  } catch {
+    return false;
+  }
 }
-function goReview () {
-  currentKey.value = 'review'
-  showPw.value = false
+function goToPrev(key) {
+  const target = steps.findIndex((s) => s.key === key);
+  if (target <= idx.value) currentKey.value = key;
 }
-function submit () {
-  modalOpen.value = true
+function goReview() {
+  currentKey.value = 'review';
+  showPw.value = false;
 }
-function onModalConfirm () {
-  modalOpen.value = false
+function submit() {
+  modalOpen.value = true;
+}
+function onModalConfirm() {
+  modalOpen.value = false;
 }
 </script>
 
@@ -318,7 +365,9 @@ function onModalConfirm () {
   line-height: 1;
 }
 
-.step-review .panel-content { padding-top: 8px; }
+.step-review .panel-content {
+  padding-top: 8px;
+}
 
 .review-title {
   width: 300px;
@@ -343,24 +392,34 @@ function onModalConfirm () {
   align-items: center;
 }
 
-.review-row.pw { grid-template-columns: 90px 1fr auto; }
+.review-row.pw {
+  grid-template-columns: 90px 1fr auto;
+}
 
 .review-label {
   color: var(--color-black);
   white-space: nowrap;
 }
 
-.review-value { color: var(--color-black); }
+.review-value {
+  color: var(--color-black);
+}
 
-.pw-toggle{
+.pw-toggle {
   background: none;
   border: none;
   padding: 0;
-  width: 32px; height: 32px;
-  display: grid; place-items: center;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
   cursor: pointer;
 }
-.pw-toggle img{ width: 20px; height: 20px; display: block; }
+.pw-toggle img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
 
 .review-note {
   width: 300px;
@@ -373,8 +432,15 @@ function onModalConfirm () {
 
 /* .cta-gap { margin-top: var(--cta-gap); } */
 
-.review-actions { display: grid; row-gap: var(--review-gap); }
+.review-actions {
+  display: grid;
+  row-gap: var(--review-gap);
+}
 
-.step-email { --cta-gap: 12px; }
-.step-pw    { --cta-gap: 20px; }
+.step-email {
+  --cta-gap: 12px;
+}
+.step-pw {
+  --cta-gap: 20px;
+}
 </style>
