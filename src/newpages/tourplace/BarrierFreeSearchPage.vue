@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SimpleHeader title="무장애 관광지 목록" />
+    <SimpleHeader title="무장애 관광지" />
     <div class="page">
       <section class="panel">
         <BarrierFreeSearchPanel
@@ -76,7 +76,7 @@ import TourplaceCard from '@/newpages/tourplace/components/SearchCard.vue'
 const router = useRouter()
 
 const query = ref('')
-const items = ref([]) // ✅ 초기엔 빈 배열
+const items = ref([]) // 초기엔 빈 배열
 const list = ref([])
 
 async function loadItems() {
@@ -86,7 +86,7 @@ async function loadItems() {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     })
-    // ✅ 필드명 변환 (API → 컴포넌트 props 맞추기)
+    // 필드명 변환 (API → 컴포넌트 props 맞추기)
     const mapped = data.map(item => ({
       id: item.contentId,
       name: item.title,
