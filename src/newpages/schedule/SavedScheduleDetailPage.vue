@@ -23,7 +23,8 @@
           <time
             class="time bodyMedium16px"
             :datetime="`${group.date}T${item.time}:00`"
-          >{{ item.time }}</time>
+            >{{ item.time }}</time
+          >
           <span class="dot" aria-hidden="true"></span>
           <div class="card-col">
             <SpotCard
@@ -40,8 +41,12 @@
     <div v-else class="empty bodyMedium16px">항목이 없습니다.</div>
 
     <div class="bottom">
-      <button class="bar-btn ghost bodyMedium16px" @click="goList">목록으로</button>
-      <button class="bar-btn danger bodyMedium16px" @click="askDelete">삭제하기</button>
+      <button class="bar-btn ghost bodyMedium16px" @click="goList">
+        목록으로
+      </button>
+      <button class="bar-btn danger bodyMedium16px" @click="askDelete">
+        삭제하기
+      </button>
     </div>
 
     <NoticeModal
@@ -62,143 +67,204 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import SimpleHeader from '@/components/layout/SimpleHeader.vue'
-import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue'
-import NoticeModal from '@/newpages/home/components/NoticeModal.vue'
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import SimpleHeader from '@/components/layout/SimpleHeader.vue';
+import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue';
+import NoticeModal from '@/newpages/home/components/NoticeModal.vue';
+import axios from 'axios';
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const title = ref('')
-const items = ref([]) // [{id,name,image,date,time}]
-const loaded = ref(false)
-const confirmOpen = ref(false)
-const notFoundOpen = ref(false)
+const title = ref('');
+const items = ref([]); // [{id,name,image,date,time}]
+const loaded = ref(false);
+const confirmOpen = ref(false);
+const notFoundOpen = ref(false);
 
-onMounted(() => {
-  const id = route.params.id
-  const raw = localStorage.getItem(`savedSchedule:${id}`)
-  if (!raw) {
-    notFoundOpen.value = true
-    loaded.value = true
-    return
-  }
+onMounted(async () => {
+  const id = route.params.id;
+  const jwt =
+    localStorage.getItem('accessToken') ||
+    localStorage.getItem('jwt') ||
+    localStorage.getItem('token') ||
+    '';
   try {
-    const obj = JSON.parse(raw)
-    title.value = obj.title || '저장된 일정'
-    items.value = Array.isArray(obj.items) ? obj.items : []
-  } catch {
-    notFoundOpen.value = true
+    const res = await axios.get(
+      `http://localhost:8080/api/schedules/${id}/json`,
+      {
+        headers: {
+          Authorization: jwt ? `Bearer ${jwt}` : undefined,
+        },
+      }
+    );
+    const data = res.data;
+    title.value = data.title || '저장된 일정';
+    // days: { day1: [...], day2: [...] }
+    // TimeLine과 동일하게 매핑
+    const arr = [];
+    // API 응답이 data.days에 중첩되지 않고 최상위 객체일 수 있음을 처리
+    const daysObject = (data.days && typeof data.days === 'object' && Object.keys(data.days).length) ? data.days : data;
+
+    if (daysObject && typeof daysObject === 'object') {
+      Object.entries(daysObject).forEach(([dayKey, spots], idx) => {
+        // day1, day2 같은 키가 아니면 건너뜀 (예: title, start_date)
+        if (!dayKey.startsWith('day')) return;
+
+        // 날짜 계산: start_date + idx
+        let date = '';
+        if (data.start_date) {
+          const d = new Date(data.start_date);
+          d.setDate(d.getDate() + idx);
+          date = d.toISOString().slice(0, 10);
+        } else {
+          date = `day${idx + 1}`;
+        }
+        (spots || []).forEach((spot) => {
+          if (!spot) return; // spot이 null이나 undefined인 경우 방지
+          arr.push({
+            date,
+            time: spot.time,
+            id: spot.contentId,
+            name: spot.place,
+            image: spot.firstImage || spot.image, // firstImage 우선, 없으면 image 사용
+          });
+        });
+      });
+    }
+    items.value = arr;
+  } catch (e) {
+    notFoundOpen.value = true;
   } finally {
-    loaded.value = true
+    loaded.value = true;
   }
-})
+});
 
 const groups = computed(() => {
-  const acc = {}
+  const acc = {};
   for (const it of items.value) {
-    const d = it.date || '0000-00-00'
-    ;(acc[d] ||= []).push(it)
+    const d = it.date || '0000-00-00';
+    (acc[d] ||= []).push(it);
   }
   return Object.entries(acc)
-    .sort(([a],[b]) => a.localeCompare(b))
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([date, arr]) => ({
       date,
-      items: arr.sort((x, y) => (x.time || '').localeCompare(y.time || ''))
-    }))
-})
+      items: arr.sort((x, y) => (x.time || '').localeCompare(y.time || '')),
+    }));
+});
 
 function goDetail(id) {
-  if (!id) return
-  router.push({ name: 'TourplaceDetailV2', params: { id } })
+  if (!id) return;
+  router.push({ name: 'TourplaceDetailV2', params: { id } });
 }
 
-function goList() { router.replace({ name: 'SavedScheduleListV2' }) }
-function askDelete() { confirmOpen.value = true }
+function goList() {
+  router.replace({ name: 'SavedScheduleListV2' });
+}
+function askDelete() {
+  confirmOpen.value = true;
+}
 function doDelete() {
-  const id = route.params.id
-  localStorage.removeItem(`savedSchedule:${id}`)
-  router.replace({ name: 'SavedScheduleListV2' })
+  // 서버 삭제 API 필요시 구현
+  // router.replace({ name: 'SavedScheduleListV2' })
+  goList();
 }
 </script>
 
 <style scoped>
-.page{
-  width:100%;
-  max-width:var(--app-max-width);
-  margin:0 auto;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
+.page {
+  width: 100%;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
-.timeline{
-  position:relative;
-  z-index:0;
-  padding:0 1rem 100px;
-  overflow-x:hidden;
+.timeline {
+  position: relative;
+  z-index: 0;
+  padding: 0 1rem 100px;
+  overflow-x: hidden;
 }
-.rail{
-  position:absolute;
-  top:0; bottom:0; left:98px;
-  width:2px; background:var(--color-lightgray);
-  z-index:0;
-}
-
-.day{ position:relative; padding-top:8px; }
-.day-label{
-  padding:6px 32px;
-  color:var(--color-black);
-  background:var(--color-white);
-  margin:0 -1rem;
+.rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 98px;
+  width: 2px;
+  background: var(--color-lightgray);
+  z-index: 0;
 }
 
-.entry{
-  display:grid;
-  grid-template-columns:76px 16px minmax(0,1fr);
-  align-items:start;
-  padding:10px 0;
+.day {
+  position: relative;
+  padding-top: 8px;
+}
+.day-label {
+  padding: 6px 32px;
+  color: var(--color-black);
+  background: var(--color-white);
+  margin: 0 -1rem;
 }
 
-.time{
-  text-align:right; color:var(--color-mediumgray);
-  padding-right:8px; line-height:1; align-self:start;
+.entry {
+  display: grid;
+  grid-template-columns: 76px 16px minmax(0, 1fr);
+  align-items: start;
+  padding: 10px 0;
 }
 
-.dot{
-  width:16px; height:16px; border-radius:50%;
+.time {
+  text-align: right;
+  color: var(--color-mediumgray);
+  padding-right: 8px;
+  line-height: 1;
+  align-self: start;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   background: var(--color-primary);
-  z-index:1;         
-  align-self:start; justify-self:center;
+  z-index: 1;
+  align-self: start;
+  justify-self: center;
 }
 
-.card-col{ min-width:0; margin-left:6px; }
-
-.empty{
-  padding:24px; text-align:center; color:var(--color-mediumgray);
+.card-col {
+  min-width: 0;
+  margin-left: 6px;
 }
 
-.bottom{
-  position:sticky;
-  bottom:0;
-  background:#f6f6f6;
-  padding:12px 1rem calc(12px + env(safe-area-inset-bottom,0px));
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  z-index:10;        
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-mediumgray);
 }
 
-.bar-btn{
-  height:48px;
-  border-radius:12px;
-  border:1px solid var(--color-mediumgray);
-  background:#fff;
-  color:var(--color-black);
+.bottom {
+  position: sticky;
+  bottom: 0;
+  background: #f6f6f6;
+  padding: 12px 1rem calc(12px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  z-index: 10;
 }
-.bar-btn.danger{
+
+.bar-btn {
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--color-mediumgray);
+  background: #fff;
+  color: var(--color-black);
+}
+.bar-btn.danger {
   border-color: var(--color-red);
   color: var(--color-red);
 }
