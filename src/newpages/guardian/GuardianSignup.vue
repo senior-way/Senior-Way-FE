@@ -61,115 +61,125 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
-import SignupInput from '@/newpages/guardian/components/SignupInput.vue'
-import SignupEmailInput from '@/newpages/guardian/components/SignupEmail.vue'
-import SubmitButton from '@/components/button/SubmitButton.vue'
-import SimpleModal from '@/components/modal/SimpleModal.vue'
+import { ref, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import SignupInput from '@/newpages/guardian/components/SignupInput.vue';
+import SignupEmailInput from '@/newpages/guardian/components/SignupEmail.vue';
+import SubmitButton from '@/components/button/SubmitButton.vue';
+import SimpleModal from '@/components/modal/SimpleModal.vue';
 
-const router = useRouter()
+const router = useRouter();
 
-const email = ref('')
-const pw = ref('')
-const pw2 = ref('')
-const name = ref('')
+const email = ref('');
+const pw = ref('');
+const pw2 = ref('');
+const name = ref('');
 
-const checking = ref(false)
-const emailChecked = ref(null)
-const modalOpen = ref(false)
+const checking = ref(false);
+const emailChecked = ref(null);
+const modalOpen = ref(false);
 
-const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value))
+const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
 
 // 비밀번호 8~20자 & (영문/숫자/특수문자) 2종 이상
 function isPwValid2of3(v) {
-  if (!v) return false
-  const lenOk = v.length >= 8 && v.length <= 20
+  if (!v) return false;
+  const lenOk = v.length >= 8 && v.length <= 20;
   const types =
     (/[A-Za-z]/.test(v) ? 1 : 0) +
     (/\d/.test(v) ? 1 : 0) +
-    (/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(v) ? 1 : 0)
-  return lenOk && types >= 2
+    (/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(v) ? 1 : 0);
+  return lenOk && types >= 2;
 }
-const isPwValid = computed(() => isPwValid2of3(pw.value))
-const isPwSame  = computed(() => pw.value && pw.value === pw2.value)
+const isPwValid = computed(() => isPwValid2of3(pw.value));
+const isPwSame = computed(() => pw.value && pw.value === pw2.value);
 
 // 에러 문구
 const pwError = computed(() => {
-  if (!pw.value) return ''
-  if (!isPwValid.value) return '비밀번호 조건에 맞지 않습니다.'
-  return ''
-})
+  if (!pw.value) return '';
+  if (!isPwValid.value) return '비밀번호 조건에 맞지 않습니다.';
+  return '';
+});
 const pw2Error = computed(() => {
-  if (!pw2.value) return ''
-  if (!isPwSame.value) return '비밀번호가 일치하지 않습니다.'
-  return ''
-})
+  if (!pw2.value) return '';
+  if (!isPwSame.value) return '비밀번호가 일치하지 않습니다.';
+  return '';
+});
 
-const isNameValid = computed(() => !!name.value.trim())
+const isNameValid = computed(() => !!name.value.trim());
 
-const submitting = ref(false)  // 버튼 클릭 잠금용 상태
+const submitting = ref(false); // 버튼 클릭 잠금용 상태
 
-const canSubmit = computed(() =>
-  isEmailValid.value && emailChecked.value === true &&
-  isPwValid.value && isPwSame.value && isNameValid.value
-)
+const canSubmit = computed(
+  () =>
+    isEmailValid.value &&
+    emailChecked.value === true &&
+    isPwValid.value &&
+    isPwSame.value &&
+    isNameValid.value
+);
 
 // 이름 숫자 제거
 watch(name, (v) => {
-  const cleaned = (v || '').replace(/\d+/g, '')
-  if (cleaned !== v) name.value = cleaned
-})
+  const cleaned = (v || '').replace(/\d+/g, '');
+  if (cleaned !== v) name.value = cleaned;
+});
 
 // 입력 변경 시 이메일 체크 상태 리셋
 watch(email, () => {
-  emailChecked.value = null
-})
+  emailChecked.value = null;
+});
 
 const emailStatus = computed(() => {
-  if (emailChecked.value === true) return 'success'
-  if (emailChecked.value === false) return 'error'
-  return ''
-})
+  if (emailChecked.value === true) return 'success';
+  if (emailChecked.value === false) return 'error';
+  return '';
+});
 const emailStatusText = computed(() => {
-  if (emailChecked.value === true) return '사용 가능한 이메일입니다.'
-  if (emailChecked.value === false) return '이미 사용 중인 이메일입니다.'
-  return ''
-})
+  if (emailChecked.value === true) return '사용 가능한 이메일입니다.';
+  if (emailChecked.value === false) return '이미 사용 중인 이메일입니다.';
+  return '';
+});
 
 async function checkEmail() {
-  checking.value = true
+  checking.value = true;
   try {
-    const ok = !['test@example.com','admin@example.com'].includes(email.value.trim().toLowerCase())
-    emailChecked.value = ok
+    const ok = !['test@example.com', 'admin@example.com'].includes(
+      email.value.trim().toLowerCase()
+    );
+    emailChecked.value = ok;
   } finally {
-    checking.value = false
+    checking.value = false;
   }
 }
 
 async function submit() {
-  if (!canSubmit.value) return
+  if (!canSubmit.value) return;
 
-  submitting.value = true
+  submitting.value = true;
   try {
-    await axios.post('http://localhost:8080/api/auth/guardian-signup', {
-      username: name.value,
-      password: pw.value,
-      email: email.value
-    })
-    modalOpen.value = true
+    await axios.post(
+      'http://localhost:8080/api/auth/guardian-signup',
+      {
+        username: name.value,
+        password: pw.value,
+        email: email.value,
+      },
+      { withCredentials: true }
+    );
+    modalOpen.value = true;
   } catch (e) {
-    console.error('회원가입 실패', e?.response?.data || e.message)
-    alert('회원가입에 실패했습니다.')
+    console.error('회원가입 실패', e?.response?.data || e.message);
+    alert('회원가입에 실패했습니다.');
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
 }
 
 function onModalConfirm() {
-  modalOpen.value = false
-  router.replace({ name: 'LoginV2' })
+  modalOpen.value = false;
+  router.replace({ name: 'LoginV2' });
 }
 </script>
 
