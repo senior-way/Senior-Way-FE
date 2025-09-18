@@ -117,17 +117,21 @@ function closeLinkModal() {
 }
 
 // 초기 연동 상태 조회 (백엔드 연동 필요 부분 주석 처리)
-// async function loadLinkedStatus() {
-//   try {
-//     const { data } = await axios.get('/api/guardian/links/status', { withCredentials: true })
-//     linked.value = !!data?.linked
-//     linkedWard.value = data?.ward || null
-//   } catch {
-//     linked.value = false
-//     linkedWard.value = null
-//   }
-// }
-// onMounted(loadLinkedStatus)
+async function loadLinkedStatus() {
+  try {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/user-guardians/status`,
+      {
+        withCredentials: true,
+      }
+    );
+    linked.value = !!data?.linked;
+    linkedWard.value = data?.ward || null;
+  } catch {
+    linked.value = false;
+    linkedWard.value = null;
+  }
+}
 
 // 백엔드 연동 전: 전송 성공으로만 처리 (API 호출부 주석)
 // 실제 연동 시 아래 주석 해제하고 API 연결
@@ -160,7 +164,7 @@ async function confirmLink() {
 
 // 백엔드 연동 전에는 기본 노출만 위해 onMounted 훅에서 별도 호출 없이 둠
 onMounted(() => {
-  linked.value = false;
+  loadLinkedStatus();
   linkedWard.value = null;
 });
 </script>
