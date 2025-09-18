@@ -3,7 +3,6 @@
   <main class="page">
     <section class="container">
       <div class="list">
-        <!-- 1. 사용자 연동 -->
         <BigIconCardBtn
           :icon="icons.connect"
           title="사용자 연동"
@@ -14,7 +13,6 @@
           @click="openLinkModal"
         />
 
-        <!-- 2. 사용자 일정 확인 -->
         <BigIconCardBtn
           :icon="icons.schedule"
           title="사용자 일정 확인"
@@ -23,7 +21,6 @@
           @click="goSchedule"
         />
 
-        <!-- 3. 사용자 위치 확인 -->
         <BigIconCardBtn
           :icon="icons.location"
           title="사용자 위치 확인"
@@ -34,7 +31,6 @@
         />
       </div>
 
-      <!-- 하단 작은 버튼 둘-->
       <div class="mini-actions">
         <button class="mini-btn" type="button" @click="showGuide">
           <img class="mini-icon" :src="mini.manual" alt="" />
@@ -47,25 +43,73 @@
       </div>
     </section>
 
-    <div v-if="linkOpen" class="modal-backdrop" @click.self="closeLinkModal">
-      <div class="modal-card">
-        <h3 class="modal-title bodyBold20px">피보호자 연동</h3>
-        <label class="field">
-          <span class="field-label bodyMedium14px">피보호자 이메일</span>
+    <!-- 연동 없음 알림 모달 -->
+    <div
+      v-if="alertOpen"
+      class="gd-modal-backdrop"
+      @click.self="closeAlert"
+      role="presentation"
+    >
+      <div
+        class="gd-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-label="알림"
+      >
+        <h3 class="gd-modal-title bodyBold20px">알림</h3>
+        <div class="gd-field">
+          <p class="bodyMedium16px gd-alert-text">
+            {{ alertMsg }}
+          </p>
+        </div>
+        <div class="gd-modal-actions gd-modal-actions--single">
+          <button class="gd-btn gd-btn--primary bodyMedium16px" @click="closeAlert">
+            확인
+          </button>
+        </div>
+        <button
+          class="gd-btn-close-x"
+          type="button"
+          aria-label="닫기"
+          @click="closeAlert"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+
+    <!-- 연동 초대 입력 모달 -->
+    <div
+      v-if="linkOpen"
+      class="gd-modal-backdrop"
+      @click.self="closeLinkModal"
+      role="presentation"
+    >
+      <div
+        class="gd-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-label="피보호자 연동"
+      >
+        <h3 class="gd-modal-title bodyBold20px">피보호자 연동</h3>
+
+        <label class="gd-field">
+          <span class="gd-field-label bodyMedium14px">피보호자 이메일</span>
           <input
             v-model.trim="wardEmail"
-            class="modal-input bodyMedium16px"
+            class="gd-modal-input bodyMedium16px modal-input"
             type="email"
             placeholder="예: seniorway@google.com"
             autocomplete="email"
             @keyup.enter="confirmLink"
           />
         </label>
-        <label class="field">
-          <span class="field-label bodyMedium14px">피보호자 이름</span>
+
+        <label class="gd-field">
+          <span class="gd-field-label bodyMedium14px">피보호자 이름</span>
           <input
             v-model.trim="wardName"
-            class="modal-input bodyMedium16px"
+            class="gd-modal-input bodyMedium16px"
             type="text"
             maxlength="20"
             placeholder="예: 홍길동"
@@ -73,23 +117,35 @@
             @keyup.enter="confirmLink"
           />
         </label>
-        <div class="modal-actions">
-          <button class="btn ghost bodyMedium16px" @click="closeLinkModal">취소</button>
+
+        <div class="gd-modal-actions">
+          <button class="gd-btn bodyMedium16px" @click="closeLinkModal">
+            취소
+          </button>
           <button
-            class="btn primary bodyMedium16px"
+            class="gd-btn gd-btn--primary bodyMedium16px"
             :disabled="!canLink || linking"
             @click="confirmLink"
           >
             {{ linking ? '전송 중…' : '연동 메일 전송' }}
           </button>
         </div>
+
+        <button
+          class="gd-btn-close-x"
+          type="button"
+          aria-label="닫기"
+          @click="closeLinkModal"
+        >
+          ×
+        </button>
       </div>
     </div>
   </main>
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -104,34 +160,74 @@ import iconPersonal from '@/assets/icons/home/personal.png'
 const icons = {
   connect: iconConnect,
   schedule: iconSchedule,
-  location: iconLocation || iconSchedule,
+  location: iconLocation || iconSchedule
 }
 const mini = { manual: iconManual, personal: iconPersonal }
 
 const router = useRouter()
-function goSchedule() { router.push({ name: 'SavedScheduleListV2' }) }
-function goLocation() { router.push({ name: 'LocationV2' }) }
-function goMyPage()   { router.push({ name: 'MyPageV2' }) }
-function showGuide()  { alert('준비중입니다.') }
 
 const linkOpen = ref(false)
 const wardEmail = ref('')
-const wardName  = ref('')
-const linking   = ref(false)
-const linked    = ref(false)
+const wardName = ref('')
+const linking = ref(false)
+
+const linked = ref(false)
 const linkedWard = ref(null)
 
 const linkBtnDisabled = computed(() => linked.value || linking.value)
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const canLink = computed(() => emailRe.test(wardEmail.value))
 
+const alertOpen = ref(false)
+const alertMsg = ref('')
+
+function openAlert(msg) {
+  alertMsg.value = msg
+  alertOpen.value = true
+  lockScroll(true)
+}
+function closeAlert() {
+  alertOpen.value = false
+  lockScroll(false)
+}
+
+function lockScroll(lock) {
+  document.body.style.overflow = lock ? 'hidden' : ''
+}
+
+function onKeydown(e) {
+  if (e.key === 'Escape') {
+    if (alertOpen.value) return closeAlert()
+    if (linkOpen.value) return closeLinkModal()
+  }
+}
+
+function goSchedule() {
+  if (!linked.value || !linkedWard.value) {
+    openAlert('아직 연동된 사용자가 없습니다!')
+    return
+  }
+  const query =
+    linkedWard.value?.id
+      ? { wardId: linkedWard.value.id }
+      : linkedWard.value?.email
+        ? { wardEmail: linkedWard.value.email }
+        : {}
+  router.push({ name: 'SavedScheduleListV2', query })
+}
+function goLocation() { router.push({ name: 'LocationV2' }) }
+function goMyPage() { router.push({ name: 'MyPageV2' }) }
+function showGuide() { openAlert('준비 중입니다.') }
+
 function openLinkModal() {
   if (linked.value) return
   linkOpen.value = true
+  lockScroll(true)
   nextTick(() => document.querySelector('.modal-input')?.focus())
 }
 function closeLinkModal() {
   linkOpen.value = false
+  lockScroll(false)
   wardEmail.value = ''
   wardName.value = ''
 }
@@ -160,15 +256,16 @@ async function confirmLink() {
       {
         params: {
           wardEmail: wardEmail.value.trim(),
-          wardName : wardName.value.trim() || undefined,
+          wardName: wardName.value.trim() || undefined
         },
-        withCredentials: true,
+        withCredentials: true
       }
     )
-    alert('연동 메일 전송이 완료되었습니다.')
+    openAlert('연동 메일 전송이 완료되었습니다.')
     closeLinkModal()
+    await loadLinkedStatus()
   } catch {
-    alert('메일 전송에 실패했습니다. 다시 시도해주세요.')
+    openAlert('메일 전송에 실패했습니다. 다시 시도해주세요.')
   } finally {
     linking.value = false
   }
@@ -176,13 +273,17 @@ async function confirmLink() {
 
 onMounted(() => {
   loadLinkedStatus()
-  linkedWard.value = null
+  document.addEventListener('keydown', onKeydown)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onKeydown)
+  lockScroll(false)
 })
 </script>
 
 <style scoped>
-.page { 
-  padding: 1rem; 
+.page {
+  padding: 1rem;
 }
 
 .list {
@@ -191,7 +292,7 @@ onMounted(() => {
   justify-items: center;
 }
 
-.mini-actions{
+.mini-actions {
   margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -201,7 +302,7 @@ onMounted(() => {
   justify-items: center;
 }
 
-.mini-btn{
+.mini-btn {
   width: 145px;
   height: 88px;
   border-radius: 12px;
@@ -212,43 +313,119 @@ onMounted(() => {
   cursor: pointer;
   padding: 12px;
 }
-.mini-icon{
-  width: 44px; height: 44px; object-fit: contain; display: block;
+
+.mini-icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
-.mini-label{
+
+.mini-label {
   color: var(--color-black);
   line-height: 1;
 }
 
-.modal-backdrop{
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.4);
-  display: flex; align-items: center; justify-content: center;
+.gd-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 100;
 }
-.modal-card{
-  width: calc(100% - 2rem); max-width: 440px;
+
+.gd-modal-card {
+  width: calc(100% - 2rem);
+  max-width: 440px;
   background: var(--color-white);
-  border-radius: 12px; padding: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
-.modal-title{ margin: 0 0 10px; color: var(--color-black); }
-.field{ display: grid; gap: 6px; margin-top: 10px; }
-.field-label{ color: var(--color-mediumgray); }
-.modal-input{
-  width: 100%; height: 42px; padding: 0 12px;
-  border: 1px solid var(--color-mediumgray); border-radius: 8px; outline: none;
+
+.gd-modal-title {
+  margin: 0 0 10px;
+  color: var(--color-black);
 }
-.modal-input:focus{ border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(0,0,0,.02); }
-.modal-actions{
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;
+
+.gd-field {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
 }
-.btn{
-  height: 44px; border-radius: 10px;
-  display: inline-flex; align-items: center; justify-content: center;
+
+.gd-field-label {
+  color: var(--color-mediumgray);
+}
+
+.gd-modal-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
   border: 1px solid var(--color-mediumgray);
-  background: var(--color-white); color: var(--color-black);
+  border-radius: 8px;
+  outline: none;
 }
-.btn.primary{ background: var(--color-primary); border-color: var(--color-primary); color: var(--color-white); }
-.btn:disabled{ opacity: .6; cursor: not-allowed; }
+
+.gd-modal-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.02);
+}
+
+.gd-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.gd-modal-actions--single {
+  grid-template-columns: 1fr;
+}
+
+.gd-btn {
+  height: 44px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-mediumgray);
+  background: var(--color-white);
+  color: var(--color-black);
+  cursor: pointer;
+}
+
+.gd-btn--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.gd-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gd-btn-close-x {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.gd-alert-text {
+  text-align: center;
+  color: var(--color-black);
+  line-height: 1.4;
+}
 </style>
