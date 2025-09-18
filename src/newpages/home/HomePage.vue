@@ -78,7 +78,7 @@ function showGuide () { alert('준비중입니다.') }
 
 <style scoped>
 .home-page {
-  padding: 016px;
+  padding: 0 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
