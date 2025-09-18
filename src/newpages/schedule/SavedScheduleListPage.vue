@@ -1,4 +1,4 @@
-<!-- src/newpages/schedule/SavedSchedulesPage.vue -->
+<!-- src/newpages/schedule/SavedScheduleListPage.vue -->
 <template>
   <main class="page">
     <SimpleHeader title="저장된 일정" />
@@ -103,12 +103,12 @@ async function loadList() {
         Authorization: jwt ? `Bearer ${jwt}` : undefined,
       },
     });
-    // 반환값의 각 객체에 id = scheduleId로 매핑
+    // 반환값의 각 객체에 id = scheduleId로 매핑, image는 photoUrl 사용
     list.value = Array.isArray(res.data)
       ? res.data.map((item) => ({
           ...item,
           id: item.scheduleId ?? item.id,
-          image: item.image ?? ''
+          image: item.photoUrl, // photoUrl을 image로 사용
         }))
       : [];
     currentPage.value = 1;
