@@ -207,10 +207,8 @@ async function saveBoth () {
     await saveElementAsImageAndPdf(timelineRef.value, {
       baseName: fileBaseName(),
       scale: 3,
-      format: 'a4',
-      orientation: 'p',
       marginMM: 10,
-      shrink: 0.75
+      gutterMM: 6
     });
   } catch (e) {
     console.error('저장 실패:', e);
