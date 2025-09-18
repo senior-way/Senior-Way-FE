@@ -15,7 +15,7 @@
             :key="it.id"
             :id="it.id"
             :title="it.title"
-            :items="it.items"
+            :image="it.image"
             :savedAt="it.savedAt"
             :startDate="it.startDate"
             :endDate="it.endDate"
@@ -74,7 +74,7 @@ const router = useRouter();
 
 const list = ref([]);
 
-// 페이징: 2개 이하면 페이징 없음, 3개부터 페이징 (페이지당 2개)
+// 2개 이하면 페이징 없음, 3개부터 페이징 (페이지당 2개)
 const pageSize = 2;
 const currentPage = ref(1);
 
@@ -107,7 +107,8 @@ async function loadList() {
     list.value = Array.isArray(res.data)
       ? res.data.map((item) => ({
           ...item,
-          id: item.scheduleId ?? item.id, // scheduleId가 있으면 id로 사용
+          id: item.scheduleId ?? item.id,
+          image: item.image ?? ''
         }))
       : [];
     currentPage.value = 1;
@@ -151,7 +152,6 @@ function openDetail(id) {
   gap: 12px;
 }
 
-/* pagination */
 .pagination {
   display: flex;
   justify-content: center;
