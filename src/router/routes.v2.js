@@ -28,11 +28,19 @@ const routesV2 = [
     meta: { title: '홈', noHeader: true },
   },
 
-  // 마이페이지
+  // 사용자 마이페이지
   {
     path: '/v2/mypage',
     name: 'MyPageV2',
     component: () => import('@/newpages/home/MyPage.vue'),
+    meta: { title: '마이페이지', noHeader: true },
+  },
+
+  // 보호자 마이페이지
+  {
+    path: '/v2/guardian/mypage',
+    name: 'GuardianMyPageV2',
+    component: () => import('@/newpages/guardian/GuardianMyPage.vue'),
     meta: { title: '마이페이지', noHeader: true },
   },
 
