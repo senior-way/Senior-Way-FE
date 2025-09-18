@@ -89,6 +89,8 @@ const notFoundOpen = ref(false);
 const timelineRef = ref(null);
 const saving = ref(false);
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+
 onMounted(async () => {
   const id = route.params.id;
   const jwt =
@@ -98,7 +100,7 @@ onMounted(async () => {
     '';
   try {
     const res = await axios.get(
-      `http://localhost:8080/api/schedules/${id}/json`,
+      `${baseUrl}/schedules/${id}/json`,
       {
         headers: {
           Authorization: jwt ? `Bearer ${jwt}` : undefined,
@@ -185,7 +187,7 @@ async function doDelete() {
     localStorage.getItem('token') ||
     '';
   try {
-    await axios.delete(`http://localhost:8080/api/schedules/${id}`, {
+    await axios.delete(`${baseUrl}/schedules/${id}`, {
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : undefined,
       },

@@ -71,6 +71,7 @@ import TextInputModal from '@/components/modal/TextInputModal.vue'
 
 const route = useRoute()
 const router = useRouter()
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const serverSchedule = ref(null)
 const loading = ref(false)
@@ -252,7 +253,7 @@ async function confirmSave() {
       ''
 
     await axios.post(
-      `http://localhost:8080/api/schedules/save?title=${encodeURIComponent(saveTitle.value.trim())}`,
+      `${baseUrl}/schedules/save?title=${encodeURIComponent(saveTitle.value.trim())}`,
       JSON.stringify(payload),
       {
         headers: {

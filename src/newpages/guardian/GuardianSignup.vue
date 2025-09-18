@@ -80,6 +80,8 @@ const checking = ref(false);
 const emailChecked = ref(null);
 const modalOpen = ref(false);
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+
 const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
 
 // 비밀번호 8~20자 & (영문/숫자/특수문자) 2종 이상
@@ -160,7 +162,7 @@ async function submit() {
   submitting.value = true;
   try {
     await axios.post(
-      'http://localhost:8080/api/auth/guardian-signup',
+      `${baseUrl}/auth/guardian-signup`,
       {
         username: name.value,
         password: pw.value,

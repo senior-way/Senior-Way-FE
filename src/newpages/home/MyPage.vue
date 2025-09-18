@@ -78,6 +78,7 @@ import iconWithdraw from '@/assets/icons/delete-account.png'
 
 const router = useRouter()
 const route  = useRoute()
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const profile = ref({
   name: '',
@@ -88,7 +89,7 @@ const profile = ref({
 async function fetchUserInfo() {
   try {
     const accessToken = localStorage.getItem('accessToken')
-    const response = await axios.get('http://localhost:8080/api/user', {
+    const response = await axios.get(`${baseUrl}/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
