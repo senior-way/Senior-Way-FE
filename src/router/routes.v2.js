@@ -59,6 +59,13 @@ const routesV2 = [
     component: () => import('@/newpages/guardian/GuardianSignup.vue'),
     meta: { title: '보호자 회원가입' },
   },
+  // 피보호자 초대 수락
+  {
+    path: '/v2/guardian/invite/accept',
+    name: 'InviteAcceptV2',
+    component: () => import('@/newpages/auth/InviteAcceptPage.vue'),
+    meta: { title: '초대 수락' },
+  },
 
   // 선호도 조사
   {
@@ -68,7 +75,7 @@ const routesV2 = [
     meta: { title: '선호도 조사' },
   },
 
-  // 임시/목데이터 추천 페이지 
+  // 임시/목데이터 추천 페이지
   {
     path: '/v2/recommend/mock',
     name: 'RecommendMockV2',
@@ -137,7 +144,7 @@ const routesV2 = [
     name: 'NotFoundV2',
     component: () => import('@/newpages/home/ErrorPage.vue'),
     meta: { title: '페이지를 찾을 수 없음' },
-  }
-]
+  },
+];
 
-export default routesV2
+export default routesV2;

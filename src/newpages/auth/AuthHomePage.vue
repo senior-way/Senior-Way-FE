@@ -30,10 +30,45 @@
 
 <script setup>
 import AuthCardButton from '@/newpages/auth/components/AuthHomeBtn.vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
 
+const router = useRouter()
+
+
+// .env에서 값 가져오기
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID
+const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+// 1️⃣ 카카오 로그인 버튼 클릭 시 Authorization URL로 이동
 function onKakaoLogin() {
-  console.log('kakao login click')
+  const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`
+  window.location.href = kakaoAuthUrl
 }
+
+// 2️⃣ 카카오 Redirect URI로 돌아왔을 때
+// 프론트 kakao/callback.vue
+onMounted(async () => {
+  const code = new URLSearchParams(window.location.search).get('code')
+  if (!code) return
+
+  console.log(code)
+  const res = await axios.get(`${API_BASE_URL}/api/oauth/kakao/callback`, {
+    params: { code },
+    withCredentials: true
+  })
+
+  localStorage.setItem('accessToken', res.data.accessToken)
+  router.replace('/') 
+})
+
+
+// axios 전역 설정
+axios.defaults.withCredentials = true
+
+
 </script>
 
 
