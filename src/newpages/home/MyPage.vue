@@ -22,6 +22,14 @@
       </div>
     </section>
 
+    <!-- 문의하기 알림 -->
+    <NoticeModal
+      v-model="contactNoticeOpen"
+      title="알림"
+      message="준비중입니다!"
+      confirmText="확인"
+    />
+
     <!-- 비밀번호 확인 (비번변경/회원탈퇴) -->
     <PasswordConfirmModal
       v-model="pwdOpen"
@@ -123,8 +131,10 @@ function onWithdraw () {
   router.push({ name: 'AuthHomeV2', query: { modal: 'withdraw' } })
 }
 function onContact () {
-  router.push({ name: 'AuthHomeV2', query: { modal: 'contact' } })
+  contactNoticeOpen.value = true
 }
+
+const contactNoticeOpen = ref(false)
 
 /* 비밀번호 확인 */
 const pwdOpen = ref(false)
@@ -175,7 +185,7 @@ function doLogoutToLogin () {
   router.replace({ name: 'LoginV2' })
 }
 
-/* 로그아웃 확인 시/ 홈으로 */
+/* 로그아웃 확인 시/ 로그인 홈으로 */
 const logoutDoneOpen = ref(false)
 function doLogoutWithNotice () {
   clearAuth()
@@ -185,7 +195,7 @@ function goHomeAfterLogout () {
   router.replace({ name: 'AuthHomeV2' })
 }
 
-/* 회원탈퇴 진행 후/ 홈으로 */
+/* 회원탈퇴 진행 후/ 로그인 홈으로 */
 const withdrawConfirmOpen = ref(false)
 async function onWithdrawConfirm () {
   // await axios.delete('/api/auth/account', { withCredentials: true })
@@ -215,6 +225,7 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   flex-direction: column;
   align-items: center;
 }
+
 .panel{
   width: 100%;
   max-width: 420px;
@@ -224,6 +235,7 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   align-items: center;
   padding: 0 1rem;
 }
+
 .panel-content{
   width: 100%;
   max-width: 420px;
@@ -235,6 +247,7 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   border-radius: 12px;
   padding: 16px;
 }
+
 .avatar{
   width: 120px;
   height: 120px;
@@ -244,12 +257,14 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   margin-top: 8px;
   margin-bottom: 8px;
 }
+
 .rows{
   width: 100%;
   display: grid;
   justify-items: center;
   row-gap: 0;
 }
+
 .action-grid{
   width: 100%;
   display: grid;
