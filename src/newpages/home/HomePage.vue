@@ -1,4 +1,7 @@
+<!-- src/newpages/home/HomePage.vue -->
 <template>
+  <div>
+  <VoiceHeader title="홈" />
   <main class="home-page">
     <button class="home-card home-card-hero" type="button" @click="goSurvey">
       <img class="home-card-icon home-card-icon-hero" :src="icons.survey" alt="설문 아이콘" />
@@ -50,10 +53,12 @@
       </button>
     </div>
   </main>
+  </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import VoiceHeader from '@/components/layout/VoiceHeader.vue'
 import surveyIcon from '@/assets/icons/home/home-survey.png'
 import scheduleIcon from '@/assets/icons/home/home-schedule.png'
 import barrierIcon from '@/assets/icons/home/home-barrier.png'
@@ -73,7 +78,7 @@ function showGuide () { alert('준비중입니다.') }
 
 <style scoped>
 .home-page {
-  padding: 16px;
+  padding: 016px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -83,14 +88,13 @@ function showGuide () { alert('준비중입니다.') }
 .home-card {
   width: 100%;
   background: var(--color-white);
-  border: 1px solid var(--color-lightgray);
   border-radius: 12px;
   color: var(--color-black);
   text-align: left;
   cursor: pointer;
 }
 .home-card-title { margin: 0; white-space: nowrap; }
-.home-card-desc { margin: 0; color: var(--color-mediumgray); line-height: 1; }
+.home-card-desc { margin: 0; color: var(--color-black); line-height: 1; }
 .home-card-texts { display: flex; flex-direction: column; }
 
 .home-card-hero {
@@ -144,7 +148,6 @@ function showGuide () { alert('준비중입니다.') }
 .home-footer-action-btn {
   height: 48px;
   border-radius: 12px;
-  border: 1px solid var(--color-mediumgray);
   background: var(--color-white);
   color: var(--color-black);
 }

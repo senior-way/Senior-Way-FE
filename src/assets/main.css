@@ -146,6 +146,12 @@ html { font-size: clamp(12px, 4.444vw, 16px); }
   font-family: 'GmarketSansMedium', sans-serif;
 }
 
+.bodyLight18px {
+  font-size: 1.125rem;
+  font-weight: 300;
+  font-family: 'GmarketSansLight', sans-serif;
+}
+
 .bodyLight16px {
   font-size: 1rem;
   font-weight: 300;

@@ -29,7 +29,7 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-white);
+  /* background-color: var(--color-white); */
 }
 
 .logo {
