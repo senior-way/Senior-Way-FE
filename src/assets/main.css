@@ -92,6 +92,11 @@ html { font-size: clamp(12px, 4.444vw, 16px); }
   font-weight: 500;
   font-family: 'GmarketSansMedium', sans-serif;
 }
+.bodyMedium26px {
+  font-size: 1.625rem;
+  font-weight: 500;
+  font-family: 'GmarketSansMedium', sans-serif;
+}
 
 .bodyMedium24px {
   font-size: 1.5rem;

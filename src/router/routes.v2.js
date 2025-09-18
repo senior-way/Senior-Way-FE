@@ -20,6 +20,14 @@ const routesV2 = [
     meta: { title: 'Auth' },
   },
 
+  // 홈
+  {
+    path: '/v2/home',
+    name: 'HomeV2',
+    component: () => import('@/newpages/home/HomePage.vue'),
+    meta: { title: '홈'},
+  },
+
   // 마이페이지
   {
     path: '/v2/mypage',
