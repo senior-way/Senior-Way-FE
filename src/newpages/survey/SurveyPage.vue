@@ -190,7 +190,7 @@ import selectAny from '@/assets/icons/select_any.png';
 import schedule from '@/assets/icons/schedule2.png';
 
 const router = useRouter();
-const baseUrl = import.meta.env.VITE_API_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const icons = {
   evaluation: iconEvaluation,
@@ -257,22 +257,15 @@ async function saveSurveyStep() {
     })(),
   };
 
-  const jwt =
-    localStorage.getItem('accessToken') ||
-    localStorage.getItem('jwt') ||
-    localStorage.getItem('token') ||
-    '';
+  const token = localStorage.getItem('accessToken');
 
   try {
     // 기존 데이터 조회
-    const meRes = await axios.get(
-      `${baseUrl}/user-profiles/me`,
-      {
-        headers: {
-          Authorization: jwt ? `Bearer ${jwt}` : undefined,
-        },
-      }
-    );
+    const meRes = await axios.get(`${baseUrl}/user-profiles/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (meRes.data && meRes.data.id) {
       // 기존 데이터가 있으면 삭제
       await axios.delete(`${baseUrl}/user-profiles/me`, {
@@ -289,7 +282,7 @@ async function saveSurveyStep() {
   axios
     .post(`${baseUrl}/user-profiles`, resultPayload, {
       headers: {
-        Authorization: jwt ? `Bearer ${jwt}` : undefined,
+        Authorization: `Bearer ${token}`,
       },
     })
     .catch(() => {
