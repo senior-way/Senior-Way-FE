@@ -34,3 +34,4 @@ coverage
 db.json
 *.local.json
 !db.example.jso
+.vercel
