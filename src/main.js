@@ -37,5 +37,4 @@ function initApp() {
   app.use(DatePicker);
   app.use(Popup);
   app.mount('#app');
-  console.log('Vue app mounted');
 }
