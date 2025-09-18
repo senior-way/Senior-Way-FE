@@ -2,31 +2,40 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
+
 import { DatePicker, Popup } from 'vant';
 import 'vant/lib/index.css';
+
 import '@/assets/main.css';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// .env 파일에서 카카오 앱 키 가져오기
+// 환경변수 Kakao 앱키
 const KAKAO_APP_KEY = import.meta.env.VITE_KAKAO_APP_KEY;
+console.log('Kakao Key:', KAKAO_APP_KEY);
 
-// 카카오맵 SDK 동적 로드 스크립트
+if (!KAKAO_APP_KEY) {
+  console.error('VITE_KAKAO_APP_KEY is undefined!');
+}
+
+// Kakao SDK 동적 로드
 const script = document.createElement('script');
-/* global kakao */
-script.onload = () => {
-  // SDK 로드가 완료되면 kakao.maps.load를 통해 init 함수 실행
-  kakao.maps.load(init);
-};
 script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${KAKAO_APP_KEY}&libraries=services,clusterer,drawing`;
+script.onload = () => {
+  console.log('Kakao SDK loaded');
+  kakao.maps.load(initApp);
+};
+script.onerror = () => {
+  console.error('Kakao SDK failed to load');
+};
 document.head.appendChild(script);
 
-function init() {
+function initApp() {
   const app = createApp(App);
-
   app.use(createPinia());
   app.use(router);
   app.use(DatePicker);
   app.use(Popup);
   app.mount('#app');
+  console.log('Vue app mounted');
 }
