@@ -1,6 +1,6 @@
 <!-- src/newpages/auth/SignupSelectPage.vue -->
 <template>
-  <main class="signup-select">
+  <main class="signup-select" role="main" aria-label="회원가입 선택">
     <section class="cards">
       <AuthCardButton
         title="일반 회원가입"
@@ -21,17 +21,21 @@ import AuthCardButton from '@/newpages/auth/components/AuthHomeBtn.vue'
 </script>
 
 <style scoped>
-.signup-select{
-  display:flex; flex-direction:column; align-items:center;
-  gap:2rem; 
-  padding:6rem 0 2.5rem 0;
+.signup-select {
+  padding: 6.5rem 32px;
 }
 
-.cards{
-  display:flex; flex-direction:column; align-items:center;
-  gap:3rem; width:100%;
+.cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 4vh, 48px);
+  width: 100%;
+  max-width: 420px; 
+  margin: 0 auto;
 }
-@media (min-width: 420px){
-  .cards{ flex-direction:row; justify-content:center; }
+
+.cards > *:not(:last-child) {
+  margin-bottom: 4px;
 }
 </style>
