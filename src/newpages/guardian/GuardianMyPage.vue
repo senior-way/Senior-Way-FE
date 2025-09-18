@@ -42,13 +42,41 @@
       </div>
     </section>
 
-    <!-- 문의하기 알림 -->
-    <NoticeModal
-      v-model="contactNoticeOpen"
-      title="알림"
-      message="준비중입니다!"
-      confirmText="확인"
-    />
+    <div
+      v-if="contactNoticeOpen"
+      class="gd-modal-backdrop"
+      @click.self="closeContact"
+      role="presentation"
+    >
+      <div class="gd-modal-card" role="dialog" aria-modal="true" aria-label="알림">
+        <h3 class="gd-modal-title bodyBold20px">알림</h3>
+        <div class="gd-field">
+          <p class="bodyMedium16px gd-alert-text">준비중입니다!</p>
+        </div>
+        <div class="gd-modal-actions gd-modal-actions--single">
+          <button class="gd-btn gd-btn--primary bodyMedium16px" @click="closeContact">확인</button>
+        </div>
+        <button class="gd-btn-close-x" type="button" aria-label="닫기" @click="closeContact">×</button>
+      </div>
+    </div>
+    
+    <div
+      v-if="logoutDoneOpen"
+      class="gd-modal-backdrop"
+      @click.self="closeLogoutDone"
+      role="presentation"
+    >
+      <div class="gd-modal-card" role="dialog" aria-modal="true" aria-label="알림">
+        <h3 class="gd-modal-title bodyBold20px">알림</h3>
+        <div class="gd-field">
+          <p class="bodyMedium16px gd-alert-text">로그아웃 되었습니다.</p>
+        </div>
+        <div class="gd-modal-actions gd-modal-actions--single">
+          <button class="gd-btn gd-btn--primary bodyMedium16px" @click="goHomeAfterLogout">확인</button>
+        </div>
+        <button class="gd-btn-close-x" type="button" aria-label="닫기" @click="goHomeAfterLogout">×</button>
+      </div>
+    </div>
 
     <!-- 비밀번호 확인 (비번변경/회원탈퇴) -->
     <PasswordConfirmModal
@@ -74,15 +102,6 @@
       message="비밀번호 변경이 완료되었습니다."
       confirmText="확인"
       @confirm="doLogoutToLogin"
-    />
-
-    <!-- 로그아웃 완료 알림 (확인 누르면/ 홈페이지 이동) -->
-    <NoticeModal
-      v-model="logoutDoneOpen"
-      title="알림"
-      message="로그아웃 되었습니다."
-      confirmText="확인"
-      @confirm="goHomeAfterLogout"
     />
   </main>
 </template>
@@ -130,6 +149,7 @@ onMounted(fetchUserInfo)
 /* 문의하기 */
 const contactNoticeOpen = ref(false)
 function onContact () { contactNoticeOpen.value = true }
+function closeContact () { contactNoticeOpen.value = false }
 
 /* 로그아웃 */
 function clearAuth() {
@@ -139,7 +159,8 @@ function clearAuth() {
 }
 const logoutDoneOpen = ref(false)
 function doLogoutWithNotice () { clearAuth(); logoutDoneOpen.value = true }
-function goHomeAfterLogout () { router.replace({ name: 'AuthHomeV2' }) }
+function closeLogoutDone () { logoutDoneOpen.value = false }
+function goHomeAfterLogout () { closeLogoutDone(); router.replace({ name: 'AuthHomeV2' }) }
 
 /* 비밀번호 변경 완료 → 로그인 이동 */
 const pwChangedOpen = ref(false)
@@ -174,6 +195,23 @@ async function onPwdSubmit(currentPw) {
 /* 회원탈퇴 */
 const withdrawConfirmOpen = ref(false)
 async function onWithdrawConfirm () { clearAuth(); router.replace({ name: 'AuthHomeV2' }) }
+
+function onKeydown(e) {
+  if (e.key === 'Escape') {
+    if (contactNoticeOpen.value) return closeContact()
+    if (logoutDoneOpen.value)   return closeLogoutDone()
+  }
+}
+const syncBodyScroll = () => {
+  const openAny = contactNoticeOpen.value || logoutDoneOpen.value
+  document.body.style.overflow = openAny ? 'hidden' : ''
+}
+watch([contactNoticeOpen, logoutDoneOpen], syncBodyScroll)
+onMounted(() => document.addEventListener('keydown', onKeydown))
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 
 /* 비번 변경 완료 플래그 감지 */
 function clearPwChangedFlag() {
@@ -235,7 +273,7 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 6px;  
+  column-gap: 6px;
   justify-items: center;
   margin-top: 12px;
 }
@@ -246,6 +284,75 @@ watch(() => route.query.pwChanged, () => checkPwChangedFlag())
   --sib-padding: 10px;
   --sib-icon-size: 24px;
   --sib-border-color: var(--color-lightgray);
-  margin: 0; 
+  margin: 0;
+}
+
+/* ---- Guardian 스타일 모달 (문의/로그아웃 공통) ---- */
+.gd-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.gd-modal-card{
+  width: calc(100% - 2rem);
+  max-width: 440px;
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  position: relative;
+}
+.gd-modal-title{
+  margin: 0 0 10px;
+  color: var(--color-black);
+}
+.gd-field{
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+.gd-modal-actions{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.gd-btn{
+  height: 44px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-mediumgray);
+  background: var(--color-white);
+  color: var(--color-black);
+  cursor: pointer;
+}
+.gd-btn--primary{
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+.gd-btn-close-x{
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+.gd-alert-text{
+  text-align: center;
+  color: var(--color-black);
+  line-height: 1.4;
 }
 </style>
