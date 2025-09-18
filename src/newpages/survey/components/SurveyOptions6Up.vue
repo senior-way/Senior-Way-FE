@@ -1,7 +1,8 @@
 <template>
   <div class="grid">
     <button
-      v-for="it in items" :key="keyOf(it)"
+      v-for="it in items"
+      :key="keyOf(it)"
       class="tile bodyMedium24px"
       :class="{ on: sel.has(keyOf(it)) }"
       @click="toggle(it)"
@@ -14,30 +15,58 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 const props = defineProps({
-  items: { type: Array, default: () => ['자연','역사·문화·예술','먹거리','쇼핑','체험\n액티비티','상관 없음'] },
-  modelValue: { type: Array, default: () => [] }
-})
-const emit = defineEmits(['update:modelValue','change'])
-const sel = ref(new Set(props.modelValue))
-watch(() => props.modelValue, v => sel.value = new Set(v))
+  items: {
+    type: Array,
+    default: () => [
+      '자연',
+      '역사·문화·예술',
+      '먹거리',
+      '쇼핑',
+      '체험\n액티비티',
+      '상관 없음',
+    ],
+  },
+  modelValue: { type: Array, default: () => [] },
+});
+const emit = defineEmits(['update:modelValue', 'change']);
+const sel = ref(new Set(props.modelValue));
+watch(
+  () => props.modelValue,
+  (v) => (sel.value = new Set(v))
+);
 
-const keyOf   = it => typeof it === 'object' ? (it.value ?? it.label ?? it.key) : it
-const labelOf = it => typeof it === 'object' ? (it.label ?? String(keyOf(it))) : String(it)
-const iconOf  = it => typeof it === 'object' ? (it.icon ?? it.iconSrc ?? null) : null
+const keyOf = (it) =>
+  typeof it === 'object' ? it.value ?? it.label ?? it.key : it;
+const labelOf = (it) =>
+  typeof it === 'object' ? it.label ?? String(keyOf(it)) : String(it);
+const iconOf = (it) =>
+  typeof it === 'object' ? it.icon ?? it.iconSrc ?? null : null;
 
-function toggle(k){
-  const key = keyOf(k)
-  sel.value.has(key) ? sel.value.delete(key) : sel.value.add(key)
-  const arr = [...sel.value]
-  emit('update:modelValue', arr)
-  emit('change', arr)
+function toggle(k) {
+  const key = keyOf(k);
+  const anyKey = keyOf(props.items.find((it) => labelOf(it) === '상관 없음'));
+  if (key === anyKey) {
+    // '상관 없음' 선택 시 나머지 모두 해제, '상관 없음'만 선택
+    if (!sel.value.has(anyKey)) {
+      sel.value = new Set([anyKey]);
+    } else {
+      sel.value.delete(anyKey);
+    }
+  } else {
+    // 다른 항목 선택 시 '상관 없음' 해제
+    sel.value.delete(anyKey);
+    sel.value.has(key) ? sel.value.delete(key) : sel.value.add(key);
+  }
+  const arr = [...sel.value];
+  emit('update:modelValue', arr);
+  emit('change', arr);
 }
 </script>
 
 <style scoped>
-.grid{
+.grid {
   display: grid;
   grid-template-columns: repeat(2, 145px);
   grid-auto-rows: 100px;
@@ -45,7 +74,7 @@ function toggle(k){
   justify-content: center;
 }
 
-.tile{
+.tile {
   box-sizing: border-box;
   width: 145px;
   height: 100px;
@@ -53,7 +82,7 @@ function toggle(k){
   border-radius: 12px;
   background: var(--color-white);
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -62,20 +91,19 @@ function toggle(k){
   cursor: pointer;
   user-select: none;
 }
-.tile.on{
+.tile.on {
   border: 1.5px solid var(--color-primary);
   background: var(--color-primary-10);
 }
 
-.icon{
+.icon {
   width: 2.5rem;
   height: 2.5rem;
   object-fit: contain;
   display: block;
 }
 
-.label{
+.label {
   line-height: 1.3;
 }
-
 </style>
