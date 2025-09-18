@@ -156,7 +156,7 @@ watch(() => router.currentRoute.value.fullPath, () => { modalOpen.value = false 
   align-items: center;
   gap: 12px;
   padding: 16px;
-  margin: 6px 8px 10px;
+  /* margin: 6px 8px 10px; */
   border: 1px solid var(--color-lightgray);
   border-radius: 12px;
   background: var(--color-white);
