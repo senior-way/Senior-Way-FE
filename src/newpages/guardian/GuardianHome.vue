@@ -52,7 +52,9 @@
         </label>
 
         <div class="modal-actions">
-          <button class="btn ghost bodyMedium16px" @click="closeLinkModal">취소</button>
+          <button class="btn ghost bodyMedium16px" @click="closeLinkModal">
+            취소
+          </button>
           <button
             class="btn primary bodyMedium16px"
             :disabled="!canLink || linking"
@@ -67,42 +69,46 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
-import BigIconButton from '@/components/button/BigIconButton.vue'
+import { ref, computed, nextTick, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import BigIconButton from '@/components/button/BigIconButton.vue';
 
-const router = useRouter()
+const router = useRouter();
 
-function goLocation() { router.push({ name: 'LocationV2' }) }
-function goMyPage()   { router.push({ name: 'MyPageV2' }) }
+function goLocation() {
+  router.push({ name: 'LocationV2' });
+}
+function goMyPage() {
+  router.push({ name: 'MyPageV2' });
+}
 
-const linkOpen   = ref(false)
-const wardEmail  = ref('')
-const wardName   = ref('')
-const linking    = ref(false)
+const linkOpen = ref(false);
+const wardEmail = ref('');
+const wardName = ref('');
+const linking = ref(false);
 
-const linked     = ref(false)
-const linkedWard = ref(null)
+const linked = ref(false);
+const linkedWard = ref(null);
 
 const linkBtnLabel = computed(() =>
   linked.value ? '연동이 완료되었습니다.' : '피보호자 연동'
-)
-const linkBtnDisabled = computed(() => linked.value || linking.value)
+);
+const linkBtnDisabled = computed(() => linked.value || linking.value);
 
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const canLink = computed(() => emailRe.test(wardEmail.value))
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const canLink = computed(() => emailRe.test(wardEmail.value));
 
 function openLinkModal() {
-  if (linked.value) return
-  linkOpen.value = true
-  nextTick(() => document.querySelector('.modal-input')?.focus())
+  if (linked.value) return;
+  linkOpen.value = true;
+  nextTick(() => document.querySelector('.modal-input')?.focus());
 }
 
 function closeLinkModal() {
-  linkOpen.value = false
-  wardEmail.value = ''
-  wardName.value = ''
+  linkOpen.value = false;
+  wardEmail.value = '';
+  wardName.value = '';
 }
 
 // 초기 연동 상태 조회 (백엔드 연동 필요 부분 주석 처리)
@@ -121,36 +127,42 @@ function closeLinkModal() {
 // 백엔드 연동 전: 전송 성공으로만 처리 (API 호출부 주석)
 // 실제 연동 시 아래 주석 해제하고 API 연결
 async function confirmLink() {
-  if (!canLink.value || linking.value) return
-  linking.value = true
+  if (!canLink.value || linking.value) return;
+  linking.value = true;
   try {
-    // const payload = {
-    //   wardEmail: wardEmail.value.trim(),
-    //   wardName : wardName.value.trim() || null,
-    //   callbackUrl: new URL('/v2/guardian/link/accept', window.location.origin).href,
-    // }
-    // await axios.post('/api/guardian/links/invite', payload, { withCredentials: true })
+    const payload = {
+      wardEmail: wardEmail.value.trim(),
+      wardName: wardName.value.trim() || undefined,
+    };
+    await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/alarm/guardian/invite`,
+      null,
+      {
+        params: payload,
+        withCredentials: true,
+      }
+    );
 
     // 데모 동작: 성공처럼 처리
-    alert('연동 메일 전송이 완료되었습니다.')
-    closeLinkModal()
+    alert('연동 메일 전송이 완료되었습니다.');
+    closeLinkModal();
   } catch (e) {
-    alert('메일 전송에 실패했습니다. 다시 시도해주세요.')
+    alert('메일 전송에 실패했습니다. 다시 시도해주세요.');
   } finally {
-    linking.value = false
+    linking.value = false;
   }
 }
 
 // 백엔드 연동 전에는 기본 노출만 위해 onMounted 훅에서 별도 호출 없이 둠
 onMounted(() => {
-  linked.value = false
-  linkedWard.value = null
-})
+  linked.value = false;
+  linkedWard.value = null;
+});
 </script>
 
 <style scoped>
 .page {
-    padding: 4.5rem 1rem;
+  padding: 4.5rem 1rem;
 }
 
 .container {
@@ -169,7 +181,7 @@ onMounted(() => {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,7 +194,7 @@ onMounted(() => {
   background: var(--color-white);
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .modal-title {
@@ -212,7 +224,7 @@ onMounted(() => {
 
 .modal-input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.02);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.02);
 }
 
 .modal-actions {
@@ -231,7 +243,7 @@ onMounted(() => {
   border: 1px solid var(--color-mediumgray);
   background: var(--color-white);
   color: var(--color-black);
-  transition: background-color .16s ease, border-color .16s ease;
+  transition: background-color 0.16s ease, border-color 0.16s ease;
 }
 
 .btn.primary {
@@ -246,7 +258,7 @@ onMounted(() => {
 }
 
 .btn:disabled {
-  opacity: .6;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 </style>
