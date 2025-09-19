@@ -5,8 +5,9 @@
       <slot name="title">{{ title }}</slot>
     </h1>
 
-    <!-- 우측 음성 인식 버튼 -->
+    <!-- 우측 음성 인식 버튼 (기본 표시) -->
     <button
+      v-if="enableVoice"
       class="shv-voice-btn"
       type="button"
       :aria-pressed="listening ? 'true' : 'false'"
@@ -16,8 +17,8 @@
       <img class="shv-voice-icon" :src="micIcon" alt="음성 인식" />
     </button>
 
-    <!-- 모달 -->
-    <teleport to="body">
+    <!-- 모달 enableVoice=true일 때만 삽입 -->
+    <teleport to="body" v-if="enableVoice">
       <div v-if="modalOpen" class="shv-backdrop" @click.self="closeVoiceModal">
         <div class="shv-card" role="dialog" aria-modal="true" aria-labelledby="shv-title">
           <button class="shv-close bodyMedium28px" type="button" aria-label="닫기" @click="closeVoiceModal">×</button>
@@ -57,6 +58,8 @@ import { createVoiceNavigator, defaultVoiceRules } from '@/utils/voiceNav'
 const props = defineProps({
   title: { type: String, default: '' },
   withBorder: { type: Boolean, default: true },
+  // 기본 표시: true
+  enableVoice: { type: Boolean, default: true },
 })
 
 const router = useRouter()
@@ -64,7 +67,10 @@ const { listening, start } = createVoiceNavigator(router, { rules: defaultVoiceR
 
 const modalOpen = ref(false)
 
-function openVoiceModal () { modalOpen.value = true }
+function openVoiceModal () {
+  if (!props.enableVoice) return
+  modalOpen.value = true
+}
 function closeVoiceModal () { modalOpen.value = false }
 function onStartVoice () { start() }
 
@@ -83,8 +89,6 @@ watch(() => router.currentRoute.value.fullPath, () => { modalOpen.value = false 
   padding: 12px 12px;
   background: transparent;
 }
-/* 필요 시 보더 켜기 */
-/* .with-border { border-bottom: 1px solid var(--color-lightgray); } */
 
 .title {
   margin: 0;
@@ -156,7 +160,6 @@ watch(() => router.currentRoute.value.fullPath, () => { modalOpen.value = false 
   align-items: center;
   gap: 12px;
   padding: 16px;
-  /* margin: 6px 8px 10px; */
   border: 1px solid var(--color-lightgray);
   border-radius: 12px;
   background: var(--color-white);

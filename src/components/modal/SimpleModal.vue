@@ -2,7 +2,7 @@
   <teleport to="body">
     <transition name="sw-fade">
       <div
-        v-if="modelValue"
+        v-if="isOpen"
         class="sw-modal-overlay"
         role="presentation"
         @click.self="close"
@@ -12,9 +12,7 @@
           role="dialog"
           aria-modal="true"
           :aria-label="ariaLabel"
-          ref="cardRef"
         >
-
           <button
             type="button"
             class="sw-close-btn titleLogo32px"
@@ -24,7 +22,6 @@
             ×
           </button>
 
-          <!-- 본문 - 기본 내용은 message prop, 필요시 기본 슬롯으로 교체 -->
           <div class="sw-modal-body">
             <p class="sw-message bodyMedium24px">
               <slot>
@@ -33,7 +30,6 @@
             </p>
           </div>
 
-          <!-- 확인 - 기본은 confirmText prop, 필요시 confirm 슬롯으로 교체 -->
           <button
             type="button"
             class="sw-confirm-btn bodyMedium20px"
@@ -51,32 +47,43 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
-  modelValue: { type: Boolean, default: false },          
-  message: { type: String, default: '회원가입이 정상적으로 완료되었습니다!' },
-  confirmText: { type: String, default: '확인' },  
-  ariaLabel: { type: String, default: '확인 모달' }
+  // 둘 다 지원: 부모가 어떤 바인딩을 쓰든 동작
+  modelValue: { type: Boolean, default: undefined },
+  open: { type: Boolean, default: undefined },
+
+  message: { type: String, default: '확인이 필요합니다.' },
+  confirmText: { type: String, default: '확인' },
+  ariaLabel: { type: String, default: '확인 모달' },
 })
-const emit = defineEmits(['update:modelValue', 'confirm', 'close'])
+const emit = defineEmits(['update:modelValue', 'update:open', 'confirm', 'close'])
 
 const confirmRef = ref(null)
-const cardRef = ref(null)
+
+// 양방향 바인딩 통합
+const isOpen = computed({
+  get: () => (props.modelValue ?? props.open ?? false),
+  set: (v) => {
+    emit('update:modelValue', v)
+    emit('update:open', v)
+  }
+})
 
 function close() {
-  emit('update:modelValue', false)
+  isOpen.value = false
   emit('close')
 }
 function confirm() {
   emit('confirm')
-  emit('update:modelValue', false)
+  isOpen.value = false
 }
 
-// ESC로 닫기 + 바디 스크롤 락
 function onKeydown(e) { if (e.key === 'Escape') close() }
+
 watch(
-  () => props.modelValue,
+  () => isOpen.value,
   (open) => {
     if (open) {
       document.addEventListener('keydown', onKeydown)
@@ -89,7 +96,7 @@ watch(
   },
   { immediate: true }
 )
-onMounted(() => { if (props.modelValue) document.addEventListener('keydown', onKeydown) })
+
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
@@ -98,9 +105,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .sw-modal-overlay {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   background: rgba(0, 0, 0, 0.45);
-  display: grid; place-items: center;
+  display: grid;
+  place-items: center;
   z-index: 999;
 }
 
@@ -120,12 +129,14 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 }
 
-/* 닫기 버튼 */
 .sw-close-btn {
   position: absolute;
-  top: 6px; right: 12px;
-  width: 28px; height: 28px;
-  border: 0; background: transparent;
+  top: 6px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
   color: var(--color-black);
   cursor: pointer;
 }
@@ -134,6 +145,7 @@ onBeforeUnmount(() => {
   margin-top: 18px;
   padding: 0 6px;
   text-align: center;
+  width: 100%;
 }
 
 .sw-message {
@@ -141,6 +153,11 @@ onBeforeUnmount(() => {
   letter-spacing: -0.03em;
   line-height: 1.3;
   margin-top: 48px;
+
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .sw-confirm-btn {
@@ -154,4 +171,7 @@ onBeforeUnmount(() => {
   transition: background .15s ease, transform .02s ease;
 }
 .sw-confirm-btn:active { transform: translateY(1px); }
+
+.sw-fade-enter-active, .sw-fade-leave-active { transition: opacity .15s ease; }
+.sw-fade-enter-from, .sw-fade-leave-to { opacity: 0; }
 </style>

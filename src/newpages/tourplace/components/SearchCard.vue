@@ -1,4 +1,3 @@
-<!-- newpages/schedule/components/TourplaceCard.vue -->
 <template>
   <div
     class="spot-card"
@@ -10,7 +9,7 @@
     @keydown.space.prevent="goDetail"
   >
     <div class="thumb-wrap">
-      <img :src="image" :alt="name" class="spot-image" />
+      <img :src="safeImage" :alt="name" class="spot-image" />
     </div>
 
     <div class="card-row">
@@ -27,13 +26,17 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import fallBackImage from '@/assets/images/fall-back.png'
 
 const props = defineProps({
   id:    { type: [String, Number], required: true },
   name:  { type: String, required: true },
   image: { type: String, required: true },
 })
+
+const safeImage = computed(() => (props.image && String(props.image).trim()) ? props.image : fallBackImage)
 
 const router = useRouter()
 function goDetail() {

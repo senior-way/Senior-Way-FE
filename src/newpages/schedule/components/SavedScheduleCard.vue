@@ -28,6 +28,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import fallBackImage from '@/assets/images/fall-back.png'
 
 const props = defineProps({
   id: { type: [String, Number], required: true },
@@ -40,7 +41,7 @@ const props = defineProps({
 defineEmits(['open'])
 
 const mainImage = computed(() => {
-  return props.image || ''
+  return props.image || fallBackImage
 })
 
 const nightsDaysText = computed(() => {

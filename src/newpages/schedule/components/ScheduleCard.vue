@@ -15,7 +15,7 @@
 
     <div class="content-grid">
       <div class="thumb">
-        <img :src="image" :alt="name" class="thumb-img" />
+        <img :src="thumbSrc" :alt="name" class="thumb-img" />
       </div>
 
       <button
@@ -31,12 +31,17 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import fallBackImage from '@/assets/images/fall-back.png'
+
 const props = defineProps({
   id:    { type: [String, Number], required: true },
   name:  { type: String, required: true },
   image: { type: String, required: true },
 })
 const emit = defineEmits(['detail'])
+
+const thumbSrc = computed(() => props.image || fallBackImage)
 </script>
 
 <style scoped>

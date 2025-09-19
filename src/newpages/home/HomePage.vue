@@ -68,7 +68,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import VoiceHeader from '@/components/layout/VoiceHeader.vue'
-import FestivalBanner from './components/FestivalBanner.vue'   
+import FestivalBanner from '@/newpages/home/components/FestivalBanner.vue'   
 
 import surveyIcon from '@/assets/icons/home/home-survey.png'
 import scheduleIcon from '@/assets/icons/home/home-schedule.png'
