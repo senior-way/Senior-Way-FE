@@ -1,96 +1,177 @@
-<!-- src/components/layout/SimpleHeader.vue -->
 <template>
-  <header class="simple-header" :class="{ 'with-border': withBorder }">
-    <h1 class="title titleLogo32px">
-      <slot name="title">{{ title }}</slot>
-    </h1>
+  <teleport to="body">
+    <transition name="sw-fade">
+      <div
+        v-if="isOpen"
+        class="sw-modal-overlay"
+        role="presentation"
+        @click.self="close"
+      >
+        <div
+          class="sw-modal-card"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="ariaLabel"
+        >
+          <button
+            type="button"
+            class="sw-close-btn titleLogo32px"
+            aria-label="닫기"
+            @click="close"
+          >
+            ×
+          </button>
 
-    <!-- 우측 음성 인식 버튼 (기본 표시) -->
-    <button
-      v-if="enableVoice"
-      class="shv-voice-btn"
-      type="button"
-      :aria-pressed="listening ? 'true' : 'false'"
-      :title="listening ? '음성 인식 중…' : '음성 인식'"
-      @click="openVoiceModal"
-    >
-      <img class="shv-voice-icon" :src="micIcon" alt="음성 인식" />
-    </button>
+          <div class="sw-modal-body">
+            <p class="sw-message bodyMedium24px">
+              <slot>
+                {{ message }}
+              </slot>
+            </p>
+          </div>
 
-    <!-- 분리된 모달 컴포넌트 사용 -->
-    <VoiceModal
-      v-if="enableVoice"
-      v-model="modalOpen"
-      :listening="listening"
-      :mic-icon="micIcon"
-      @start="onStartVoice"
-    />
-  </header>
+          <button
+            type="button"
+            class="sw-confirm-btn bodyMedium20px"
+            @click="confirm"
+            ref="confirmRef"
+          >
+            <slot name="confirm">
+              {{ confirmText }}
+            </slot>
+          </button>
+        </div>
+      </div>
+    </transition>
+  </teleport>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import micIcon from '@/assets/icons/mic-icon2.png'
-import { createVoiceNavigator, defaultVoiceRules } from '@/utils/voiceNav'
-import VoiceModal from '@/components/modal/VoiceModal.vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
-  title: { type: String, default: '' },
-  withBorder: { type: Boolean, default: true },
-  enableVoice: { type: Boolean, default: true }, // 기본 표시
+  // 둘 다 지원: 부모가 어떤 바인딩을 쓰든 동작
+  modelValue: { type: Boolean, default: undefined },
+  open: { type: Boolean, default: undefined },
+
+  message: { type: String, default: '확인이 필요합니다.' },
+  confirmText: { type: String, default: '확인' },
+  ariaLabel: { type: String, default: '확인 모달' },
+})
+const emit = defineEmits(['update:modelValue', 'update:open', 'confirm', 'close'])
+
+const confirmRef = ref(null)
+
+// 양방향 바인딩 통합
+const isOpen = computed({
+  get: () => (props.modelValue ?? props.open ?? false),
+  set: (v) => {
+    emit('update:modelValue', v)
+    emit('update:open', v)
+  }
 })
 
-const router = useRouter()
-const { listening, start } = createVoiceNavigator(router, { rules: defaultVoiceRules(router) })
-
-const modalOpen = ref(false)
-
-function openVoiceModal () {
-  if (!props.enableVoice) return
-  modalOpen.value = true
+function close() {
+  isOpen.value = false
+  emit('close')
 }
-function onStartVoice () { start() }
+function confirm() {
+  emit('confirm')
+  isOpen.value = false
+}
 
-// 라우팅 발생 시 모달 닫기
-watch(() => router.currentRoute.value.fullPath, () => { modalOpen.value = false })
+function onKeydown(e) { if (e.key === 'Escape') close() }
+
+watch(
+  () => isOpen.value,
+  (open) => {
+    if (open) {
+      document.addEventListener('keydown', onKeydown)
+      document.body.style.overflow = 'hidden'
+      setTimeout(() => confirmRef.value?.focus(), 50)
+    } else {
+      document.removeEventListener('keydown', onKeydown)
+      document.body.style.overflow = ''
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 </script>
 
 <style scoped>
-.simple-header {
+.sw-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.sw-modal-card {
+  width: 300px;
+  height: 280px;
+  box-sizing: border-box;
+  background: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.22);
+  padding: 20px 18px 16px;
   position: relative;
-  width: 100%;
-  min-height: 4rem;
+
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 12px 12px;
-  background: transparent;
+  justify-content: space-between;
 }
 
-.title {
-  margin: 0;
-  line-height: 1.2;
-  text-align: center;
-  word-break: keep-all;
-}
-
-/* 오른쪽 상단 음성 버튼 */
-.shv-voice-btn {
+.sw-close-btn {
   position: absolute;
+  top: 6px;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 0;
-  background: transparent;
-  padding: 4px;
-  line-height: 0;
-  cursor: pointer;
-}
-.shv-voice-icon {
   width: 28px;
   height: 28px;
-  object-fit: contain;
-  display: block;
+  border: 0;
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
 }
+
+.sw-modal-body {
+  margin-top: 18px;
+  padding: 0 6px;
+  text-align: center;
+  width: 100%;
+}
+
+.sw-message {
+  color: var(--color-black);
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  margin-top: 48px;
+
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.sw-confirm-btn {
+  width: 250px;
+  height: 50px;
+  border: 1.5px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-black);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .15s ease, transform .02s ease;
+}
+.sw-confirm-btn:active { transform: translateY(1px); }
+
+.sw-fade-enter-active, .sw-fade-leave-active { transition: opacity .15s ease; }
+.sw-fade-enter-from, .sw-fade-leave-to { opacity: 0; }
 </style>
