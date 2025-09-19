@@ -93,8 +93,6 @@ function onConfirm() {
 }
 function onSecondary() {
   emit('secondary')
-  // 필요하면 닫지 않고 유지하려면 위 줄만 두고 아래는 지워도 됨
-  // emit('update:modelValue', false)
 }
 
 function onKeydown(e) { if (e.key === 'Escape') close() }
@@ -143,7 +141,6 @@ onBeforeUnmount(() => {
   align-items: center;
 }
 
-/* Close button */
 .sw-close-btn {
   position: absolute;
   top: 8px; 
@@ -155,7 +152,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
-/* Body */
 .sw-modal-body {
   margin-top: 18px;
   padding: 0 8px;
@@ -163,13 +159,17 @@ onBeforeUnmount(() => {
   flex: 1 0 auto;
   display: grid; place-items: center;
 }
+
 .sw-message {
-  color: var(--color-black, #111);
+  color: var(--color-black);
   letter-spacing: -0.03em;
   line-height: 1.2;
+  white-space: normal;
+  word-break: keep-all;  
+  overflow-wrap: anywhere;  
+  hyphens: auto;          
 }
 
-/* Actions */
 .sw-actions {
   display: grid;
   grid-auto-rows: 50px;  /* 각 버튼 높이 고정 */
@@ -177,7 +177,6 @@ onBeforeUnmount(() => {
   padding-bottom: 6px;
 }
 
-/* Button: 250 x 50, 1px solid color */
 .sw-btn {
   width: 250px;
   height: 50px;
