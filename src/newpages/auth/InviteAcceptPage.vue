@@ -35,25 +35,18 @@ function currentFullPath() {
   return full.startsWith('#') ? full.slice(1) : full;
 }
 
-async function checkAuth() {
-  try {
-    await axios.get(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
-      withCredentials: true,
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 async function exchangeToken(token) {
   phase.value = 'exchanging';
   try {
+    const accessToken = localStorage.getItem('accessToken') || '';
     await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/alarm/guardian/accept`,
       null,
       {
         params: { token },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         withCredentials: true,
       }
     );
@@ -66,7 +59,7 @@ async function exchangeToken(token) {
       phase.value = 'redirectLogin';
       sessionStorage.setItem('inviteToken', token);
       const next = encodeURIComponent(currentFullPath());
-      router.replace(`/login?next=${next}`);
+      router.replace(`/v2/login?next=${next}`);
       return;
     }
     if (status === 400) {
@@ -80,31 +73,23 @@ async function exchangeToken(token) {
 }
 
 function goHome() {
-  router.replace({ name: 'Home' });
+  router.replace({ name: 'HomeV2' });
 }
 
 onMounted(async () => {
-  let token = route.query.token?.toString();
+  let token =
+    route.query.token?.toString() || localStorage.getItem('inviteToken') || '';
+
   if (!token) {
-    token = sessionStorage.getItem('inviteToken') || '';
-  }
-  if (!token) {
-    phase.value = 'error';
-    errorMessage.value = '잘못된 접근입니다. (토큰 없음)';
+    phase.value = 'redirectLogin';
+    const next = encodeURIComponent(currentFullPath());
+    router.replace(`/v2/login?next=${next}`);
     return;
   }
 
-  const authed = await checkAuth();
-  if (!authed) {
-    phase.value = 'redirectLogin';
-    sessionStorage.setItem('inviteToken', token);
-    const next = encodeURIComponent(currentFullPath());
-    router.replace(`/login?next=${next}`);
-    return;
-  }
+  await exchangeToken(token);
 
   sessionStorage.removeItem('inviteToken');
-  await exchangeToken(token);
 });
 </script>
 

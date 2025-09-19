@@ -11,6 +11,7 @@
           :disabled="linkBtnDisabled"
           :icon-opacity="0.8"
           @click="openLinkModal"
+          :class="{ 'is-grayscale': linked }"
         />
 
         <BigIconCardBtn
@@ -185,7 +186,9 @@ const linkBtnDisabled = computed(() => linked.value || linking.value);
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const canLink = computed(() => emailRe.test(wardEmail.value));
 
-const linkTitle = computed(() => (linked.value ? '사용자 연동 완료' : '사용자 연동'))
+const linkTitle = computed(() =>
+  linked.value ? '사용자 연동 완료' : '사용자 연동'
+);
 
 const alertOpen = ref(false);
 const alertMsg = ref('');
@@ -429,5 +432,12 @@ onBeforeUnmount(() => {
   text-align: center;
   color: var(--color-black);
   line-height: 1.4;
+}
+
+:deep(.big-icon-card.is-grayscale) {
+  filter: grayscale(1); /* 전체를 흑백으로 */
+  opacity: 0.65; /* 살짝 연하게 */
+  pointer-events: none; /* 클릭/호버 차단 보조 */
+  transition: filter 0.2s ease, opacity 0.2s ease; /* 자연스럽게 */
 }
 </style>

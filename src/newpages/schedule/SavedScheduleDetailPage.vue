@@ -83,7 +83,7 @@ import { useRoute, useRouter } from 'vue-router';
 import SimpleHeader from '@/components/layout/SimpleHeader.vue';
 import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue';
 import NoticeModal from '@/newpages/home/components/NoticeModal.vue';
-import SimpleModal from '@/components/modal/SimpleModal.vue'; 
+import SimpleModal from '@/components/modal/SimpleModal.vue';
 import axios from 'axios';
 import { saveElementAsImageAndPdf } from '@/utils/exportCapture';
 
@@ -192,6 +192,7 @@ function askDelete() {
 async function doDelete() {
   const id = route.params.id;
   try {
+    const token = localStorage.getItem('accessToken');
     await axios.delete(`${baseUrl}/schedules/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
