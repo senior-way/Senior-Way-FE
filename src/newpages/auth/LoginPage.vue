@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import TextInput from '@/components/input/TextInput.vue';
 import SubmitButton from '@/components/button/SubmitButton.vue';
@@ -41,6 +41,7 @@ const email = ref('');
 const pw = ref('');
 const loading = ref(false);
 const router = useRouter();
+const route = useRoute();
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function getRoleFromToken(token) {
@@ -50,6 +51,14 @@ function getRoleFromToken(token) {
   } catch {
     return '';
   }
+}
+
+function resolveNext() {
+  const raw = route.query.next ? String(route.query.next) : '';
+  if (!raw) return null;
+  const decoded = decodeURIComponent(raw);
+  if (/^https?:\/\//i.test(decoded)) return null;
+  return decoded;
 }
 
 async function login() {
@@ -93,6 +102,12 @@ async function login() {
     ).toLowerCase();
     const role = roleFromApi || getRoleFromToken(accessToken) || 'user';
     localStorage.setItem('role', role);
+
+    const next = resolveNext();
+    if (next) {
+      router.replace(next);
+      return;
+    }
 
     // 역할별 라우팅
     if (role === 'guardians') {
