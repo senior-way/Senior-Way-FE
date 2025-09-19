@@ -80,7 +80,7 @@ const checking = ref(false);
 const emailChecked = ref(null);
 const modalOpen = ref(false);
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
 
