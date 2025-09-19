@@ -65,7 +65,10 @@
           </p>
         </div>
         <div class="gd-modal-actions gd-modal-actions--single">
-          <button class="gd-btn gd-btn--primary bodyMedium16px" @click="closeAlert">
+          <button
+            class="gd-btn gd-btn--primary bodyMedium16px"
+            @click="closeAlert"
+          >
             확인
           </button>
         </div>
@@ -147,18 +150,18 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 
-import BigIconCardBtn from '@/newpages/guardian/components/BigIconButton.vue'
-import SmallIconButton from '@/newpages/guardian/components/SmallIconButton.vue'
+import BigIconCardBtn from '@/newpages/guardian/components/BigIconButton.vue';
+import SmallIconButton from '@/newpages/guardian/components/SmallIconButton.vue';
 
-import iconConnect from '@/assets/icons/home/guardian-connect.png'
-import iconSchedule from '@/assets/icons/home/guardian-schedule.png'
-import iconLocation from '@/assets/icons/home/guardian-location.png'
-import iconManual from '@/assets/icons/home/manual.png'
-import iconPersonal from '@/assets/icons/home/personal.png'
+import iconConnect from '@/assets/icons/home/guardian-connect.png';
+import iconSchedule from '@/assets/icons/home/guardian-schedule.png';
+import iconLocation from '@/assets/icons/home/guardian-location.png';
+import iconManual from '@/assets/icons/home/manual.png';
+import iconPersonal from '@/assets/icons/home/personal.png';
 
 const icons = {
   connect: iconConnect,
@@ -166,123 +169,138 @@ const icons = {
   location: iconLocation,
   manual: iconManual,
   personal: iconPersonal,
-}
+};
 
-const router = useRouter()
+const router = useRouter();
 
-const linkOpen = ref(false)
-const wardEmail = ref('')
-const wardName = ref('')
-const linking = ref(false)
+const linkOpen = ref(false);
+const wardEmail = ref('');
+const wardName = ref('');
+const linking = ref(false);
 
-const linked = ref(false)
-const linkedWard = ref(null)
+const linked = ref(false);
+const linkedWard = ref(null);
 
-const linkBtnDisabled = computed(() => linked.value || linking.value)
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const canLink = computed(() => emailRe.test(wardEmail.value))
+const linkBtnDisabled = computed(() => linked.value || linking.value);
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const canLink = computed(() => emailRe.test(wardEmail.value));
 
-const alertOpen = ref(false)
-const alertMsg = ref('')
+const alertOpen = ref(false);
+const alertMsg = ref('');
 
 function openAlert(msg) {
-  alertMsg.value = msg
-  alertOpen.value = true
-  lockScroll(true)
+  alertMsg.value = msg;
+  alertOpen.value = true;
+  lockScroll(true);
 }
 function closeAlert() {
-  alertOpen.value = false
-  lockScroll(false)
+  alertOpen.value = false;
+  lockScroll(false);
 }
 
 function lockScroll(lock) {
-  document.body.style.overflow = lock ? 'hidden' : ''
+  document.body.style.overflow = lock ? 'hidden' : '';
 }
 
 function onKeydown(e) {
   if (e.key === 'Escape') {
-    if (alertOpen.value) return closeAlert()
-    if (linkOpen.value) return closeLinkModal()
+    if (alertOpen.value) return closeAlert();
+    if (linkOpen.value) return closeLinkModal();
   }
 }
 
 function goSchedule() {
   if (!linked.value || !linkedWard.value) {
-    openAlert('아직 연동된 사용자가 없습니다!')
-    return
+    openAlert('아직 연동된 사용자가 없습니다!');
+    return;
   }
-  const query =
-    linkedWard.value?.id
-      ? { wardId: linkedWard.value.id }
-      : linkedWard.value?.email
-        ? { wardEmail: linkedWard.value.email }
-        : {}
-  router.push({ name: 'SavedScheduleListV2', query })
+  const query = linkedWard.value?.id
+    ? { wardId: linkedWard.value.id }
+    : linkedWard.value?.email
+    ? { wardEmail: linkedWard.value.email }
+    : {};
+  router.push({ name: 'SavedScheduleListV2', query });
 }
-function goLocation() { router.push({ name: 'LocationV2' }) }
-function goMyPage() { router.push({ name: 'GuardianMyPageV2' }) }
-function showGuide() { openAlert('준비 중입니다.') }
+function goLocation() {
+  router.push({ name: 'LocationV2' });
+}
+function goMyPage() {
+  router.push({ name: 'GuardianMyPageV2' });
+}
+function showGuide() {
+  openAlert('준비 중입니다.');
+}
 
 function openLinkModal() {
-  if (linked.value) return
-  linkOpen.value = true
-  lockScroll(true)
-  nextTick(() => document.querySelector('.modal-input')?.focus())
+  if (linked.value) return;
+  linkOpen.value = true;
+  lockScroll(true);
+  nextTick(() => document.querySelector('.modal-input')?.focus());
 }
 function closeLinkModal() {
-  linkOpen.value = false
-  lockScroll(false)
-  wardEmail.value = ''
-  wardName.value = ''
+  linkOpen.value = false;
+  lockScroll(false);
+  wardEmail.value = '';
+  wardName.value = '';
 }
 
+// 초기 연동 상태 조회
 async function loadLinkedStatus() {
   try {
-    const { data } = await axios.get(
+    const token = localStorage.getItem('accessToken');
+    const res = await axios.get(
       `${import.meta.env.VITE_API_BASE_URL}/user-guardians/status`,
-      { withCredentials: true }
-    )
-    linked.value = !!data?.linked
-    linkedWard.value = data?.ward || null
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    linked.value = res.data;
   } catch {
-    linked.value = false
-    linkedWard.value = null
+    linked.value = false;
   }
 }
 
 async function confirmLink() {
-  if (!canLink.value || linking.value) return
-  linking.value = true
+  if (!canLink.value || linking.value) return;
+  linking.value = true;
   try {
+    const token = localStorage.getItem('accessToken');
+    const payload = {
+      wardEmail: wardEmail.value.trim(),
+      wardName: wardName.value.trim() || undefined,
+    };
     await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/alarm/guardian/invite`,
       null,
       {
-        params: {
-          wardEmail: wardEmail.value.trim(),
-          wardName: wardName.value.trim() || undefined
+        params: payload,
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        withCredentials: true
+        withCredentials: true,
       }
-    )
-    openAlert('연동 메일 전송이 완료되었습니다.')
-    closeLinkModal()
-    await loadLinkedStatus()
+    );
+    openAlert('연동 메일 전송이 완료되었습니다.');
+    closeLinkModal();
+    await loadLinkedStatus();
   } catch {
-    openAlert('메일 전송에 실패했습니다. 다시 시도해주세요.')
+    openAlert('메일 전송에 실패했습니다. 다시 시도해주세요.');
   } finally {
-    linking.value = false
+    linking.value = false;
   }
 }
 
 onMounted(() => {
-  loadLinkedStatus()
-  document.addEventListener('keydown', onKeydown)
-})
+  loadLinkedStatus();
+  document.addEventListener('keydown', onKeydown);
+});
 onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onKeydown)
-  lockScroll(false)
-})
+  document.removeEventListener('keydown', onKeydown);
+  lockScroll(false);
+});
 </script>
 
 <style scoped>
