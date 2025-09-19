@@ -1,157 +1,96 @@
+<!-- src/components/layout/SimpleHeader.vue -->
 <template>
-  <teleport to="body">
-    <transition name="sw-fade">
-      <div
-        v-if="modelValue"
-        class="sw-modal-overlay"
-        role="presentation"
-        @click.self="close"
-      >
-        <div
-          class="sw-modal-card"
-          role="dialog"
-          aria-modal="true"
-          :aria-label="ariaLabel"
-          ref="cardRef"
-        >
+  <header class="simple-header" :class="{ 'with-border': withBorder }">
+    <h1 class="title titleLogo32px">
+      <slot name="title">{{ title }}</slot>
+    </h1>
 
-          <button
-            type="button"
-            class="sw-close-btn titleLogo32px"
-            aria-label="닫기"
-            @click="close"
-          >
-            ×
-          </button>
+    <!-- 우측 음성 인식 버튼 (기본 표시) -->
+    <button
+      v-if="enableVoice"
+      class="shv-voice-btn"
+      type="button"
+      :aria-pressed="listening ? 'true' : 'false'"
+      :title="listening ? '음성 인식 중…' : '음성 인식'"
+      @click="openVoiceModal"
+    >
+      <img class="shv-voice-icon" :src="micIcon" alt="음성 인식" />
+    </button>
 
-          <!-- 본문 - 기본 내용은 message prop, 필요시 기본 슬롯으로 교체 -->
-          <div class="sw-modal-body">
-            <p class="sw-message bodyMedium24px">
-              <slot>
-                {{ message }}
-              </slot>
-            </p>
-          </div>
-
-          <!-- 확인 - 기본은 confirmText prop, 필요시 confirm 슬롯으로 교체 -->
-          <button
-            type="button"
-            class="sw-confirm-btn bodyMedium20px"
-            @click="confirm"
-            ref="confirmRef"
-          >
-            <slot name="confirm">
-              {{ confirmText }}
-            </slot>
-          </button>
-        </div>
-      </div>
-    </transition>
-  </teleport>
+    <!-- 분리된 모달 컴포넌트 사용 -->
+    <VoiceModal
+      v-if="enableVoice"
+      v-model="modalOpen"
+      :listening="listening"
+      :mic-icon="micIcon"
+      @start="onStartVoice"
+    />
+  </header>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import micIcon from '@/assets/icons/mic-icon2.png'
+import { createVoiceNavigator, defaultVoiceRules } from '@/utils/voiceNav'
+import VoiceModal from '@/components/modal/VoiceModal.vue'
 
 const props = defineProps({
-  modelValue: { type: Boolean, default: false },          
-  message: { type: String, default: '회원가입이 정상적으로 완료되었습니다!' },
-  confirmText: { type: String, default: '확인' },  
-  ariaLabel: { type: String, default: '확인 모달' }
+  title: { type: String, default: '' },
+  withBorder: { type: Boolean, default: true },
+  enableVoice: { type: Boolean, default: true }, // 기본 표시
 })
-const emit = defineEmits(['update:modelValue', 'confirm', 'close'])
 
-const confirmRef = ref(null)
-const cardRef = ref(null)
+const router = useRouter()
+const { listening, start } = createVoiceNavigator(router, { rules: defaultVoiceRules(router) })
 
-function close() {
-  emit('update:modelValue', false)
-  emit('close')
+const modalOpen = ref(false)
+
+function openVoiceModal () {
+  if (!props.enableVoice) return
+  modalOpen.value = true
 }
-function confirm() {
-  emit('confirm')
-  emit('update:modelValue', false)
-}
+function onStartVoice () { start() }
 
-// ESC로 닫기 + 바디 스크롤 락
-function onKeydown(e) { if (e.key === 'Escape') close() }
-watch(
-  () => props.modelValue,
-  (open) => {
-    if (open) {
-      document.addEventListener('keydown', onKeydown)
-      document.body.style.overflow = 'hidden'
-      setTimeout(() => confirmRef.value?.focus(), 50)
-    } else {
-      document.removeEventListener('keydown', onKeydown)
-      document.body.style.overflow = ''
-    }
-  },
-  { immediate: true }
-)
-onMounted(() => { if (props.modelValue) document.addEventListener('keydown', onKeydown) })
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onKeydown)
-  document.body.style.overflow = ''
-})
+// 라우팅 발생 시 모달 닫기
+watch(() => router.currentRoute.value.fullPath, () => { modalOpen.value = false })
 </script>
 
 <style scoped>
-.sw-modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: grid; place-items: center;
-  z-index: 999;
-}
-
-.sw-modal-card {
-  width: 300px;
-  height: 280px;
-  box-sizing: border-box;
-  background: var(--color-white);
-  border-radius: 12px;
-  box-shadow: 0 12px 36px rgba(0,0,0,.22);
-  padding: 20px 18px 16px;
+.simple-header {
   position: relative;
-
+  width: 100%;
+  min-height: 4rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-}
-
-/* 닫기 버튼 */
-.sw-close-btn {
-  position: absolute;
-  top: 6px; right: 12px;
-  width: 28px; height: 28px;
-  border: 0; background: transparent;
-  color: var(--color-black);
-  cursor: pointer;
-}
-
-.sw-modal-body {
-  margin-top: 18px;
-  padding: 0 6px;
-  text-align: center;
-}
-
-.sw-message {
-  color: var(--color-black);
-  letter-spacing: -0.03em;
-  line-height: 1.3;
-  margin-top: 48px;
-}
-
-.sw-confirm-btn {
-  width: 250px;
-  height: 50px;
-  border: 1.5px solid var(--color-primary);
+  justify-content: center;
+  padding: 12px 12px;
   background: transparent;
-  color: var(--color-black);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background .15s ease, transform .02s ease;
 }
-.sw-confirm-btn:active { transform: translateY(1px); }
+
+.title {
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* 오른쪽 상단 음성 버튼 */
+.shv-voice-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  line-height: 0;
+  cursor: pointer;
+}
+.shv-voice-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
 </style>
