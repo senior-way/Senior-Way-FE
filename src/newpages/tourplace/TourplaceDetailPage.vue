@@ -101,6 +101,7 @@ import no_barrier from '@/assets/img/no_barrier_free.png'
 import yes_barrier from '@/assets/img/yes_barrier_free.png'
 import calendarIcon from '@/assets/icons/schedule.png'
 import micIcon from '@/assets/icons/microphone.png'
+import fallBackImage from '@/assets/images/fall-back.png'
 
 const route = useRoute()
 const place = ref(null)
@@ -235,7 +236,8 @@ const slides = computed(() => {
   if (Array.isArray(place.value?.thumbnails) && place.value.thumbnails.length) {
     base.push(...place.value.thumbnails)
   }
-  return base
+  const filtered = base.filter(Boolean)
+  return filtered.length ? filtered : [fallBackImage]  
 })
 
 function next() { current.value = (current.value + 1) % slides.value.length }
