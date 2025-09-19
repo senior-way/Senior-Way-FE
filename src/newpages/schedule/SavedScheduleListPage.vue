@@ -23,41 +23,45 @@
           />
         </ul>
 
-        <!-- 3개부터 페이지네이션 (2개 이하일 땐 숨김) -->
-        <nav
+        <!-- 4개부터 페이지네이션 (3개 이하일 땐 숨김) -->
+        <div
           v-if="showPagination"
           class="pagination"
-          aria-label="Saved schedules pages"
         >
           <button
-            class="page-btn nav"
             type="button"
-            :disabled="currentPage === 1"
-            @click="currentPage--"
+            class="page-btn bodyMedium16px"
+            :disabled="page === 1"
+            @click="page = 1"
           >
-            ← 이전
+            처음
           </button>
-
           <button
-            v-for="n in totalPages"
-            :key="n"
-            class="page-btn"
-            :class="{ active: currentPage === n }"
             type="button"
-            @click="currentPage = n"
+            class="page-btn bodyMedium16px"
+            :disabled="page === 1"
+            @click="page--"
           >
-            {{ n }}
+            이전
           </button>
-
+          <span class="page-info bodyMedium16px">{{ page }} / {{ totalPages }}</span>
           <button
-            class="page-btn nav"
             type="button"
-            :disabled="currentPage === totalPages"
-            @click="currentPage++"
+            class="page-btn bodyMedium16px"
+            :disabled="page === totalPages"
+            @click="page++"
           >
-            다음 →
+            다음
           </button>
-        </nav>
+          <button
+            type="button"
+            class="page-btn bodyMedium16px"
+            :disabled="page === totalPages"
+            @click="page = totalPages"
+          >
+            마지막
+          </button>
+        </div>
       </template>
     </section>
   </main>
@@ -75,18 +79,18 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const list = ref([]);
 
-// 2개 이하면 페이징 없음, 3개부터 페이징 (페이지당 2개)
-const pageSize = 2;
-const currentPage = ref(1);
+// 3개 이하면 페이징 없음, 4개부터 페이징 (페이지당 3개)
+const pageSize = 3;
+const page = ref(1);
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil(list.value.length / pageSize))
 );
-const showPagination = computed(() => list.value.length >= 3);
+const showPagination = computed(() => list.value.length >= 4);
 
 const pageItems = computed(() => {
   if (!showPagination.value) return list.value;
-  const start = (currentPage.value - 1) * pageSize;
+  const start = (page.value - 1) * pageSize;
   const end = start + pageSize;
   return list.value.slice(start, end);
 });
@@ -112,7 +116,7 @@ async function loadList() {
           image: item.photoUrl, // photoUrl을 image로 사용
         }))
       : [];
-    currentPage.value = 1;
+    page.value = 1;
   } catch (e) {
     list.value = [];
   }
@@ -122,7 +126,7 @@ onMounted(loadList);
 
 // 총 페이지 수 변동 시 현재 페이지 보정
 watch(totalPages, (n) => {
-  if (currentPage.value > n) currentPage.value = n;
+  if (page.value > n) page.value = n;
 });
 
 function openDetail(id) {
@@ -153,33 +157,31 @@ function openDetail(id) {
   gap: 12px;
 }
 
+/* 페이지네이션 스타일 - 통일 */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  margin-top: 14px;
+  gap: 8px;
+  flex-wrap: nowrap;
+  margin: 8px 0 16px;
 }
+
 .page-btn {
-  min-width: 34px;
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--color-lightgray);
+  padding: 6px 10px;
+  border: 1px solid var(--color-mediumgray);
   background: #fff;
-  color: var(--color-black);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-}
-.page-btn.active {
-  border-color: var(--color-primary);
-  background: var(--color-primary-10);
-  color: var(--color-primary);
-}
-.page-btn.nav {
-  padding: 0 12px;
+  white-space: nowrap;
 }
 .page-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.page-info {
+  min-width: 40px;
+  text-align: center;
 }
 </style>
