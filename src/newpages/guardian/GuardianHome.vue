@@ -5,7 +5,7 @@
       <div class="list">
         <BigIconCardBtn
           :icon="icons.connect"
-          title="사용자 연동"
+          :title="linkTitle"
           desc="연동하고자 하는 사용자의 이메일을 입력한 뒤, 승인 과정을 진행합니다."
           variant="primary"
           :disabled="linkBtnDisabled"
@@ -184,6 +184,8 @@ const linkedWard = ref(null);
 const linkBtnDisabled = computed(() => linked.value || linking.value);
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const canLink = computed(() => emailRe.test(wardEmail.value));
+
+const linkTitle = computed(() => (linked.value ? '사용자 연동 완료' : '사용자 연동'))
 
 const alertOpen = ref(false);
 const alertMsg = ref('');
