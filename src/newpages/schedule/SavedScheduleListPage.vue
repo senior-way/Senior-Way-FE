@@ -24,10 +24,7 @@
         </ul>
 
         <!-- 4개부터 페이지네이션 (3개 이하일 땐 숨김) -->
-        <div
-          v-if="showPagination"
-          class="pagination"
-        >
+        <div v-if="showPagination" class="pagination">
           <button
             type="button"
             class="page-btn bodyMedium16px"
@@ -44,7 +41,9 @@
           >
             이전
           </button>
-          <span class="page-info bodyMedium16px">{{ page }} / {{ totalPages }}</span>
+          <span class="page-info bodyMedium16px"
+            >{{ page }} / {{ totalPages }}</span
+          >
           <button
             type="button"
             class="page-btn bodyMedium16px"
@@ -69,12 +68,13 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import SimpleHeader from '@/components/layout/SimpleHeader.vue';
 import SavedScheduleCard from '@/newpages/schedule/components/SavedScheduleCard.vue';
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const list = ref([]);
@@ -122,7 +122,41 @@ async function loadList() {
   }
 }
 
-onMounted(loadList);
+async function loadListByEmail(wardEmail) {
+  try {
+    const token = localStorage.getItem('accessToken');
+    const res = await axios.get(`${baseUrl}/schedules/list-by-email`, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+      params: { protegeEmail: wardEmail },
+    });
+
+    list.value = Array.isArray(res.data)
+      ? res.data.map((item) => ({
+          ...item,
+          id: item.scheduleId ?? item.id,
+          image: item.photoUrl, // photoUrl을 image로 사용
+        }))
+      : [];
+    page.value = 1;
+  } catch {}
+}
+
+onMounted(async () => {
+  try {
+    const wardEmail = route.query.wardEmail;
+
+    if (wardEmail) {
+      await loadListByEmail(wardEmail);
+    } else {
+      await loadList();
+    }
+  } catch (e) {
+    console.error(e);
+    list.value = [];
+  }
+});
 
 // 총 페이지 수 변동 시 현재 페이지 보정
 watch(totalPages, (n) => {

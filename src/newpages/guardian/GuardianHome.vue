@@ -214,17 +214,18 @@ function onKeydown(e) {
   }
 }
 
-function goSchedule() {
+async function goSchedule() {
+  await loadWardEmail();
+  console.log(linkedWard.value);
+
   if (!linked.value || !linkedWard.value) {
     openAlert('아직 연동된 사용자가 없습니다!');
     return;
   }
-  const query = linkedWard.value?.id
-    ? { wardId: linkedWard.value.id }
-    : linkedWard.value?.email
-    ? { wardEmail: linkedWard.value.email }
-    : {};
-  router.push({ name: 'SavedScheduleListV2', query });
+  router.push({
+    name: 'SavedScheduleListV2',
+    query: { wardEmail: linkedWard.value },
+  });
 }
 function goLocation() {
   router.push({ name: 'LocationV2' });
@@ -295,6 +296,26 @@ async function confirmLink() {
     openAlert('메일 전송에 실패했습니다. 다시 시도해주세요.');
   } finally {
     linking.value = false;
+  }
+}
+
+// 피보호자 이메일 가져오기
+async function loadWardEmail() {
+  try {
+    const token = localStorage.getItem('accessToken');
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/user-guardians/get-ward-email`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(res.data);
+    linkedWard.value = res.data || null;
+  } catch {
+    linkedWard.value = null;
   }
 }
 
