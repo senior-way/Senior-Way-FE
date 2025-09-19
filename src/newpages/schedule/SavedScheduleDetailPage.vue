@@ -66,6 +66,14 @@
       confirmText="목록으로"
       @confirm="goList"
     />
+
+    <!-- 저장 성공/실패 알림 모달 추가 -->
+    <SimpleModal
+      v-model="saveNoticeOpen"
+      :message="saveNoticeMsg"
+      :confirmText="'확인'"
+      :ariaLabel="'알림'"
+    />
   </div>
 </template>
 
@@ -75,6 +83,7 @@ import { useRoute, useRouter } from 'vue-router';
 import SimpleHeader from '@/components/layout/SimpleHeader.vue';
 import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue';
 import NoticeModal from '@/newpages/home/components/NoticeModal.vue';
+import SimpleModal from '@/components/modal/SimpleModal.vue'; 
 import axios from 'axios';
 import { saveElementAsImageAndPdf } from '@/utils/exportCapture';
 
@@ -90,6 +99,14 @@ const timelineRef = ref(null);
 const saving = ref(false);
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+// 저장 알림 모달 상태
+const saveNoticeOpen = ref(false);
+const saveNoticeMsg = ref('');
+function openSaveNotice(msg) {
+  saveNoticeMsg.value = msg;
+  saveNoticeOpen.value = true;
+}
 
 onMounted(async () => {
   const id = route.params.id;
@@ -201,9 +218,10 @@ async function saveBoth() {
       marginMM: 10,
       gutterMM: 6,
     });
+    openSaveNotice('파일로 저장이 완료되었습니다.');
   } catch (e) {
     console.error('저장 실패:', e);
-    alert('파일 저장 중 오류가 발생했어요.');
+    openSaveNotice('파일 저장 중 오류가 발생했습니다.');
   } finally {
     saving.value = false;
   }
