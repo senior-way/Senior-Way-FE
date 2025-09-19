@@ -57,6 +57,15 @@
       @confirm="confirmSave"
       @cancel="closeSaveModal"
     />
+
+    <!-- 커스텀 알림 모달 -->
+    <SimpleModal
+      v-model="noticeOpen"
+      :message="noticeMsg"
+      :confirmText="'확인'"
+      :ariaLabel="'알림'"
+      @confirm="onNoticeConfirm"
+    />
   </div>
 </template>
 
@@ -68,6 +77,7 @@ import SimpleHeader from '@/components/layout/SimpleHeader.vue';
 import SpotCard from '@/newpages/schedule/components/ScheduleCard.vue';
 import BottomDualButtons from '@/components/button/DualButton.vue';
 import TextInputModal from '@/components/modal/TextInputModal.vue';
+import SimpleModal from '@/components/modal/SimpleModal.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -75,6 +85,19 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const serverSchedule = ref(null);
 const loading = ref(false);
+
+const noticeOpen = ref(false);
+const noticeMsg = ref('');
+const savedOk = ref(false);
+function openNotice(msg, ok = false) {
+  noticeMsg.value = msg;
+  savedOk.value = !!ok;
+  noticeOpen.value = true;
+}
+function onNoticeConfirm() {
+  // 저장 성공 시에만 홈으로 이동
+  if (savedOk.value) router.replace({ name: 'HomeV2' });
+}
 
 onMounted(loadTimeline);
 
@@ -264,10 +287,9 @@ async function confirmSave() {
         },
       }
     );
-    alert('저장되었습니다.');
-    router.replace({ name: 'HomeV2' });
+    openNotice('저장되었습니다.', true);
   } catch (e) {
-    alert('저장 실패');
+    openNotice('저장에 실패했습니다. 다시 시도해 주세요.');
   } finally {
     saving.value = false;
     saveOpen.value = false;
