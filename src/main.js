@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // 환경변수 Kakao 앱키
 const KAKAO_APP_KEY = import.meta.env.VITE_KAKAO_APP_KEY;
-console.log('Kakao Key:', KAKAO_APP_KEY);
+// console.log('Kakao Key:', KAKAO_APP_KEY);
 
 if (!KAKAO_APP_KEY) {
   console.error('VITE_KAKAO_APP_KEY is undefined!');
