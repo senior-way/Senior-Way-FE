@@ -56,6 +56,7 @@
         <KakaoMap :address="addressFull" />
       </div>
 
+      <!--
       <div class="cta-grid">
         <SquareButton
           label="일정 추가"
@@ -74,6 +75,7 @@
           @click="onVoiceGuide"
         />
       </div>
+      -->
     </div>
   </div>
 
@@ -147,7 +149,7 @@ function normalizePlace(raw) {
     addressDetail: spot.addr2,
     image: spot.firstimage,
     thumbnails: [spot.firstimage, spot.firstimage2].filter(Boolean),
-    isBarrierFree: detail.chkBarrierFree === 'Y', // 예시, 실제 데이터 확인 필요
+    isBarrierFree: detail.chkBarrierFree === 'Y',
     openingHours: detail.useTime,
     holiday: detail.restDate,
     price: detail.price,
@@ -332,7 +334,7 @@ function onVoiceGuide() {
 }
 
 .graytag-list + .graytag-list { 
-  margin-top: 18px;      /* 두 리스트 사이 간격 */
+  margin-top: 18px;
 }
 
 .map_wrap {
