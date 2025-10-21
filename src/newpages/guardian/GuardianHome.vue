@@ -456,9 +456,9 @@ onBeforeUnmount(() => {
 }
 
 :deep(.big-icon-card.is-grayscale) {
-  filter: grayscale(1); /* 전체를 흑백으로 */
-  opacity: 0.65; /* 살짝 연하게 */
-  pointer-events: none; /* 클릭/호버 차단 보조 */
-  transition: filter 0.2s ease, opacity 0.2s ease; /* 자연스럽게 */
+  filter: grayscale(1); 
+  opacity: 0.65; 
+  pointer-events: none; 
+  transition: filter 0.2s ease, opacity 0.2s ease; 
 }
 </style>
