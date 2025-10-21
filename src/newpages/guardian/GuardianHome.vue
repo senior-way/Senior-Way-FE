@@ -11,6 +11,7 @@
           :disabled="linkBtnDisabled"
           :icon-opacity="0.8"
           @click="openLinkModal"
+          :class="{ 'is-grayscale': linked }"
         />
 
         <BigIconCardBtn
@@ -429,5 +430,12 @@ onBeforeUnmount(() => {
   text-align: center;
   color: var(--color-black);
   line-height: 1.4;
+}
+
+:deep(.big-icon-card.is-grayscale) {
+  filter: grayscale(1);     
+  opacity: 0.65;             
+  pointer-events: none;      
+  transition: filter .2s ease, opacity .2s ease; 
 }
 </style>
