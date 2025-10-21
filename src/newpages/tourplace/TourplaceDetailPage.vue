@@ -334,7 +334,7 @@ function onVoiceGuide() {
 }
 
 .graytag-list + .graytag-list { 
-  margin-top: 18px;
+  margin-top: 18px;      /* 두 리스트 사이 간격 */
 }
 
 .map_wrap {
