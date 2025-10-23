@@ -1,12 +1,12 @@
 const routesV2 = [
   {
-    path: '/v2',
+    path: '/',
     redirect: { name: 'AuthHomeV2' },
   },
 
   // 로그인
   {
-    path: '/v2/login',
+    path: '/login',
     name: 'LoginV2',
     component: () => import('@/newpages/auth/LoginPage.vue'),
     meta: { title: '로그인' },
@@ -14,7 +14,7 @@ const routesV2 = [
 
   // Auth 홈
   {
-    path: '/v2/auth',
+    path: '/auth',
     name: 'AuthHomeV2',
     component: () => import('@/newpages/auth/AuthHomePage.vue'),
     meta: { title: 'Auth' },
@@ -22,7 +22,7 @@ const routesV2 = [
 
   // 홈
   {
-    path: '/v2/home',
+    path: '/home',
     name: 'HomeV2',
     component: () => import('@/newpages/home/HomePage.vue'),
     meta: { title: '홈', noHeader: true },
@@ -30,7 +30,7 @@ const routesV2 = [
 
   // 사용자 마이페이지
   {
-    path: '/v2/mypage',
+    path: '/mypage',
     name: 'MyPageV2',
     component: () => import('@/newpages/home/MyPage.vue'),
     meta: { title: '마이페이지', noHeader: true },
@@ -38,7 +38,7 @@ const routesV2 = [
 
   // 보호자 마이페이지
   {
-    path: '/v2/guardian/mypage',
+    path: '/guardian/mypage',
     name: 'GuardianMyPageV2',
     component: () => import('@/newpages/guardian/GuardianMyPage.vue'),
     meta: { title: '마이페이지', noHeader: true },
@@ -46,7 +46,7 @@ const routesV2 = [
 
   // 보호자 홈
   {
-    path: '/v2/guardian',
+    path: '/guardian',
     name: 'GuardianHomeV2',
     component: () => import('@/newpages/guardian/GuardianHome.vue'),
     meta: { title: 'Guardian' },
@@ -54,7 +54,7 @@ const routesV2 = [
 
   // 회원가입 유형 선택
   {
-    path: '/v2/signin/select',
+    path: '/signin/select',
     name: 'SignupSelectV2',
     component: () => import('@/newpages/auth/SignupSelectPage.vue'),
     meta: { title: '회원가입 유형 선택' },
@@ -62,7 +62,7 @@ const routesV2 = [
 
   // 일반 회원가입
   {
-    path: '/v2/signin',
+    path: '/signin',
     name: 'SigninV2',
     component: () => import('@/newpages/auth/SigninPage.vue'),
     meta: { title: '회원가입' },
@@ -70,14 +70,15 @@ const routesV2 = [
 
   // 보호자 회원가입
   {
-    path: '/v2/guardian/signup',
+    path: '/guardian/signup',
     name: 'GuardianSignupV2',
     component: () => import('@/newpages/guardian/GuardianSignup.vue'),
     meta: { title: '보호자 회원가입' },
   },
+
   // 피보호자 초대 수락
   {
-    path: '/v2/guardian/invite/accept',
+    path: '/guardian/invite/accept',
     name: 'InviteAcceptV2',
     component: () => import('@/newpages/auth/InviteAcceptPage.vue'),
     meta: { title: '초대 수락' },
@@ -85,7 +86,7 @@ const routesV2 = [
 
   // 선호도 조사
   {
-    path: '/v2/survey',
+    path: '/survey',
     name: 'SurveyV2',
     component: () => import('@/newpages/survey/SurveyPage.vue'),
     meta: { title: '선호도 조사' },
@@ -93,7 +94,7 @@ const routesV2 = [
 
   // 임시/목데이터 추천 페이지
   {
-    path: '/v2/recommend/mock',
+    path: '/recommend/mock',
     name: 'RecommendMockV2',
     component: () => import('@/newpages/tourplace/RecommendPlacesPage.vue'),
     meta: { title: '추천 관광지', noHeader: true },
@@ -101,7 +102,7 @@ const routesV2 = [
 
   // 선택한 관광지 확인 (쿼리 ids 기반)
   {
-    path: '/v2/plan/selected',
+    path: '/plan/selected',
     name: 'SelectedPlacesV2',
     component: () => import('@/newpages/tourplace/SelectedPlacesPage.vue'),
     meta: { title: '선택한 관광지', noHeader: true },
@@ -109,7 +110,7 @@ const routesV2 = [
 
   // 관광지 상세
   {
-    path: '/v2/tourplace/:id',
+    path: '/tourplace/:id',
     name: 'TourplaceDetailV2',
     component: () => import('@/newpages/tourplace/TourplaceDetailPage.vue'),
     meta: { title: '관광지 상세', noHeader: true },
@@ -117,7 +118,7 @@ const routesV2 = [
 
   // 무장애 관광지 검색
   {
-    path: '/v2/barrierfree',
+    path: '/barrierfree',
     name: 'BarrierFreePlacesV2',
     component: () => import('@/newpages/tourplace/BarrierFreeSearchPage.vue'),
     meta: { title: '무장애 관광지', noHeader: true },
@@ -125,7 +126,7 @@ const routesV2 = [
 
   // 일정 상세 (추천 결과 타임라인)
   {
-    path: '/v2/schedule/timeline',
+    path: '/schedule/timeline',
     name: 'ScheduleTimelineV2',
     component: () => import('@/newpages/schedule/ScheduleTimelinePage.vue'),
     meta: { title: '일정 타임라인', noHeader: true },
@@ -133,7 +134,7 @@ const routesV2 = [
 
   // 저장된 일정 목록
   {
-    path: '/v2/schedule/saved',
+    path: '/schedule/saved',
     name: 'SavedScheduleListV2',
     component: () => import('@/newpages/schedule/SavedScheduleListPage.vue'),
     meta: { title: '저장된 일정', noHeader: true },
@@ -141,7 +142,7 @@ const routesV2 = [
 
   // 저장된 일정 상세
   {
-    path: '/v2/schedule/saved/:id',
+    path: '/schedule/saved/:id',
     name: 'SavedScheduleDetail',
     component: () => import('@/newpages/schedule/SavedScheduleDetailPage.vue'),
     meta: { title: '저장된 일정 상세', noHeader: true },
@@ -149,14 +150,14 @@ const routesV2 = [
 
   // 보호자 위치
   {
-    path: '/v2/location',
+    path: '/location',
     name: 'LocationV2',
     component: () => import('@/newpages/guardian/Location.vue'),
   },
 
   // 404
   {
-    path: '/v2/:pathMatch(.*)*',
+    path: '/:pathMatch(.*)*',
     name: 'NotFoundV2',
     component: () => import('@/newpages/home/ErrorPage.vue'),
     meta: { title: '페이지를 찾을 수 없음' },

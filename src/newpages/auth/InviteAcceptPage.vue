@@ -59,7 +59,7 @@ async function exchangeToken(token) {
       phase.value = 'redirectLogin';
       sessionStorage.setItem('inviteToken', token);
       const next = encodeURIComponent(currentFullPath());
-      router.replace(`/v2/login?next=${next}`);
+      router.replace(`/login?next=${next}`);
       return;
     }
     if (status === 400) {
@@ -83,7 +83,7 @@ onMounted(async () => {
   if (!token) {
     phase.value = 'redirectLogin';
     const next = encodeURIComponent(currentFullPath());
-    router.replace(`/v2/login?next=${next}`);
+    router.replace(`/login?next=${next}`);
     return;
   }
 

@@ -40,7 +40,7 @@ const safeImage = computed(() => (props.image && String(props.image).trim()) ? p
 
 const router = useRouter()
 function goDetail() {
-  router.push(`/v2/tourplace/${props.id}`)
+  router.push(`/tourplace/${props.id}`)
 }
 </script>
 
