@@ -61,7 +61,7 @@ onMounted(async () => {
   })
 
   localStorage.setItem('accessToken', res.data.accessToken)
-  router.replace('/v2') 
+  router.replace('/') 
 })
 
 
