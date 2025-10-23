@@ -254,7 +254,7 @@ function next() {
 async function checkEmailAndNext() {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL}/user/check-email`,
+      `${import.meta.env.VITE_API_BASE_URL}/auth/check-email`,
       {
         params: { email: email.value },
         withCredentials: true,
