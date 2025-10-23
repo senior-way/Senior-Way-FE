@@ -260,7 +260,7 @@ async function checkEmailAndNext() {
         withCredentials: true,
       }
     );
-    if (res.data) {
+    if (!res.data) {
       next();
       return true;
     } else {
