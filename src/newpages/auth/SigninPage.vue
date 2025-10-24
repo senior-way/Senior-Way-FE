@@ -219,6 +219,9 @@ import SimpleModal from '@/components/modal/SimpleModal.vue';
 
 import pwClosed from '@/assets/icons/pw_hide_eye.png';
 import pwOpen from '@/assets/icons/pw_show_eye.png';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const steps = [
   { key: 'terms', label: '정보제공 동의' },
@@ -279,8 +282,28 @@ function goReview() {
   currentKey.value = 'review';
   showPw.value = false;
 }
-function submit() {
-  modalOpen.value = true;
+async function submit() {
+  try {
+    const payload = {
+      email: email.value,
+      password: pw.value,
+      username: name.value,
+      gender: gender.value,
+      birth: birth.value,
+    };
+
+    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, payload, {
+      withCredentials: true, // 쿠키 전달 필요 시
+    });
+
+    modalOpen.value = true;
+
+    // 회원가입 완료 후 메인 페이지로 이동
+    router.push('/');
+  } catch (err) {
+    console.error(err);
+    alert('회원가입에 실패했습니다.');
+  }
 }
 function onModalConfirm() {
   modalOpen.value = false;
