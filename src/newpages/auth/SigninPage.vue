@@ -299,7 +299,7 @@ async function submit() {
     modalOpen.value = true;
 
     // 회원가입 완료 후 메인 페이지로 이동
-    router.push('/');
+    router.push('/login');
   } catch (err) {
     console.error(err);
     alert('회원가입에 실패했습니다.');
