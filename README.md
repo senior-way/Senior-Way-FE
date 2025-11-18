@@ -17,6 +17,18 @@
 
 ---
 
+## 👥 팀 부산스런
+
+| 이름 | GitHub | 역할 |
+|------|--------|-------|
+| 이다연 | [@Leeday11](https://github.com/Leeday11) | FE |
+| 박예빈 | [@yebinnnnn](https://github.com/yebinnnnn) | Infra |
+| 박준영 | [@Tarae0419](https://github.com/Tarae0419) | BE |
+| 윤제승 | [@yjs1228](https://github.com/yjs1228) | BE |
+| 이학준 | [@dlgkrwns213](https://github.com/dlgkrwns213) | BE |
+
+---
+
 # 📌 1. 서비스 개요
 
 **Senior-Way**는 시니어 세대를 위해 설계된 여행 지원 서비스입니다.  
@@ -172,3 +184,42 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
+# 💻 7. 기술 스택 (Tech Stack)
+
+## 🌐 Frontend
+- **Vue.js 3** (Composition API)
+- **Vite**
+- **Pinia** (상태 관리)
+- **Vue Router**
+- **Kakao Map JavaScript API**
+- **HTML/CSS/JavaScript**
+- **Axios**
+- **Vercel** (배포)
+
+## 🛠 Backend
+- **Java 17**
+- **Spring Boot 3.x**
+- **Spring MVC**
+- **Spring Security**
+- **OAuth2 (Kakao Login)**
+- **Spring Data JPA**
+- **MySQL**
+- **WebSocket** (실시간 위치 & 연동 기능)
+- **OpenAPI 연동**  
+  - 한국관광공사 TourAPI  
+  - 공공데이터포털(축제/무장애 관광지 등)
+
+📂 Backend Repository  
+👉 https://github.com/senior-way/SeniorWay-BE
+
+## ☁️ Infra & Deployment
+- **AWS EC2**
+- **AWS RDS (MySQL)**
+- **Nginx**
+- **Certbot(HTTPS)**
+
+## 🧰 Tools & Collaboration
+- **GitHub / GitHub Projects**
+- **Figma** (UI/UX 디자인)
+- **Notion**
+- **Slack**
