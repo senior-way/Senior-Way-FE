@@ -184,42 +184,41 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-# 💻 7. 기술 스택 (Tech Stack)
+## 💻 Tech Stack
 
-## 🌐 Frontend
-- **Vue.js 3** (Composition API)
-- **Vite**
-- **Pinia** (상태 관리)
-- **Vue Router**
-- **Kakao Map JavaScript API**
-- **HTML/CSS/JavaScript**
-- **Axios**
-- **Vercel** (배포)
+### 🌐 Frontend
+![Vue3](https://img.shields.io/badge/Vue.js%203-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Pinia](https://img.shields.io/badge/Pinia-FFD859?style=for-the-badge&logo=pinia&logoColor=white)
+![Vue Router](https://img.shields.io/badge/Vue%20Router-4E9CA0?style=for-the-badge&logo=vue.js&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-## 🛠 Backend
-- **Java 17**
-- **Spring Boot 3.x**
-- **Spring MVC**
-- **Spring Security**
-- **OAuth2 (Kakao Login)**
-- **Spring Data JPA**
-- **MySQL**
-- **WebSocket** (실시간 위치 & 연동 기능)
-- **OpenAPI 연동**  
-  - 한국관광공사 TourAPI  
-  - 공공데이터포털(축제/무장애 관광지 등)
+### 🗺 API & External Services
+![TourAPI](https://img.shields.io/badge/TourAPI-1273E6?style=for-the-badge&logo=googlemaps&logoColor=white)
+![KakaoMap](https://img.shields.io/badge/KakaoMap_API-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=000000)
+![STT](https://img.shields.io/badge/Speech_to_Text-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
-📂 Backend Repository  
-👉 https://github.com/senior-way/SeniorWay-BE
+### 🛠 Backend
+![Java](https://img.shields.io/badge/Java%2017-007396?style=for-the-badge&logo=coffeescript&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![OAuth2](https://img.shields.io/badge/OAuth2-3A3A3A?style=for-the-badge&logo=auth0&logoColor=white)
+![WebSocket](https://img.shields.io/badge/WebSocket-333333?style=for-the-badge&logo=socketdotio&logoColor=white)
 
-## ☁️ Infra & Deployment
-- **AWS EC2**
-- **AWS RDS (MySQL)**
-- **Nginx**
-- **Certbot(HTTPS)**
+📂 **Backend Repo:**  
+https://github.com/senior-way/SeniorWay-BE
 
-## 🧰 Tools & Collaboration
-- **GitHub / GitHub Projects**
-- **Figma** (UI/UX 디자인)
-- **Notion**
-- **Slack**
+### ☁️ Infra
+![AWS EC2](https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AWS RDS](https://img.shields.io/badge/AWS_RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![HTTPS](https://img.shields.io/badge/HTTPS-0052CC?style=for-the-badge&logo=letsencrypt&logoColor=white)
+
+### 🧰 Tools & Collaboration
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+
