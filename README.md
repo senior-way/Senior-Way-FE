@@ -17,7 +17,7 @@
 
 ---
 
-## 👥 팀 부산스런
+## 팀 부산스런
 
 | 이름 | GitHub | 역할 |
 |------|--------|-------|
@@ -29,7 +29,7 @@
 
 ---
 
-# 📌 1. 서비스 개요
+## 1. 서비스 개요
 
 **Senior-Way**는 시니어 세대를 위해 설계된 여행 지원 서비스입니다.  
 사용자의 **디지털 활용 역량·시력·이동 환경을 고려한 UI/UX**와  
@@ -41,7 +41,7 @@
 
 ---
 
-# 🌱 2. 서비스 개발 배경
+## 2. 서비스 개발 배경
 
 통계청 **2017 여가활동조사**에 따르면,  
 65세 이상 시니어의 희망 여가 활동 1위는 **관광(65.8%)**입니다.
@@ -65,13 +65,13 @@
 
 ---
 
-# 🎨 3. 핵심 디자인 전략
+## 3. 핵심 디자인 전략
 
-## 🟦 Okabe-Ito 색각 배리어 프리 팔레트 적용
+### 🟦 Okabe-Ito 색각 배리어 프리 팔레트 적용
 - 색각 이상자도 인식 가능한 색 구성  
 - 명확한 대비(Contrast)로 가독성 향상  
 
-## 🟪 시니어 친화 UI
+### 🟪 시니어 친화 UI
 - 큰 폰트  
 - 명확한 아이콘  
 - 단순한 네비게이션 구조  
@@ -81,9 +81,9 @@
 
 ---
 
-# 🛠 4. 주요 기능
+## 4. 주요 기능
 
-## ✔ 1) 사용자 유형별 회원가입 & 로그인
+### ✔ 1) 사용자 유형별 회원가입 & 로그인
 - 일반 사용자 / 보호자 유형 선택  
 - 상단 Breadcrumb로 진행 단계 시각화  
 - 카카오 OAuth2 소셜 로그인  
@@ -91,14 +91,14 @@
 
 ---
 
-## ✔ 2) 사용자 기본 홈 화면
+### 2) 사용자 기본 홈 화면
 
-### 부산 지역 축제 정보 제공
+#### 부산 지역 축제 정보 제공
 - 홈 화면 메인 배너에서  
   **현재 시점 기준 가장 가까운 부산 축제 5개 자동 노출**
 - 최신 & 시기적절한 관광 정보 제공
 
-### 🎙 음성 인식(STT) 내비게이션
+#### 🎙 음성 인식(STT) 내비게이션
 헤더의 마이크 아이콘을 탭하면 음성으로 아래 기능 실행 가능:
 - “뒤로 가기”
 - “홈으로”
@@ -110,7 +110,7 @@
 
 ---
 
-## ✔ 3) 개인 맞춤 선호도 조사 (Profiling)
+##✔ 3) 개인 맞춤 선호도 조사 (Profiling)
 설문 항목:
 - 여행 선호 유형(힐링/문화/맛집 등)
 - 이동 수단
@@ -127,7 +127,7 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-## ✔ 4) 선호도 조사 기반의 맞춤 여행 일정 자동 생성
+### 4) 선호도 조사 기반의 맞춤 여행 일정 자동 생성
 - 한국관광공사 **TourAPI** 데이터 연동  
 - 선호도 기반 추천 일정 자동 생성  
 - “n박 n일 추천 일정” 자동 제목 생성  
@@ -139,7 +139,7 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-## ✔ 5) 일정 관리 & 오프라인 활용
+### 5) 일정 관리 & 오프라인 활용
 - 저장된 일정 전체 목록 조회  
 - 일정 상세 페이지에서  
   - PDF 다운로드  
@@ -151,7 +151,7 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-## ✔ 6) 무장애 관광지(Barrier-Free) 정보
+### 6) 무장애 관광지(Barrier-Free) 정보
 - 부산 지역 **무장애 관광지 리스트 제공**
 - 텍스트 검색 / 음성 검색 / 카테고리 필터 지원
 - 관광지 상세 페이지에서 제공되는 정보:
@@ -165,17 +165,17 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-## ✔ 7) 보호자-사용자 연동 기능
+### 7) 보호자-사용자 연동 기능
 연동 과정:
 1. 보호자가 사용자 이메일·이름 입력  
 2. 사용자가 이메일 인증으로 승인  
 3. 연동 완료 → 상호 연결  
 
-### 📍 실시간 위치 확인
+#### 실시간 위치 확인
 - 카카오맵 API 기반  
 - 연동된 사용자의 현재 위치 실시간 조회  
 
-### 🗂 여행 일정 조회
+#### 여행 일정 조회
 - 사용자가 저장한 모든 일정 확인 가능  
 - 여행 중 상황 대응 및 안전 관리 지원  
 
@@ -184,9 +184,9 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 
 ---
 
-## 💻 Tech Stack
+### 💻 Tech Stack
 
-### 🌐 Frontend
+#### 🌐 Frontend
 ![Vue3](https://img.shields.io/badge/Vue.js%203-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Pinia](https://img.shields.io/badge/Pinia-FFD859?style=for-the-badge&logo=pinia&logoColor=white)
@@ -194,7 +194,7 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-### 🗺 API & External Services
+#### 🗺 API & External Services
 ![TourAPI](https://img.shields.io/badge/TourAPI-1273E6?style=for-the-badge&logo=googlemaps&logoColor=white)
 ![KakaoMap](https://img.shields.io/badge/KakaoMap_API-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=000000)
 ![STT](https://img.shields.io/badge/Speech_to_Text-4285F4?style=for-the-badge&logo=google&logoColor=white)
@@ -211,7 +211,7 @@ Breadcrumb UI로 **진행 상황을 단계별 시각화**.
 📂 **Backend Repo:**  
 https://github.com/senior-way/SeniorWay-BE
 
-### ☁️ Infra
+#### ☁️ Infra
 ![AWS EC2](https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![AWS RDS](https://img.shields.io/badge/AWS_RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
